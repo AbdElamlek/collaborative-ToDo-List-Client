@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import Controllers.AuthenticationController;
 
 /**
  *
@@ -24,7 +25,11 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void handleButtonAction(ActionEvent event) {
         System.out.println("You clicked me!");
-        label.setText("Hello World!");
+        
+        /*Reham*/
+        AuthenticationController authenticationController = new AuthenticationController();
+        authenticationController.logIn("reham", "123");
+        /*Reham*/
     }
     
     @Override

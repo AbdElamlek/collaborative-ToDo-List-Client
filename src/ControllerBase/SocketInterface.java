@@ -14,6 +14,6 @@ public interface SocketInterface {
     
     void connect();
     void disconnect();
-    boolean sendJsonObject(JsonObject jsonObject); 
+    void sendJsonObject(String jsonObject); 
     
 }

@@ -9,6 +9,6 @@ package ControllerBase;
  *
  * @author Abd-Elmalek
  */
-public interface ActionsInterface {
-    
+public interface ActionHandler { //Strategy in strategy pattern
+    public void handleAction(String responseJsonObject);
 }

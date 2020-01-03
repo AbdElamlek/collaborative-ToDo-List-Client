@@ -13,7 +13,7 @@ import javax.json.JsonObject;
  */
 public interface AuthenticationInterface {
     
-    void logIn(JsonObject user);
+    void logIn(String username, String password);
     void SignUp(JsonObject user);
     
 }
