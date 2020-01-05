@@ -93,6 +93,8 @@ public class SocketController implements SocketInterface {
                 case "signup":
                     actionHandler = new SignUpHandler();
                     break;
+                case "notification":
+                    actionHandler = new NotificationHandler();
             }
             Handler handler = new Handler(actionHandler);
             handler.handleAction(jsonObjectStr);
