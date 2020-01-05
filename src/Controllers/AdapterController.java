@@ -6,23 +6,35 @@
 package Controllers;
 
 import ControllerBase.AdapterInterface;
-import Utils.BaseEntity;
-import javax.json.JsonObject;
+import Utils.EntityWrapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  *
  * @author Abd-Elmalek
  */
-public class AdapterController implements AdapterInterface{
+public class AdapterController implements AdapterInterface {
 
-    @Override
-    public JsonObject entity2Json(BaseEntity entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    GsonBuilder gsonBuilder;
+    Gson gson;
+    SocketController socketController;
+
+    public AdapterController() {
+        gsonBuilder = new GsonBuilder();
+        gson = gsonBuilder.create();
+        socketController = SocketController.getInstance();
     }
 
     @Override
-    public BaseEntity json2Entity(JsonObject json) {
+    public String entity2Json(EntityWrapper entity) {
+        String json=gson.toJson(entity);
+        return json;
+    }
+
+    @Override
+    public EntityWrapper json2Entity(String json) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

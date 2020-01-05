@@ -18,14 +18,18 @@ import javax.json.JsonObject;
  */
 public class AuthenticationController implements AuthenticationInterface{
     
-    GsonBuilder gsonBuilder;
-    Gson gson;
-    SocketController socketController;
+    private GsonBuilder gsonBuilder;
+    private Gson gson;
+    private SocketController socketController;
+    private AdapterController adapterController;
+    
     
     public AuthenticationController() {
         gsonBuilder = new GsonBuilder();
         gson = gsonBuilder.create();
         socketController = SocketController.getInstance();
+        adapterController=new AdapterController();
+        
     }
 
     @Override
@@ -34,11 +38,12 @@ public class AuthenticationController implements AuthenticationInterface{
         socketController.sendJsonObject(userJson);
     }
     
+    /*Eman Kamal*/
     @Override
-    public void SignUp(JsonObject user) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    
-    
+    public void SignUp(UserEntity userEntity) {
+       String userJson=adapterController.entity2Json(new EntityWrapper("signup","UserEntity",
+               new UserEntity(0, userEntity.getFirstName(), userEntity.getLastName(), userEntity.getUserName(), userEntity.getEmail(), userEntity.getPassword())));
+       socketController.sendJsonObject(userJson);
+    }    
+    /*Eman Kamal*/
 }

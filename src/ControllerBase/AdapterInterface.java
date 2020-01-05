@@ -5,8 +5,7 @@
  */
 package ControllerBase;
 
-import Utils.BaseEntity;
-import javax.json.JsonObject;
+import Utils.EntityWrapper;
 
 /**
  *
@@ -15,6 +14,6 @@ import javax.json.JsonObject;
 public interface AdapterInterface {
     
     
-    JsonObject entity2Json(BaseEntity entity);
-    BaseEntity json2Entity(JsonObject json);
+    String entity2Json(EntityWrapper entity);
+    EntityWrapper json2Entity(String json);
 }

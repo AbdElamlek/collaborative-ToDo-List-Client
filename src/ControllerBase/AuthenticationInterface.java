@@ -5,6 +5,7 @@
  */
 package ControllerBase;
 
+import Utils.UserEntity;
 import javax.json.JsonObject;
 
 /**
@@ -14,6 +15,6 @@ import javax.json.JsonObject;
 public interface AuthenticationInterface {
     
     void logIn(String username, String password);
-    void SignUp(JsonObject user);
+    void SignUp(UserEntity userEntity);
     
 }
