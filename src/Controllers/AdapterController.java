@@ -22,7 +22,7 @@ public class AdapterController implements AdapterInterface {
 
     public AdapterController() {
         gsonBuilder = new GsonBuilder();
-        gson = gsonBuilder.create();
+        gson = gsonBuilder.serializeNulls().create();
         socketController = SocketController.getInstance();
     }
 

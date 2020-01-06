@@ -48,6 +48,11 @@ public class FXMLDocumentController implements Initializable {
          LOGINPANE.setVisible(false);
          SIGNUPPANE.setVisible(true);
     }
+     @FXML
+     private void login (MouseEvent event) {
+         //LOGINPANE.setVisible(false);
+         //SIGNUPPANE.setVisible(true);
+    }
       @FXML
      private void backToLogin(MouseEvent event) {
          LOGINPANE.setVisible(true);

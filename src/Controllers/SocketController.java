@@ -34,7 +34,7 @@ public class SocketController implements SocketInterface {
 
     private SocketController() {
         try {
-            socket = new Socket("10.105.79.130", 5005);
+            socket = new Socket("127.0.0.1", 5005);
             dataInputStream = new DataInputStream(socket.getInputStream());
             printStream = new PrintStream(socket.getOutputStream());
             //dataOutputStream = new DataOutputStream(socket.getOutputStream());
@@ -70,10 +70,12 @@ public class SocketController implements SocketInterface {
     @Override
     public void sendJsonObject(String jsonObjectStr) {
         /*Eman Kamal*/
+        System.out.println("sending json: " + jsonObjectStr);
         SocketController.getInstance().connect();
             //OR FUNCTION NAME CAN BE: sendRequest(String jsonObjectStr)
             //System.out.println("from sendJsonObject: " + jsonObjectStr);
             printStream.println(jsonObjectStr);
+            System.out.println("SENT");
             //Send to the server the json to register !
             //dataOutputStream.writeUTF(jsonObjectStr);
        

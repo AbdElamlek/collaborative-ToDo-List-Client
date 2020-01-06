@@ -21,6 +21,7 @@ public class LoginHandler implements ActionHandler{
 
     @Override
     public void handleAction(String responseJsonObject) {
+        System.out.println("******LoginHandler");
         Gson gson = new Gson();
         try {
             JSONObject jsonObject = new JSONObject(responseJsonObject);
@@ -28,8 +29,11 @@ public class LoginHandler implements ActionHandler{
             UserEntity user = gson.fromJson(userJsonObject, UserEntity.class);
             
             if(user != null){
+                System.out.println("user found");
                 // LOGGEDIN SUCCESSFULLY 
             }else{
+                System.out.println("user not found");
+
                 // NOT LOGGEDIN SUCCESSFULLY 
             }
         } catch (JSONException ex) {

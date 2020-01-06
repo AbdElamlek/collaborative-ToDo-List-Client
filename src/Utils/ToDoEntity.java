@@ -19,20 +19,29 @@ public class ToDoEntity implements BaseEntity {
     private Date assignDate;
     private Date deadLineDate;
     private int ownerId;
+    private int status;
     private ArrayList<UserEntity> clllaboratorList;
     private ArrayList<ItemEntity> itemsList;
 
     public ToDoEntity() {
     }
 
-    public ToDoEntity(int id, String title, Date assignDate, Date deadLineDate, int ownerId) {
+    public ToDoEntity(int id, String title, Date assignDate, Date deadLineDate, int ownerId, int status) {
         this.id = id;
         this.title = title;
         this.assignDate = assignDate;
         this.deadLineDate = deadLineDate;
         this.ownerId = ownerId;
+        this.status = status;
     }
 
+    public ToDoEntity(String title, Date assignDate, Date deadLineDate, int ownerId, int status){
+        this.title = title;
+        this.assignDate = assignDate;
+        this.deadLineDate = deadLineDate;
+        this.ownerId = ownerId;
+        this.status = status;
+    }
     public void setId(int id) {
         this.id = id;
     }
@@ -87,6 +96,14 @@ public class ToDoEntity implements BaseEntity {
 
     public ArrayList<ItemEntity> getItemsList() {
         return itemsList;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
     
     
