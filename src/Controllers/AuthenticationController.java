@@ -32,7 +32,7 @@ public class AuthenticationController implements AuthenticationInterface{
 
     @Override
     public void logIn(String username, String password) {
-        String userJson = adapterController.entity2Json(new EntityWrapper("logIn", "UserEntity", new UserEntity(0, "", "", username, "", password)));
+        String userJson = adapterController.entity2Json(new EntityWrapper("logIn", "UserEntity", new UserEntity(username, password)));
         socketController.sendJsonObject(userJson);
     }
     

@@ -19,6 +19,8 @@ public class Handler { //Context in strategy pattern
     }
     
     public void handleAction(String responseJsonObject){
+        if(actionHandler == null)
+            System.out.println("NUULLL");
         actionHandler.handleAction(responseJsonObject);
     }
 }

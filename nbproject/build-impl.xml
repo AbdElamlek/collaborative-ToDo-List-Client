@@ -61,7 +61,7 @@ is divided into following sections:
         </loadproperties>
     </target>
     <target depends="-pre-init,-init-private,-init-private-libraries" name="-init-libraries">
-        
+
     </target>
     <target depends="-pre-init,-init-private,-init-libraries" name="-init-user">
         <property file="${user.properties.file}"/>

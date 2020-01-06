@@ -27,6 +27,7 @@ public class SignUpHandler implements ActionHandler {
             UserEntity user = gson.fromJson(userJsonObject, UserEntity.class);
             if (user != null) {
                 // Registered SUCCESSFULLY 
+                
             } else {
                 // NOT Registered SUCCESSFULLY 
             }

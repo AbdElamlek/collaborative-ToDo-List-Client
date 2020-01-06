@@ -18,7 +18,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
- *
  * @author Abd-Elmalek
  */
 public class CollaborativeToDoListClient extends Application {
@@ -57,8 +56,9 @@ public class CollaborativeToDoListClient extends Application {
     public static void main(String[] args) {
         //SocketController sc = SocketController.getInstance();
         //sc.connect();
-        AuthenticationController authenticationController = new AuthenticationController();
-        authenticationController.logIn("ReeeEzzat", "123");
+        //AuthenticationController authenticationController = new AuthenticationController();
+        //authenticationController.logIn("ReeeEzzat", "123");
+        SocketController.getInstance().connect();
         launch(args);
     }
     
