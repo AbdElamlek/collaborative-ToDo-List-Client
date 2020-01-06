@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
- *
  * @author Abd-Elmalek
  */
 public class CollaborativeToDoListClient extends Application {
@@ -25,7 +24,7 @@ public class CollaborativeToDoListClient extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-       Parent root = FXMLLoader.load(getClass().getResource("FXML.fxml"));
+       Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument_1.fxml"));
         
          stage.initStyle(StageStyle.TRANSPARENT);
         
