@@ -25,7 +25,7 @@ public class TaskController implements TaskInterFace{
         RequestEntity requestEntity = new RequestEntity();
         requestEntity.setSentUserId(assignerId);
         requestEntity.setReceivedUserId(assigneeId);
-        requestEntity.setType("assigonToTaskRequest");
+        requestEntity.setType(1);
         requestEntity.setTime(new Date());
         EntityWrapper entityWrapper = new EntityWrapper("assigonToTaskRequest", "entity", requestEntity);
         String taskJsonResponse = adapterController.entity2Json(entityWrapper);
@@ -55,7 +55,7 @@ public class TaskController implements TaskInterFace{
     public boolean acceptTask(TaskEntity task, String userId) {
         try {
         task.getAssignedUsersList().add(userId);
-        EntityWrapper entityWrapper = new EntityWrapper("assigonToTask", "entity", task);
+        EntityWrapper entityWrapper = new EntityWrapper("acceptTask", "entity", task);
         String taskJsonResponse = adapterController.entity2Json(entityWrapper);
         SocketController.getInstance().sendJsonObject(taskJsonResponse);
         return true;
@@ -68,10 +68,10 @@ public class TaskController implements TaskInterFace{
     @Override
     public boolean rejectTask(RequestEntity taskRequest, UserEntity userEntity) {
         try {
-        userEntity.getRequestList().remove(userEntity.getRequestList().indexOf(taskRequest));
         EntityWrapper entityWrapper = new EntityWrapper("rejectTaskRequest", "entity", taskRequest);
         String taskJsonResponse = adapterController.entity2Json(entityWrapper);
         SocketController.getInstance().sendJsonObject(taskJsonResponse);
+        userEntity.getRequestList().remove(userEntity.getRequestList().indexOf(taskRequest));
         return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,10 +82,12 @@ public class TaskController implements TaskInterFace{
     @Override
     public boolean withdrawFromTask(TaskEntity task, String userId) {
         try {
-        task.getAssignedUsersList().remove(task.getAssignedUsersList().indexOf(userId));
+        task.getAssignedUsersList().add(userId);
         EntityWrapper entityWrapper = new EntityWrapper("withdrawFromTask", "entity", task);
         String taskJsonResponse = adapterController.entity2Json(entityWrapper);
         SocketController.getInstance().sendJsonObject(taskJsonResponse);
+        task.getAssignedUsersList().remove(task.getAssignedUsersList().indexOf(userId));
+        task.getAssignedUsersList().remove(task.getAssignedUsersList().indexOf(userId));
         return true;
         } catch (Exception e) {
             e.printStackTrace();
