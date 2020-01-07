@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Ellipse?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="543.0" maxWidth="867.0" minHeight="543.0" minWidth="867.0" prefHeight="543.0" prefWidth="931.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="collaborative.to.pkgdo.list.client.FXMLDocumentController">
+<BorderPane fx:id="borderPane" maxHeight="543.0" maxWidth="867.0" minHeight="543.0" minWidth="867.0" prefHeight="543.0" prefWidth="931.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="collaborative.to.pkgdo.list.client.FXMLDocumentController">
    <right>
       <AnchorPane prefHeight="532.0" prefWidth="301.0" style="-fx-background-color: #3b8ef4;" BorderPane.alignment="CENTER">
          <children>

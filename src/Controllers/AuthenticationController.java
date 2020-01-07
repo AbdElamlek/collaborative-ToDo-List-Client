@@ -8,9 +8,6 @@ package Controllers;
 import ControllerBase.AuthenticationInterface;
 import Utils.EntityWrapper;
 import Utils.UserEntity;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import javax.json.JsonObject;
 
 /**
  *

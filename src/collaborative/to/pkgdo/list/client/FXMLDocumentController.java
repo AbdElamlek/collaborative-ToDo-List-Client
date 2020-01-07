@@ -87,7 +87,7 @@ public class FXMLDocumentController implements Initializable {
          
          authenticationController.logIn(username, password);
     }
-
+     
     private boolean isValidData(String email, String password, String cpassword, String firstname, String lastname, String username) {
         boolean isValid = true;
         if (!isValidEmail(email)) {
@@ -170,5 +170,5 @@ public class FXMLDocumentController implements Initializable {
         LOGINPANE.setVisible(true);
         SIGNUPPANE.setVisible(false);
     }
-
+    
 }

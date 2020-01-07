@@ -98,6 +98,8 @@ public class SocketController implements SocketInterface {
                     break;
                 case "notification":
                     actionHandler = new NotificationHandler();
+                case "create todo list":
+                    actionHandler = new ToDoCreationHandler();
             }
             Handler handler = new Handler(actionHandler);
             handler.handleAction(jsonObjectStr);

@@ -18,32 +18,31 @@ import javax.json.JsonObject;
  * @author Abd-Elmalek
  */
 public class ToDoListController implements ToDoListInterface {
-    GsonBuilder gsonBuilder;
-    Gson gson;
-    SocketController socketController;
+
+    private SocketController socketController;
+    private AdapterController adapterController;
+
     
     public ToDoListController() {
-        gsonBuilder = new GsonBuilder();
-        gson = gsonBuilder.create();
         socketController = SocketController.getInstance();
+        adapterController = new AdapterController();
     }
 
     @Override
-    public void createToDoList(String title, Date deadline, int ownerId, int status) {
-        Date assignDate = new Date();
-        String todoJson = gson.toJson(new EntityWrapper("create todo list", "ToDoEntity", new ToDoEntity(title, assignDate, deadline, ownerId, status)));
+    public void createToDoList(ToDoEntity todo) {
+        String todoJson = adapterController.entity2Json(new EntityWrapper("create todo list", "ToDoEntity", todo));
         socketController.sendJsonObject(todoJson);
     }
 
     @Override
     public void updateToDoList(ToDoEntity todo) {
-        String todoJson = gson.toJson(new EntityWrapper("update todo list", "ToDoEntity", todo));
+        String todoJson = adapterController.entity2Json(new EntityWrapper("update todo list", "ToDoEntity", todo));
         socketController.sendJsonObject(todoJson);
     }
 
     @Override
     public void deleteToDoList(ToDoEntity todo) {
-        String todoJson = gson.toJson(new EntityWrapper("delete todo list", "ToDoEntity", todo));
+        String todoJson = adapterController.entity2Json(new EntityWrapper("delete todo list", "ToDoEntity", todo));
         socketController.sendJsonObject(todoJson);    }
     
 }

@@ -8,6 +8,8 @@ package Controllers;
 import ControllerBase.ActionHandler;
 import Utils.UserEntity;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.JSONException;
@@ -18,10 +20,15 @@ import org.json.JSONObject;
  * @author Reham
  */
 public class LoginHandler implements ActionHandler{
+    private static Consumer<UserEntity> userGUILoader;
+    
+    public static void setGUILoader(Consumer<UserEntity> myLoader){
+        userGUILoader = myLoader;
+    }
 
     @Override
     public void handleAction(String responseJsonObject) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().serializeNulls().setDateFormat("MMM dd, yyyy h:mm:ss a").create();
         try {
             JSONObject jsonObject = new JSONObject(responseJsonObject);
             
@@ -32,6 +39,9 @@ public class LoginHandler implements ActionHandler{
                 
                 System.out.println("user found");
                 
+                if(userGUILoader != null){
+                    userGUILoader.accept(user);
+                }
                 // LOGGEDIN SUCCESSFULLY 
             }else{
                 System.out.println("user not found");

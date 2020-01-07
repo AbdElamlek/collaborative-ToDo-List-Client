@@ -14,7 +14,7 @@ import javax.json.JsonObject;
  * @author Abd-Elmalek
  */
 public interface ToDoListInterface {
-   void createToDoList(String title, Date deadline, int ownerId, int status);
+   void createToDoList(ToDoEntity todo);
    void updateToDoList(ToDoEntity todo);
    void deleteToDoList(ToDoEntity todo);
    
