@@ -5,6 +5,10 @@
  */
 package Controllers;
 
+import Handlers.Handler;
+import Handlers.NotificationHandler;
+import Handlers.LoginHandler;
+import Handlers.SignUpHandler;
 import ControllerBase.ActionHandler;
 import ControllerBase.SocketInterface;
 import java.io.DataInputStream;
