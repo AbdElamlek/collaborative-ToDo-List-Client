@@ -6,6 +6,11 @@
 package Controllers;
 
 import ControllerBase.TaskInterFace;
+import Utils.EntityWrapper;
+import Utils.RequestEntity;
+import Utils.TaskEntity;
+import Utils.UserEntity;
+import java.util.Date;
 import javax.json.JsonObject;
 
 /**
@@ -13,30 +18,79 @@ import javax.json.JsonObject;
  * @author Abd-Elmalek
  */
 public class TaskController implements TaskInterFace{
-
+    AdapterController adapterController = new AdapterController();
     @Override
-    public void assignToTask(JsonObject task) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean assignToTask(int assignerId, int assigneeId) {
+        try {
+        RequestEntity requestEntity = new RequestEntity();
+        requestEntity.setSentUserId(assignerId);
+        requestEntity.setReceivedUserId(assigneeId);
+        requestEntity.setType("assigonToTaskRequest");
+        requestEntity.setTime(new Date());
+        EntityWrapper entityWrapper = new EntityWrapper("assigonToTaskRequest", "entity", requestEntity);
+        String taskJsonResponse = adapterController.entity2Json(entityWrapper);
+        SocketController.getInstance().sendJsonObject(taskJsonResponse);
+        return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override
-    public void updateTaskStatus(JsonObject task) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean updateTaskStatus(TaskEntity task, int status) {
+        try {
+        task.setStatus(status);
+        EntityWrapper entityWrapper = new EntityWrapper("changeTaskStatus", "entity", task);
+        String taskJsonResponse = adapterController.entity2Json(entityWrapper);
+        SocketController.getInstance().sendJsonObject(taskJsonResponse);
+        return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override
-    public void acceptTask(JsonObject task) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean acceptTask(TaskEntity task, String userId) {
+        try {
+        task.getAssignedUsersList().add(userId);
+        EntityWrapper entityWrapper = new EntityWrapper("assigonToTask", "entity", task);
+        String taskJsonResponse = adapterController.entity2Json(entityWrapper);
+        SocketController.getInstance().sendJsonObject(taskJsonResponse);
+        return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override
-    public void rejectTask(JsonObject task) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean rejectTask(RequestEntity taskRequest, UserEntity userEntity) {
+        try {
+        userEntity.getRequestList().remove(userEntity.getRequestList().indexOf(taskRequest));
+        EntityWrapper entityWrapper = new EntityWrapper("rejectTaskRequest", "entity", taskRequest);
+        String taskJsonResponse = adapterController.entity2Json(entityWrapper);
+        SocketController.getInstance().sendJsonObject(taskJsonResponse);
+        return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override
-    public void withdrawFromTask(JsonObject task) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean withdrawFromTask(TaskEntity task, String userId) {
+        try {
+        task.getAssignedUsersList().remove(task.getAssignedUsersList().indexOf(userId));
+        EntityWrapper entityWrapper = new EntityWrapper("withdrawFromTask", "entity", task);
+        String taskJsonResponse = adapterController.entity2Json(entityWrapper);
+        SocketController.getInstance().sendJsonObject(taskJsonResponse);
+        return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
     
 }
