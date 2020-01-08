@@ -5,12 +5,15 @@
  */
 package Controllers;
 
+import Handlers.ToDoCreationHandler;
 import Handlers.Handler;
 import Handlers.NotificationHandler;
 import Handlers.LoginHandler;
 import Handlers.SignUpHandler;
 import ControllerBase.ActionHandler;
 import ControllerBase.SocketInterface;
+import Handlers.ToDoDeleteHandler;
+import Handlers.ToDoUpdateHandler;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
@@ -102,8 +105,16 @@ public class SocketController implements SocketInterface {
                     break;
                 case "notification":
                     actionHandler = new NotificationHandler();
+                    break;
                 case "create todo list":
                     actionHandler = new ToDoCreationHandler();
+                    break;
+                case "update todo list":
+                    actionHandler = new ToDoUpdateHandler();
+                    break;
+                case "delete todo list":
+                    actionHandler = new ToDoDeleteHandler();
+                    break;
             }
             Handler handler = new Handler(actionHandler);
             handler.handleAction(jsonObjectStr);
