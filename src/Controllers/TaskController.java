@@ -6,11 +6,11 @@
 package Controllers;
 
 import ControllerBase.TaskInterFace;
+import Entities.EntityWrapper;
+import Entities.RequestEntity;
+import Entities.TaskEntity;
+import Entities.UserEntity;
 import DTOs.Accept_RejectTaskDTO;
-import Utils.EntityWrapper;
-import Utils.RequestEntity;
-import Utils.TaskEntity;
-import Utils.UserEntity;
 import java.util.Date;
 import javax.json.JsonObject;
 

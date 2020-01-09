@@ -8,7 +8,7 @@ package collaborative.to.pkgdo.list.client;
 import Controllers.AuthenticationController;
 import Controllers.SocketController;
 import Controllers.ToDoListController;
-import Utils.ToDoEntity;
+import Entities.ToDoEntity;
 import java.util.Date;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -63,7 +63,7 @@ public class CollaborativeToDoListClient extends Application {
         //authenticationController.logIn("ReeeEzzat", "123");
         SocketController.getInstance().connect();
         //ToDoListController tlc = new ToDoListController();
-        //tlc.createToDoList(new ToDoEntity("New list", new Date(), new Date(), 11, 1, "0xcc3333ff"));
+        //tlc.createToDoList(new ToDoEntity("New list", new Date(), new Date(), 11, 1, "0xcc3333ff")); 
         launch(args);
     }
     

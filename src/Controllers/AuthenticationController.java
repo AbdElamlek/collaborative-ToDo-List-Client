@@ -6,8 +6,8 @@
 package Controllers;
 
 import ControllerBase.AuthenticationInterface;
-import Utils.EntityWrapper;
-import Utils.UserEntity;
+import Entities.EntityWrapper;
+import Entities.UserEntity;
 
 /**
  *

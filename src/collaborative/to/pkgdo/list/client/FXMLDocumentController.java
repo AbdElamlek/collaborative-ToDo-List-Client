@@ -2,8 +2,9 @@ package collaborative.to.pkgdo.list.client;
 
 import Controllers.AuthenticationController;
 import Handlers.LoginHandler;
-import Utils.ToDoEntity;
-import Utils.UserEntity;
+import Entities.ToDoEntity;
+import Controllers.CollaboratorController;
+import Entities.UserEntity;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -40,8 +41,8 @@ public class FXMLDocumentController implements Initializable {
     public AnchorPane SIGNUPPANE;
 
     @FXML
-//    public JFXButton Login;
-//    public JFXButton Create;
+     //public JFXButton Login;
+    //public JFXButton Create;
     //public JFXButton Sihnup;
     //public JFXTextField UsernameText;
     //public JFXTextField PasswordText;
@@ -60,7 +61,15 @@ public class FXMLDocumentController implements Initializable {
      @FXML
     private void toSignUp(MouseEvent event) {
         LOGINPANE.setVisible(false);
-        SIGNUPPANE.setVisible(true);}
+        SIGNUPPANE.setVisible(true);
+        /*System.out.println("just test collaborator controller");
+        CollaboratorController c=new CollaboratorController();
+        //c.addCollaboratorRequest(1, 2, 10);
+        //c.acceptCollaboratorRequest(4);
+        //c.rejectCollaboratorRequest(5);*/
+        
+        
+    }
     
     @FXML
     private void SignUp(MouseEvent event) {

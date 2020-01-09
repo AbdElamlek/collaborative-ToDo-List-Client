@@ -5,7 +5,7 @@
  */
 package ControllerBase;
 
-import Utils.ToDoEntity;
+import Entities.ToDoEntity;
 import java.util.Date;
 import javax.json.JsonObject;
 

@@ -6,8 +6,8 @@
 package Controllers;
 
 import ControllerBase.ToDoListInterface;
-import Utils.EntityWrapper;
-import Utils.ToDoEntity;
+import Entities.EntityWrapper;
+import Entities.ToDoEntity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.util.Date;

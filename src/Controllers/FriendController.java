@@ -6,8 +6,8 @@
 package Controllers;
 
 import ControllerBase.FriendIntrface;
-import Utils.EntityWrapper;
-import Utils.RequestEntity;
+import Entities.EntityWrapper;
+import Entities.RequestEntity;
 import javax.json.JsonObject;
 
 /**

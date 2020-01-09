@@ -5,9 +5,9 @@
  */
 package ControllerBase;
 
-import Utils.RequestEntity;
-import Utils.TaskEntity;
-import Utils.UserEntity;
+import Entities.RequestEntity;
+import Entities.TaskEntity;
+import Entities.UserEntity;
 
 /**
  *

@@ -7,8 +7,8 @@ package Handlers;
 
 import ControllerBase.ActionHandler;
 import Utils.CurrentUser;
-import Utils.ToDoEntity;
-import Utils.UserEntity;
+import Entities.ToDoEntity;
+import Entities.UserEntity;
 import com.google.gson.Gson;
 import java.util.function.Consumer;
 import org.json.JSONException;

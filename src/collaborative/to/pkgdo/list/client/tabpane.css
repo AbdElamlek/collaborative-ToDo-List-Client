@@ -12,7 +12,7 @@
 
 /* Up- and Down-Button Padding */
 .scroll-bar:vertical > .increment-button, .scroll-bar:vertical > .decrement-button {
-    -fx-padding: 5 2 5 2;
+    -fx-padding: 2 2 2 2;
 }
 
 /* Left- and Right-Button Padding */
@@ -60,7 +60,9 @@
     -fx-background-insets: 0;
     -fx-padding: 0;
 }
-
+.scroll-pane > .viewport {
+   -fx-background-color: transparent;
+}
 .scroll-pane:focused {
     
     -fx-background-color: #fefefe;
@@ -85,5 +87,24 @@
 .jfx-tab-pane.tab-selected-line{
     
     -fx-border-color: #3399ff;
-    -fx-stroke : RED;
+    -fx-stroke : #fefefe;
 }
+.titled-pane .title,
+.titled-pane .content{
+    -fx-pref-tile-height:10px;
+    -fx-background-color: #fefefe;
+    -fx-border-style: solid;
+    -fx-border-color: #fefefe;
+    -fx-border-width: 1px;
+   -fx-padding: 0 0 0 -6;
+    
+}
+.titled-pane > .title > .arrow-button {
+      
+     -fx-translate-x: 442;
+     -fx-alignment:TOP_RIGHT;
+     -fx-content-display:right;
+          -fx-arrow-side: right;
+     -fx-padding: 0 0 0 -4;
+}
+

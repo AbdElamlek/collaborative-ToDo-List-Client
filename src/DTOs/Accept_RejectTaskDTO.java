@@ -5,7 +5,7 @@
  */
 package DTOs;
 
-import Utils.BaseEntity;
+import Entities.BaseEntity;
 
 /**
  *
