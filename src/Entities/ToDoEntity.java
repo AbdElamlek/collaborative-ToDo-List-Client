@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Utils;
+package Entities;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,7 +20,7 @@ public class ToDoEntity implements BaseEntity {
     private Date deadLineDate;
     private int ownerId;
     private int status;
-    private ArrayList<UserEntity> clllaboratorList;
+    private ArrayList<UserEntity> collaboratorList;
     private ArrayList<ItemEntity> itemsList;
 
     public ToDoEntity() {
@@ -82,12 +82,12 @@ public class ToDoEntity implements BaseEntity {
         return ownerId;
     }
 
-    public void setClllaboratorList(ArrayList<UserEntity> clllaboratorList) {
-        this.clllaboratorList = clllaboratorList;
+    public void setCollaboratorList(ArrayList<UserEntity> collaboratorList) {
+        this.collaboratorList = collaboratorList;
     }
 
-    public ArrayList<UserEntity> getClllaboratorList() {
-        return clllaboratorList;
+    public ArrayList<UserEntity> getCollaboratorList() {
+        return collaboratorList;
     }
 
     public void setItemsList(ArrayList<ItemEntity> itemsList) {

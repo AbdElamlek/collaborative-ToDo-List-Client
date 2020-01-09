@@ -5,7 +5,7 @@
  */
 package Controllers;
 
-import Utils.BaseEntity;
+import Entities.BaseEntity;
 import com.google.gson.JsonObject;
 
 /**

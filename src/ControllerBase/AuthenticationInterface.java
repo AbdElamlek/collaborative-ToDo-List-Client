@@ -5,7 +5,7 @@
  */
 package ControllerBase;
 
-import Utils.UserEntity;
+import Entities.UserEntity;
 import javax.json.JsonObject;
 
 /**

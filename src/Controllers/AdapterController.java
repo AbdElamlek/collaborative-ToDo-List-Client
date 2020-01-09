@@ -6,7 +6,7 @@
 package Controllers;
 
 import ControllerBase.AdapterInterface;
-import Utils.EntityWrapper;
+import Entities.EntityWrapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

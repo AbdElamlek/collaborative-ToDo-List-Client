@@ -5,7 +5,7 @@
  */
 package ControllerBase;
 
-import Utils.EntityWrapper;
+import Entities.EntityWrapper;
 
 /**
  *

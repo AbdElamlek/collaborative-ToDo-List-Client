@@ -6,8 +6,8 @@
 package Controllers;
 
 import ControllerBase.ActionHandler;
-import Utils.ToDoEntity;
-import Utils.UserEntity;
+import Entities.ToDoEntity;
+import Entities.UserEntity;
 import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;

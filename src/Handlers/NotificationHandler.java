@@ -7,7 +7,7 @@ package Handlers;
 
 import ControllerBase.ActionHandler;
 import ControllerBase.NotificationInterface;
-import Utils.NotificationEntity;
+import Entities.NotificationEntity;
 import com.google.gson.Gson;
 import javax.json.JsonObject;
 import org.json.JSONException;

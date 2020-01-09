@@ -6,7 +6,7 @@
 package Handlers;
 
 import ControllerBase.ActionHandler;
-import Utils.UserEntity;
+import Entities.UserEntity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.util.function.Consumer;
