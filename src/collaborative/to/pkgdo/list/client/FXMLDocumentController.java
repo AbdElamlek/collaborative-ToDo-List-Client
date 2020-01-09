@@ -1,6 +1,8 @@
 package collaborative.to.pkgdo.list.client;
 
 import Controllers.AuthenticationController;
+import Handlers.LoginHandler;
+import Utils.ToDoEntity;
 import Utils.UserEntity;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
@@ -8,19 +10,26 @@ import com.jfoenix.controls.JFXTextField;
 import static com.sun.deploy.security.BlockedDialog.show;
 import static com.sun.glass.events.DndEvent.EXIT;
 import static com.sun.glass.events.MouseEvent.EXIT;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 public class FXMLDocumentController implements Initializable {
 
@@ -86,6 +95,26 @@ public class FXMLDocumentController implements Initializable {
          String password = PasswordText.getText();
          
          authenticationController.logIn(username, password);
+    }
+     
+    public void navigateToMainPage(Object o){
+        
+       Platform.runLater(()->{
+        try {
+            System.out.println("loading main page ....");
+            
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXML.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) UsernameText.getScene().getWindow();
+            
+            stage.setScene(scene);
+            
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        });
+        
     }
      
     private boolean isValidData(String email, String password, String cpassword, String firstname, String lastname, String username) {
@@ -161,6 +190,7 @@ public class FXMLDocumentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        LoginHandler.setMainPageNavigator(this::navigateToMainPage);
         LOGINPANE.setVisible(true);
         SIGNUPPANE.setVisible(false);
     }
@@ -170,5 +200,5 @@ public class FXMLDocumentController implements Initializable {
         LOGINPANE.setVisible(true);
         SIGNUPPANE.setVisible(false);
     }
-    
+
 }

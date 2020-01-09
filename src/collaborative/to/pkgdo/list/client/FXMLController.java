@@ -25,9 +25,16 @@ package collaborative.to.pkgdo.list.client;
 //    }    
 //    
 //}
+import Controllers.ToDoListController;
+import Handlers.LoginHandler;
+import Handlers.ToDoCreationHandler;
+import Utils.CurrentUser;
+import Utils.ToDoEntity;
+import Utils.UserEntity;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import java.net.URL;
+import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -53,11 +60,12 @@ import javafx.scene.text.Font;
  * @author Abd-Elmalek
  */
 public class FXMLController implements Initializable  {
+    UserEntity currentUser;
     
     Friendicon Fitem=new Friendicon();
     Friendicon Fitem2=new Friendicon();
-    Listicon  Litem=new Listicon();
-    Listicon  Litem2=new Listicon();
+    //Listicon  Litem=new Listicon();
+    //Listicon  Litem2=new Listicon();
     Tasks tasks=new Tasks();
     Tasks tasks2=new Tasks();
    
@@ -85,9 +93,12 @@ public class FXMLController implements Initializable  {
     public Line linefriends;
     public ImageView DATEPICK;
     public JFXButton CLEARDATE;
+    public Label USERNAME;
+    public Label TITLE;
     @FXML
        public void nav(MouseEvent event) {
-        
+           ToDoListController tlc = new ToDoListController();
+           tlc.createToDoList(new ToDoEntity("New list", new Date(), new Date(), 11, 1, "0xcc3333ff"));
            if(event.getSource()==LISTS){
             
             FRIENDSSCROLL.setVisible(false);
@@ -155,20 +166,31 @@ public class FXMLController implements Initializable  {
         
        
     }
+
+     
       public  void actions() {
-         TODOPANE.setVisible(true);
+        TODOPANE.setVisible(true);
             STATUSPANE.setVisible(false);
             REQUESTPANE.setVisible(false);    
             TODAYPANE.setVisible(false);  }
      
+    
+      
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        System.out.println("in init in main page");
+        
+        ToDoCreationHandler.setTodoGUIGenerator(this::createTodoList);
+        
+        currentUser = CurrentUser.getCurrentUser();
+      
+      
       Fitem =new Friendicon();
       FRIENDSLIST.getChildren().add(Fitem);
       FRIENDSLIST.getChildren().add(Fitem2);
      
-      LIST.getChildren().add(Litem);
-      LIST.getChildren().add(Litem2);
+      //LIST.getChildren().add(Litem);
+      //LIST.getChildren().add(Litem2);
       
       TASKLISTS.getChildren().add(tasks);
       TASKLISTS.getChildren().add(tasks2);
@@ -178,11 +200,18 @@ public class FXMLController implements Initializable  {
       linelists.setStroke(javafx.scene.paint.Color.valueOf("#000000"));
       linefriends.setStroke(javafx.scene.paint.Color.valueOf("#d7d0d0"));
     
-    
+      initiateCurrentUser();
     }    
     
-
-
+   
+    public void initiateCurrentUser(){
+        USERNAME.setText(currentUser.getUserName());
+        for(ToDoEntity todo : currentUser.getTodoList()){
+            Listicon  Litem=new Listicon(todo);
+            LIST.getChildren().add(Litem);
+        }
+            
+    }
 
 
 
@@ -267,11 +296,12 @@ public class FXMLController implements Initializable  {
      
      
      class Listicon extends AnchorPane {
-
+         private ToDoEntity todo;
     protected final ImageView imageView;
     protected  Label label;
-    public Listicon() {
-
+    public Listicon(ToDoEntity todo) {
+        
+        this.todo = todo;
         imageView = new ImageView();
         label = new Label();
 
@@ -293,7 +323,7 @@ public class FXMLController implements Initializable  {
         label.setPrefWidth(100.0);
         label.setTextFill(javafx.scene.paint.Color.valueOf("#2c2a2a"));
         label.setFont(new Font(16.0));
-        label.setText("omnia's list");
+        label.setText(todo.getTitle());
         getChildren().add(imageView);
         getChildren().add(label);
         
@@ -301,14 +331,11 @@ public class FXMLController implements Initializable  {
             @Override
             public void handle(MouseEvent event) {
              actions();
+             TITLE.setText(todo.getTitle());
             }
         });
         
     }
-     public void setListName(String s)
-        {
-         label.setText(s);
-        }
 }
 
 
@@ -353,7 +380,7 @@ public class FXMLController implements Initializable  {
 
         label.setLayoutX(64.0);
         label.setLayoutY(7.0);
-         label.setText("omnia");
+         //label.setText("omnia");
         label.setFont(new Font(16.0));
 
         getChildren().add(jFXCheckBox);
@@ -367,4 +394,11 @@ public class FXMLController implements Initializable  {
         {
          label.setText(s);
         }
-}}
+}
+    public void createTodoList(ToDoEntity todo){
+        Platform.runLater(() ->  {
+        Listicon  Litem=new Listicon(todo);
+        LIST.getChildren().add(Litem);
+        });
+    }
+}

@@ -6,6 +6,7 @@
 package Handlers;
 
 import ControllerBase.ActionHandler;
+import Utils.CurrentUser;
 import Utils.UserEntity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,10 +21,11 @@ import org.json.JSONObject;
  * @author Reham
  */
 public class LoginHandler implements ActionHandler{
-    private static Consumer<UserEntity> userGUILoader;
+    private static Consumer mainPageNavigator;
     
-    public static void setGUILoader(Consumer<UserEntity> myLoader){
-        userGUILoader = myLoader;
+    public static void setMainPageNavigator(Consumer navigator){
+        mainPageNavigator = navigator;
+        System.out.println("settting navigator");
     }
 
     @Override
@@ -38,9 +40,12 @@ public class LoginHandler implements ActionHandler{
                 UserEntity user = gson.fromJson(userJsonObject, UserEntity.class);
                 
                 System.out.println("user found");
-                
-                if(userGUILoader != null){
-                    userGUILoader.accept(user);
+                CurrentUser.setCurrentUser(user);
+               
+                if(mainPageNavigator != null){
+                    
+                    System.out.println("nooottt nuuulllllllll");
+                    mainPageNavigator.accept(null);
                 }
                 // LOGGEDIN SUCCESSFULLY 
             }else{
