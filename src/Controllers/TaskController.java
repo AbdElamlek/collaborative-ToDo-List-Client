@@ -10,6 +10,7 @@ import Entities.EntityWrapper;
 import Entities.RequestEntity;
 import Entities.TaskEntity;
 import Entities.UserEntity;
+import DTOs.Accept_RejectTaskDTO;
 import java.util.Date;
 import javax.json.JsonObject;
 
@@ -52,10 +53,12 @@ public class TaskController implements TaskInterFace{
     }
 
     @Override
-    public boolean acceptTask(TaskEntity task, String userId) {
+    public boolean acceptTask(int taskId, int userId) {
         try {
-        task.getAssignedUsersList().add(userId);
-        EntityWrapper entityWrapper = new EntityWrapper("acceptTask", "entity", task);
+        Accept_RejectTaskDTO acceptTaskDTO = new Accept_RejectTaskDTO();
+        acceptTaskDTO.setTaskId(taskId);
+        acceptTaskDTO.setUserId(userId);
+        EntityWrapper entityWrapper = new EntityWrapper("acceptTask", "entity", acceptTaskDTO);
         String taskJsonResponse = adapterController.entity2Json(entityWrapper);
         SocketController.getInstance().sendJsonObject(taskJsonResponse);
         return true;
@@ -80,13 +83,14 @@ public class TaskController implements TaskInterFace{
     }
 
     @Override
-    public boolean withdrawFromTask(TaskEntity task, String userId) {
+    public boolean withdrawFromTask(TaskEntity task, int userId) {
         try {
-        task.getAssignedUsersList().add(userId);
-        EntityWrapper entityWrapper = new EntityWrapper("withdrawFromTask", "entity", task);
+        Accept_RejectTaskDTO accept_RejectTaskDTO = new Accept_RejectTaskDTO();
+        accept_RejectTaskDTO.setTaskId(task.getId());
+        accept_RejectTaskDTO.setUserId(userId);
+        EntityWrapper entityWrapper = new EntityWrapper("withdrawFromTask", "entity", accept_RejectTaskDTO);
         String taskJsonResponse = adapterController.entity2Json(entityWrapper);
         SocketController.getInstance().sendJsonObject(taskJsonResponse);
-        task.getAssignedUsersList().remove(task.getAssignedUsersList().indexOf(userId));
         task.getAssignedUsersList().remove(task.getAssignedUsersList().indexOf(userId));
         return true;
         } catch (Exception e) {
