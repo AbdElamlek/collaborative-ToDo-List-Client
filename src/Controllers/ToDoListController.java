@@ -6,6 +6,11 @@
 package Controllers;
 
 import ControllerBase.ToDoListInterface;
+import Entities.EntityWrapper;
+import Entities.ToDoEntity;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.util.Date;
 import javax.json.JsonObject;
 
 /**
@@ -14,19 +19,30 @@ import javax.json.JsonObject;
  */
 public class ToDoListController implements ToDoListInterface {
 
-    @Override
-    public void createToDoList(JsonObject todoList) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private SocketController socketController;
+    private AdapterController adapterController;
+
+    
+    public ToDoListController() {
+        socketController = SocketController.getInstance();
+        adapterController = new AdapterController();
     }
 
     @Override
-    public void updateToDoList(JsonObject todoList) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void createToDoList(ToDoEntity todo) {
+        String todoJson = adapterController.entity2Json(new EntityWrapper("create todo list", "ToDoEntity", todo));
+        socketController.sendJsonObject(todoJson);
     }
 
     @Override
-    public void deleteToDoList(JsonObject todoList) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void updateToDoList(ToDoEntity todo) {
+        String todoJson = adapterController.entity2Json(new EntityWrapper("update todo list", "ToDoEntity", todo));
+        socketController.sendJsonObject(todoJson);
     }
+
+    @Override
+    public void deleteToDoList(ToDoEntity todo) {
+        String todoJson = adapterController.entity2Json(new EntityWrapper("delete todo list", "ToDoEntity", todo));
+        socketController.sendJsonObject(todoJson);    }
     
 }

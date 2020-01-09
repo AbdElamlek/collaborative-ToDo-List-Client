@@ -5,6 +5,8 @@
  */
 package ControllerBase;
 
+import Entities.ToDoEntity;
+import java.util.Date;
 import javax.json.JsonObject;
 
 /**
@@ -12,8 +14,8 @@ import javax.json.JsonObject;
  * @author Abd-Elmalek
  */
 public interface ToDoListInterface {
-   void createToDoList(JsonObject todoList);
-   void updateToDoList(JsonObject todoList);
-   void deleteToDoList(JsonObject todoList);
+   void createToDoList(ToDoEntity todo);
+   void updateToDoList(ToDoEntity todo);
+   void deleteToDoList(ToDoEntity todo);
    
 }

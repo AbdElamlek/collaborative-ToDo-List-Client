@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controllers;
+package Handlers;
 
 import ControllerBase.ActionHandler;
 
@@ -19,6 +19,8 @@ public class Handler { //Context in strategy pattern
     }
     
     public void handleAction(String responseJsonObject){
+        if(actionHandler == null)
+            System.out.println("NUULLL");
         actionHandler.handleAction(responseJsonObject);
     }
 }

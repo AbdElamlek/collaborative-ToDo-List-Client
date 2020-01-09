@@ -6,11 +6,8 @@
 package Controllers;
 
 import ControllerBase.AuthenticationInterface;
-import Utils.EntityWrapper;
-import Utils.UserEntity;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import javax.json.JsonObject;
+import Entities.EntityWrapper;
+import Entities.UserEntity;
 
 /**
  *
@@ -18,15 +15,13 @@ import javax.json.JsonObject;
  */
 public class AuthenticationController implements AuthenticationInterface{
     
-    private GsonBuilder gsonBuilder;
-    private Gson gson;
+    
     private SocketController socketController;
     private AdapterController adapterController;
     
     
     public AuthenticationController() {
-        gsonBuilder = new GsonBuilder();
-        gson = gsonBuilder.create();
+        
         socketController = SocketController.getInstance();
         adapterController=new AdapterController();
         
@@ -34,7 +29,7 @@ public class AuthenticationController implements AuthenticationInterface{
 
     @Override
     public void logIn(String username, String password) {
-        String userJson = gson.toJson(new EntityWrapper("logIn", "UserEntity", new UserEntity(username, password)));
+        String userJson = adapterController.entity2Json(new EntityWrapper("logIn", "UserEntity", new UserEntity(username, password)));
         socketController.sendJsonObject(userJson);
     }
     

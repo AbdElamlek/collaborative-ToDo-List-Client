@@ -5,7 +5,9 @@
  */
 package ControllerBase;
 
-import javax.json.JsonObject;
+import Entities.RequestEntity;
+import Entities.TaskEntity;
+import Entities.UserEntity;
 
 /**
  *
@@ -13,9 +15,9 @@ import javax.json.JsonObject;
  */
 public interface TaskInterFace {
     
-    void assignToTask(JsonObject task);
-    void updateTaskStatus(JsonObject task);
-    void acceptTask(JsonObject task);
-    void rejectTask(JsonObject task);
-    void withdrawFromTask(JsonObject task);
+    boolean assignToTask(int assignerId, int assigneeId);
+    boolean updateTaskStatus(TaskEntity task, int status);
+    boolean acceptTask(int taskId, int userId);
+    boolean rejectTask(RequestEntity taskRequest, UserEntity userEntity);
+    boolean withdrawFromTask(TaskEntity task, int userId);
 }

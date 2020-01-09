@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Ellipse?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="543.0" maxWidth="867.0" minHeight="543.0" minWidth="867.0" prefHeight="543.0" prefWidth="931.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="collaborative.to.pkgdo.list.client.FXMLDocumentController">
+<BorderPane fx:id="borderPane" maxHeight="543.0" maxWidth="867.0" minHeight="543.0" minWidth="867.0" prefHeight="543.0" prefWidth="931.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="collaborative.to.pkgdo.list.client.FXMLDocumentController">
    <right>
       <AnchorPane prefHeight="532.0" prefWidth="301.0" style="-fx-background-color: #3b8ef4;" BorderPane.alignment="CENTER">
          <children>
@@ -22,7 +22,7 @@
                <children>
                   <AnchorPane layoutX="53.0" layoutY="93.0" prefHeight="313.0" prefWidth="207.0">
                      <children>
-                        <JFXButton fx:id="Loginbtn1" buttonType="RAISED" layoutX="8.0" layoutY="255.0" prefHeight="25.0" prefWidth="194.0" style="-fx-background-color: #fd9b1d; -fx-background-radius: 12;" text="Create" textFill="#fefefe">
+                        <JFXButton fx:id="Loginbtn1" buttonType="RAISED" layoutX="8.0" layoutY="255.0" onMouseClicked="#SignUp" prefHeight="25.0" prefWidth="194.0" style="-fx-background-color: #fd9b1d; -fx-background-radius: 12;" text="Create" textFill="#fefefe">
                            <font>
                               <Font size="10.0" />
                            </font>
@@ -54,7 +54,7 @@
                <children>
                   <AnchorPane layoutX="53.0" layoutY="87.0" prefHeight="318.0" prefWidth="185.0">
                      <children>
-                        <JFXButton fx:id="Loginbtn" buttonType="RAISED" layoutX="9.0" layoutY="245.0" prefHeight="25.0" prefWidth="192.0" style="-fx-background-color: #fd9b1d; -fx-background-radius: 12;" text="Login" textFill="#fefefe">
+                        <JFXButton fx:id="Loginbtn" buttonType="RAISED" layoutX="9.0" layoutY="245.0" onMouseClicked="#login" prefHeight="25.0" prefWidth="192.0" style="-fx-background-color: #fd9b1d; -fx-background-radius: 12;" text="Login" textFill="#fefefe">
                            <font>
                               <Font size="10.0" />
                            </font>
@@ -70,7 +70,7 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <JFXButton fx:id="SIGHNINBTN" layoutX="69.0" layoutY="303.0" onMouseClicked="#SignUp" prefHeight="25.0" prefWidth="70.0" ripplerFill="BLACK" style="-fx-background-color: #3b8ef4; -fx-border-color: #fefefe; -fx-background-radius: 12;" text="Sign up" textFill="#fefefe" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="69.0" AnchorPane.rightAnchor="68.0" AnchorPane.topAnchor="303.0">
+                        <JFXButton fx:id="SIGHNINBTN" layoutX="69.0" layoutY="303.0" onMouseClicked="#toSignUp" prefHeight="25.0" prefWidth="70.0" ripplerFill="BLACK" style="-fx-background-color: #3b8ef4; -fx-border-color: #fefefe; -fx-background-radius: 12;" text="Sign up" textFill="#fefefe" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="69.0" AnchorPane.rightAnchor="68.0" AnchorPane.topAnchor="303.0">
                            <font>
                               <Font size="10.0" />
                            </font>
@@ -95,7 +95,7 @@
    <left>
       <AnchorPane prefHeight="543.0" style="-fx-background-color: #fefefe;">
          <children>
-            <ImageView fitHeight="406.0" fitWidth="502.0" layoutX="43.0" layoutY="46.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="120.5" AnchorPane.leftAnchor="43.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="46.0">
+            <ImageView fitHeight="406.0" fitWidth="502.0" layoutX="43.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="63.5" AnchorPane.leftAnchor="43.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="103.0">
                <image>
                   <Image url="@todo.jpg" />
                </image>

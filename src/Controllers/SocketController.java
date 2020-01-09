@@ -5,6 +5,10 @@
  */
 package Controllers;
 
+import Handlers.Handler;
+import Handlers.NotificationHandler;
+import Handlers.LoginHandler;
+import Handlers.SignUpHandler;
 import ControllerBase.ActionHandler;
 import ControllerBase.SocketInterface;
 import java.io.DataInputStream;
@@ -34,7 +38,7 @@ public class SocketController implements SocketInterface {
 
     private SocketController() {
         try {
-            socket = new Socket("10.105.79.130", 5005);
+            socket = new Socket("127.0.0.1", 7777);
             dataInputStream = new DataInputStream(socket.getInputStream());
             printStream = new PrintStream(socket.getOutputStream());
             //dataOutputStream = new DataOutputStream(socket.getOutputStream());
@@ -70,10 +74,13 @@ public class SocketController implements SocketInterface {
     @Override
     public void sendJsonObject(String jsonObjectStr) {
         /*Eman Kamal*/
-        SocketController.getInstance().connect();
+        System.out.println("sending json: " + jsonObjectStr);
+        
             //OR FUNCTION NAME CAN BE: sendRequest(String jsonObjectStr)
             //System.out.println("from sendJsonObject: " + jsonObjectStr);
             printStream.println(jsonObjectStr);
+            System.out.println("SENT");
+
             //Send to the server the json to register !
             //dataOutputStream.writeUTF(jsonObjectStr);
        
@@ -85,14 +92,18 @@ public class SocketController implements SocketInterface {
             JSONObject jsonObject = new JSONObject(jsonObjectStr);
             String action = jsonObject.getString("action");
             ActionHandler actionHandler = null;
-
+            
             switch (action) {
-                case "login":
+                case "logIn":
                     actionHandler = new LoginHandler();
                     break;
                 case "signup":
                     actionHandler = new SignUpHandler();
                     break;
+                case "notification":
+                    actionHandler = new NotificationHandler();
+                case "create todo list":
+                    actionHandler = new ToDoCreationHandler();
             }
             Handler handler = new Handler(actionHandler);
             handler.handleAction(jsonObjectStr);

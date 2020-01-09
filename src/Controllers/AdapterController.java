@@ -6,7 +6,7 @@
 package Controllers;
 
 import ControllerBase.AdapterInterface;
-import Utils.EntityWrapper;
+import Entities.EntityWrapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -22,7 +22,7 @@ public class AdapterController implements AdapterInterface {
 
     public AdapterController() {
         gsonBuilder = new GsonBuilder();
-        gson = gsonBuilder.create();
+        gson = gsonBuilder.serializeNulls().setDateFormat("MMM dd, yyyy h:mm:ss a").create();
         socketController = SocketController.getInstance();
     }
 
