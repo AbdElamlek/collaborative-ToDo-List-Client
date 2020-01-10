@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.effect.DropShadow?>
@@ -16,7 +17,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="652.0" prefWidth="1028.0" style="-fx-background-color: #fefefe; -fx-border-radius: 5;" stylesheets="@tabpane.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="collaborative.to.pkgdo.list.client.FXMLController">
+<AnchorPane id="AnchorPane" prefHeight="652.0" prefWidth="1028.0" style="-fx-background-color: #fefefe;" stylesheets="@tabpane.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="collaborative.to.pkgdo.list.client.FXMLController">
  <children>
       <AnchorPane prefHeight="699.0" prefWidth="259.0" style="-fx-border-radius: 5; -fx-background-color: #fefefe;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="769.0" AnchorPane.topAnchor="0.0">
          <effect>
@@ -38,7 +39,7 @@
                   <Image url="@icons8_planner_filled_50px.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="NOTIFICATIONS" fitHeight="25.0" fitWidth="28.0" layoutX="171.0" layoutY="149.0" opacity="0.57" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="25.0" fitWidth="28.0" layoutX="171.0" layoutY="149.0" onMouseClicked="#nav1" opacity="0.57" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@icons8_bell_24px.png" />
                </image>
@@ -77,16 +78,46 @@
             </Label>
             <AnchorPane layoutX="30.0" layoutY="363.0" prefHeight="226.0" prefWidth="201.0">
                <children>
-                  <ScrollPane fx:id="LISTSCROLL" hbarPolicy="NEVER" layoutY="52.0" prefHeight="178.0" prefWidth="201.0" style="-fx-background-color: #FEFEFE;">
-                     <content>
-                        <VBox fx:id="LIST" prefHeight="177.0" prefWidth="202.0" style="-fx-background-color: #fefefe;" />
-                     </content>
-                  </ScrollPane>
-                  <ScrollPane fx:id="FRIENDSSCROLL" hbarPolicy="NEVER" layoutY="51.0" prefHeight="178.0" prefWidth="201.0" style="-fx-background-color: #FEFEFE;">
-                     <content>
-                        <VBox fx:id="FRIENDSLIST" prefHeight="177.0" prefWidth="203.0" style="-fx-background-color: #fefefe;" />
-                     </content>
-                  </ScrollPane>
+                  <AnchorPane fx:id="FRIENDPANE" layoutY="51.0" prefHeight="166.0" prefWidth="215.0" visible="false">
+                     <children>
+                        <ScrollPane fx:id="FRIENDSSCROLL" hbarPolicy="NEVER" prefHeight="144.0" prefWidth="215.0" style="-fx-background-color: #FEFEFE;">
+                           <content>
+                              <VBox fx:id="FRIENDSLIST" prefHeight="144.0" prefWidth="203.0" style="-fx-background-color: #fefefe;" />
+                           </content>
+                        </ScrollPane>
+                        <ImageView fitHeight="21.0" fitWidth="25.0" layoutX="4.0" layoutY="144.0" opacity="0.61" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons8_add_24px.png" />
+                           </image>
+                        </ImageView>
+                        <Label layoutX="37.0" layoutY="142.0" text="Add Friend">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <JFXButton fx:id="nEWFRIEND" layoutY="137.0" prefHeight="36.0" prefWidth="215.0" ripplerFill="#3b8ef4" text=" " />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="LISTPANE" layoutY="51.0" prefHeight="173.0" prefWidth="206.0">
+                     <children>
+                        <ScrollPane fx:id="LISTSCROLL" hbarPolicy="NEVER" prefHeight="144.0" prefWidth="215.0" style="-fx-background-color: #FEFEFE;">
+                           <content>
+                              <VBox fx:id="LIST" prefHeight="144.0" prefWidth="203.0" style="-fx-background-color: #fefefe;" />
+                           </content>
+                        </ScrollPane>
+                        <ImageView fitHeight="21.0" fitWidth="25.0" layoutX="4.0" layoutY="144.0" opacity="0.61" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons8_add_24px.png" />
+                           </image>
+                        </ImageView>
+                        <Label layoutX="37.0" layoutY="142.0" text="Add lIST">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <JFXButton fx:id="nEWLIST" layoutY="137.0" onMouseClicked="#nav1" prefHeight="36.0" prefWidth="215.0" ripplerFill="#3b8ef4" text=" " />
+                     </children>
+                  </AnchorPane>
                   <HBox layoutY="7.0" prefHeight="44.0" prefWidth="201.0">
                      <children>
                         <AnchorPane onMouseClicked="#nav" prefHeight="44.0" prefWidth="100.0">
@@ -128,25 +159,21 @@
                   <Font size="16.0" />
                </font>
             </JFXButton>
+            <JFXButton fx:id="SHOWNOTIFICATIONS" layoutX="172.0" layoutY="149.0" prefHeight="25.0" prefWidth="25.0" text=" " />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="TODOPANE" layoutX="260.0" prefHeight="652.0" prefWidth="769.0" style="-fx-background-color: #FEFEFE;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="TODOPANE" layoutX="260.0" prefHeight="652.0" prefWidth="769.0" style="-fx-background-color: #FEFEFE;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
          <effect>
             <DropShadow blurType="ONE_PASS_BOX" color="#00000053" height="4.875" radius="1.96875" width="5.0" />
          </effect>
          <children>
-            <Label fx:id="TITLE" layoutX="35.0" layoutY="45.0" prefHeight="36.0" prefWidth="64.0" text="Title">
+            <Label fx:id="TITLE" layoutX="35.0" layoutY="45.0" prefHeight="36.0" prefWidth="235.0" text="Title">
                <font>
                   <Font name="Calibri Bold" size="31.0" />
                </font>
             </Label>
             <AnchorPane layoutX="22.0" layoutY="104.0" prefHeight="36.0" prefWidth="423.0" style="-fx-background-color: #f0f1f5; -fx-background-radius: 5;">
                <children>
-                  <ImageView fx:id="ADDDATE" fitHeight="17.0" fitWidth="44.0" layoutX="367.0" layoutY="10.0" opacity="0.59" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@icons8_calendar_filled_50px.png" />
-                     </image>
-                  </ImageView>
                   <ImageView fx:id="MORE" fitHeight="17.0" fitWidth="9.0" layoutX="400.0" layoutY="14.0" opacity="0.59" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@icons8_sort_down_26px_1.png" />
@@ -169,9 +196,9 @@
                   <Image url="@add%20task.PNG" />
                </image>
             </ImageView>
-            <ScrollPane fx:id="TASKSLISTSCROLL" hbarPolicy="NEVER" layoutX="1.0" layoutY="162.0" prefHeight="457.0" prefWidth="444.0" style="-fx-background-color: #FEFEFE;">
+            <ScrollPane fx:id="TASKSLISTSCROLL" hbarPolicy="NEVER" layoutY="152.0" prefHeight="466.0" prefWidth="446.0" style="-fx-background-color: #fefefefe;">
                <content>
-                  <VBox fx:id="TASKLISTS" prefHeight="450.0" prefWidth="449.0" style="-fx-background-color: #fefefe;" />
+                  <Accordion fx:id="TASKLISTS" />
                </content>
             </ScrollPane>
             <AnchorPane fx:id="STATUSPANE1" layoutX="470.0" layoutY="1.0" prefHeight="652.0" prefWidth="298.0" style="-fx-background-color: #FEFEFE;">
@@ -179,18 +206,34 @@
                   <DropShadow blurType="ONE_PASS_BOX" color="#00000053" height="4.875" radius="1.96875" width="5.0" />
                </effect>
                <children>
-                  <AnchorPane fx:id="TASKDISCRIPTION" layoutX="16.0" layoutY="98.0">
+                  <AnchorPane fx:id="TASKDISCRIPTION" layoutX="16.0" layoutY="70.0" prefHeight="246.0" prefWidth="259.0">
                      <children>
-                        <Label layoutX="8.0" prefHeight="36.0" prefWidth="146.0" text="Task">
+                        <Label layoutX="8.0" layoutY="34.0" prefHeight="36.0" prefWidth="50.0" text="Task">
                            <font>
                               <Font name="Calibri Bold" size="20.0" />
                            </font>
                         </Label>
-                        <JFXTextArea layoutY="36.0" prefHeight="182.0" prefWidth="259.0" promptText="  Description" unFocusColor="#ddd9d9">
+                        <JFXTextArea layoutX="1.0" layoutY="78.0" prefHeight="166.0" prefWidth="259.0" promptText="  Description" unFocusColor="#ddd9d9">
                            <font>
                               <Font name="Candara Bold" size="12.0" />
                            </font>
                         </JFXTextArea>
+                        <AnchorPane layoutX="86.0" layoutY="11.0" prefHeight="56.0" prefWidth="167.0" style="-fx-background-radius: 6; -fx-background-color: #fefefe;">
+                           <children>
+                              <Label layoutX="40.0" layoutY="9.0" text="Start Date :" textFill="#9e9999" />
+                              <Label layoutX="40.0" layoutY="29.0" text="End Date   :" textFill="#9e9999" />
+                              <Label layoutX="103.0" layoutY="9.0" text="dd/mm/yy" textFill="#9e9999" />
+                              <Label layoutX="102.0" layoutY="31.0" text="dd/mm/yy" textFill="#9e9999" />
+                              <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="7.0" layoutY="8.0" opacity="0.71" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons8_calendar_filled_50px.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                           <effect>
+                              <DropShadow blurType="ONE_PASS_BOX" color="#706b6bac" height="10.0" radius="4.5" width="10.0" />
+                           </effect>
+                        </AnchorPane>
                      </children>
                   </AnchorPane>
                   <ScrollPane fx:id="COLLABSCROLL" hbarPolicy="NEVER" layoutX="14.0" layoutY="353.0" prefHeight="271.0" prefWidth="259.0" style="-fx-background-color: #FEFEFE;">
@@ -203,27 +246,27 @@
                         <Font name="Calibri Bold" size="20.0" />
                      </font>
                   </Label>
+                  <ImageView fx:id="ADDCOLLAB" fitHeight="21.0" fitWidth="17.0" layoutX="223.0" layoutY="328.0" opacity="0.68" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons8_plus_24px_1.png" />
+                     </image>
+                  </ImageView>
                </children>
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="TODAYPANE" layoutX="256.0" prefHeight="652.0" prefWidth="769.0" style="-fx-background-color: #FEFEFE;">
+      <AnchorPane fx:id="TODAYPANE" layoutX="256.0" prefHeight="652.0" prefWidth="769.0" style="-fx-background-color: #FEFEFE;" visible="false">
          <effect>
             <DropShadow blurType="ONE_PASS_BOX" color="#00000053" height="4.875" radius="1.96875" width="5.0" />
          </effect>
          <children>
-            <Label layoutX="35.0" layoutY="45.0" prefHeight="36.0" prefWidth="108.0" text="Today">
+            <Label layoutX="35.0" layoutY="45.0" prefHeight="36.0" prefWidth="235.0" text="Today">
                <font>
                   <Font name="Calibri Bold" size="31.0" />
                </font>
             </Label>
             <AnchorPane layoutX="22.0" layoutY="104.0" prefHeight="36.0" prefWidth="423.0" style="-fx-background-color: #f0f1f5; -fx-background-radius: 5;">
                <children>
-                  <ImageView fx:id="DATEPICK" fitHeight="17.0" fitWidth="44.0" layoutX="367.0" layoutY="10.0" onMouseClicked="#nav1" opacity="0.59" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@icons8_calendar_filled_50px.png" />
-                     </image>
-                  </ImageView>
                   <ImageView fitHeight="17.0" fitWidth="9.0" layoutX="400.0" layoutY="14.0" opacity="0.59" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@icons8_sort_down_26px_1.png" />
@@ -234,6 +277,14 @@
                         <Font name="Calibri Light" size="12.0" />
                      </font>
                   </JFXTextField>
+                  <JFXButton fx:id="DATEPICK" layoutX="360.0" layoutY="6.0" prefHeight="25.0" prefWidth="21.0" style="-fx-background-image:icons8_calendar_filled_50px.png;" text=" ">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="25.0" opacity="0.59" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons8_calendar_filled_50px.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></JFXButton>
                </children>
             </AnchorPane>
             <ImageView fitHeight="25.0" fitWidth="17.0" layoutX="395.0" layoutY="59.0" opacity="0.55" pickOnBounds="true" preserveRatio="true">
@@ -251,7 +302,36 @@
                   <DropShadow blurType="ONE_PASS_BOX" color="#00000053" height="4.875" radius="1.96875" width="5.0" />
                </effect>
                <children>
-                  <AnchorPane fx:id="TASKDISCRIPTION1" layoutX="16.0" layoutY="98.0" prefHeight="36.0" prefWidth="108.0" />
+                  <AnchorPane fx:id="TASKDISCRIPTION2" layoutX="19.0" layoutY="86.0" prefHeight="246.0" prefWidth="259.0">
+                     <children>
+                        <Label layoutX="8.0" layoutY="34.0" prefHeight="36.0" prefWidth="50.0" text="Task">
+                           <font>
+                              <Font name="Calibri Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <JFXTextArea layoutX="1.0" layoutY="78.0" prefHeight="166.0" prefWidth="259.0" promptText="  Description" unFocusColor="#ddd9d9">
+                           <font>
+                              <Font name="Candara Bold" size="12.0" />
+                           </font>
+                        </JFXTextArea>
+                        <AnchorPane layoutX="86.0" layoutY="11.0" prefHeight="56.0" prefWidth="167.0" style="-fx-background-radius: 6; -fx-background-color: #fefefe;">
+                           <children>
+                              <Label layoutX="40.0" layoutY="9.0" text="Start Date :" textFill="#9e9999" />
+                              <Label layoutX="40.0" layoutY="29.0" text="End Date   :" textFill="#9e9999" />
+                              <Label layoutX="103.0" layoutY="9.0" text="dd/mm/yy" textFill="#9e9999" />
+                              <Label layoutX="102.0" layoutY="31.0" text="dd/mm/yy" textFill="#9e9999" />
+                              <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="7.0" layoutY="8.0" opacity="0.71" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons8_calendar_filled_50px.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                           <effect>
+                              <DropShadow blurType="ONE_PASS_BOX" color="#706b6bac" height="10.0" radius="4.5" width="10.0" />
+                           </effect>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
                </children>
             </AnchorPane>
          </children>
@@ -343,8 +423,100 @@
       </AnchorPane>
       <JFXButton fx:id="EXIT" layoutX="985.0" layoutY="11.0" onMouseClicked="#exit" prefHeight="25.0" prefWidth="25.0" ripplerFill="#f2503d" text=" " />
       <JFXButton fx:id="MINIMIZE" layoutX="954.0" layoutY="10.0" prefHeight="25.0" prefWidth="25.0" ripplerFill="#f0eb3e" text=" " />
+      <AnchorPane fx:id="NOTIFIPANE" layoutX="116.0" layoutY="179.0" prefHeight="314.0" prefWidth="350.0" style="-fx-background-color: #FEFEFE; -fx-background-radius: 5;" visible="false">
+         <children>
+            <ScrollPane hbarPolicy="NEVER" layoutX="6.0" prefHeight="314.0" prefWidth="332.0">
+               <content>
+                  <AnchorPane prefWidth="319.0">
+                     <children>
+                        <VBox fx:id="NOTIFICATIONS" layoutY="14.0" prefWidth="319.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
+         </children>
+         <effect>
+            <DropShadow blurType="TWO_PASS_BOX" color="#6f6868c9" />
+         </effect>
+      </AnchorPane>
+      <AnchorPane fx:id="ADDLISTPANE" layoutX="314.0" layoutY="122.0" prefHeight="206.0" prefWidth="350.0" style="-fx-background-color: #FEFEFE; -fx-background-radius: 5;" visible="false">
+         <effect>
+            <DropShadow blurType="TWO_PASS_BOX" color="#6f6868c9" />
+         </effect>
+         <children>
+            <Label fx:id="LABELADDEDIT" layoutX="10.0" layoutY="10.0" text="Add List">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <AnchorPane layoutX="17.0" layoutY="49.0" prefHeight="44.0" prefWidth="316.0" style="-fx-background-color: #f0f1f5; -fx-background-radius: 5; -fx-border-color: #6c80d0; -fx-border-radius: 5; -fx-border-width: 2;">
+               <children>
+                  <JFXTextField focusColor="#f0f1f5" layoutX="7.0" layoutY="6.0" prefHeight="30.0" prefWidth="260.0" promptText="Name" style="-fx-background-color: #f0f1f5; -fx-background-radius: 4;" unFocusColor="#f0f1f5">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </JFXTextField>
+                  <ImageView fitHeight="17.0" fitWidth="44.0" layoutX="276.0" layoutY="14.0" opacity="0.59" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons8_calendar_filled_50px.png" />
+                     </image>
+                  </ImageView>
+                  <JFXButton fx:id="ADDDATE" layoutX="268.0" layoutY="9.0" prefHeight="25.0" prefWidth="33.0" text=" " />
+               </children>
+            </AnchorPane>
+            <JFXButton fx:id="SAVELIST" layoutX="162.0" layoutY="170.0" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #3b8ef4;" text="Save" textFill="#fffbfb" />
+            <JFXButton fx:id="CANCELLIST" layoutX="252.0" layoutY="170.0" onMouseClicked="#nav1" prefHeight="25.0" prefWidth="78.0" style="-fx-background-color: #f0f1f5;" text="Cancel" />
+            <Circle fx:id="BLUE" fill="DODGERBLUE" layoutX="55.0" layoutY="121.0" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+            <Circle fx:id="PURPLE" fill="#b022c9" layoutX="94.0" layoutY="121.0" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+            <Circle fx:id="PINK" fill="#f220ac" layoutX="133.0" layoutY="121.0" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+            <Circle fx:id="YELLOW" fill="#ffc41f" layoutX="173.0" layoutY="121.0" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+            <Circle fx:id="GREEN" fill="#70ae3a" layoutX="213.0" layoutY="121.0" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+            <Circle fx:id="ORANGE" fill="#f87110" layoutX="252.0" layoutY="121.0" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+            <Circle fx:id="RED" fill="#ff1c07" layoutX="291.0" layoutY="121.0" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="ADDFRIENDPANE" layoutX="324.0" layoutY="132.0" prefHeight="424.0" prefWidth="350.0" style="-fx-background-color: #FEFEFE; -fx-background-radius: 5;" visible="false">
+         <effect>
+            <DropShadow blurType="TWO_PASS_BOX" color="#6f6868c9" />
+         </effect>
+         <children>
+            <Label fx:id="LABELADDEDIT1" layoutX="10.0" layoutY="8.0" text="Add Friend">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <AnchorPane layoutX="26.0" layoutY="46.0" prefHeight="333.0" prefWidth="298.0" style="-fx-background-color: #f0f1f5; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-width: 2;">
+               <children>
+                  <ScrollPane layoutX="1.0" prefHeight="335.0" prefWidth="283.0" />
+               </children>
+            </AnchorPane>
+            <JFXButton fx:id="dONEADDFRIEND" layoutX="286.0" layoutY="389.0" prefHeight="25.0" prefWidth="50.0" style="-fx-background-color: #3b8ef4;" text="Done" textFill="#fffbfb" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="aDDCOLLABORATOR" layoutX="334.0" layoutY="133.0" prefHeight="424.0" prefWidth="350.0" style="-fx-background-color: #FEFEFE; -fx-background-radius: 5;" visible="false">
+         <effect>
+            <DropShadow blurType="TWO_PASS_BOX" color="#6f6868c9" />
+         </effect>
+         <children>
+            <Label fx:id="LABELADDEDIT11" layoutX="10.0" layoutY="8.0" text="Add Collaborator">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <AnchorPane layoutX="26.0" layoutY="46.0" prefHeight="333.0" prefWidth="298.0" style="-fx-background-color: #f0f1f5; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-width: 2;">
+               <children>
+                  <ScrollPane layoutX="1.0" prefHeight="335.0" prefWidth="298.0">
+                     <content>
+                        <VBox fx:id="aDDRIENDCOLABLIST" prefHeight="318.0" prefWidth="284.0" />
+                     </content>
+                  </ScrollPane>
+               </children>
+            </AnchorPane>
+            <JFXButton fx:id="dONEADDFRIEND1" layoutX="286.0" layoutY="389.0" prefHeight="25.0" prefWidth="50.0" style="-fx-background-color: #3b8ef4;" text="Done" textFill="#fffbfb" />
+         </children>
+      </AnchorPane>
    </children>
    <effect>
-      <DropShadow color="#000000b1" />
+      <DropShadow />
    </effect>
 </AnchorPane>

@@ -61,9 +61,9 @@ public class CollaborativeToDoListClient extends Application {
         //sc.connect();
         //AuthenticationController authenticationController = new AuthenticationController();
         //authenticationController.logIn("ReeeEzzat", "123");
-        //SocketController.getInstance().connect();
+        SocketController.getInstance().connect();
         //ToDoListController tlc = new ToDoListController();
-        //tlc.createToDoList(new ToDoEntity("Home ToDo List", new Date(), new Date(), 11, 1));
+        //tlc.createToDoList(new ToDoEntity("New list", new Date(), new Date(), 11, 1, "0xcc3333ff")); 
         launch(args);
     }
     
