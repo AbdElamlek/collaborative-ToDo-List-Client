@@ -15,17 +15,15 @@ public class RequestEntity implements BaseEntity {
     
     private int id;
     private Date time;
-    private int type;
     private int receivedUserId;
     private int sentUserId;
 
     public RequestEntity() {
     }
 
-    public RequestEntity(int id, Date time, int type, int receivedUserId, int sentUserId) {
+    public RequestEntity(int id, Date time, int receivedUserId, int sentUserId) {
         this.id = id;
         this.time = time;
-        this.type = type;
         this.receivedUserId = receivedUserId;
         this.sentUserId = sentUserId;
     }
@@ -38,9 +36,7 @@ public class RequestEntity implements BaseEntity {
         this.time = time;
     }
 
-    public void setType(int type) {
-        this.type = type;
-    }
+    
 
     public void setReceivedUserId(int receivedUserId) {
         this.receivedUserId = receivedUserId;
@@ -58,9 +54,7 @@ public class RequestEntity implements BaseEntity {
         return time;
     }
 
-    public int getType() {
-        return type;
-    }
+    
 
     public int getReceivedUserId() {
         return receivedUserId;

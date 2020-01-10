@@ -11,6 +11,7 @@ import Entities.RequestEntity;
 import Entities.TaskEntity;
 import Entities.UserEntity;
 import DTOs.Accept_RejectTaskDTO;
+import Entities.Accept_RecjectTaskEntity;
 import java.util.Date;
 import javax.json.JsonObject;
 
@@ -21,14 +22,14 @@ import javax.json.JsonObject;
 public class TaskController implements TaskInterFace{
     AdapterController adapterController = new AdapterController();
     @Override
-    public boolean assignToTask(int assignerId, int assigneeId) {
+    public boolean assignToTask(int assignerId, int assigneeId, int taskId) {
         try {
-        RequestEntity requestEntity = new RequestEntity();
-        requestEntity.setSentUserId(assignerId);
-        requestEntity.setReceivedUserId(assigneeId);
-        requestEntity.setType(1);
-        requestEntity.setTime(new Date());
-        EntityWrapper entityWrapper = new EntityWrapper("assigonToTaskRequest", "entity", requestEntity);
+        Accept_RecjectTaskEntity accept_RecjectTaskEntity = new Accept_RecjectTaskEntity();
+        accept_RecjectTaskEntity.setSentUserId(assignerId);
+        accept_RecjectTaskEntity.setReceivedUserId(assigneeId);
+        accept_RecjectTaskEntity.setTaskId(taskId);
+        accept_RecjectTaskEntity.setTime(new Date());
+        EntityWrapper entityWrapper = new EntityWrapper("assigonToTaskRequest", "entity", accept_RecjectTaskEntity);
         String taskJsonResponse = adapterController.entity2Json(entityWrapper);
         SocketController.getInstance().sendJsonObject(taskJsonResponse);
         return true;
