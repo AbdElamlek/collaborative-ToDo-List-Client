@@ -20,4 +20,5 @@ public interface TaskInterFace {
     boolean acceptTask(int taskId, int userId);
     boolean rejectTask(RequestEntity taskRequest, UserEntity userEntity);
     boolean withdrawFromTask(TaskEntity task, int userId);
+    boolean createNewTask(int status , String description, int itemId);
 }
