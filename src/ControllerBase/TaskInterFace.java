@@ -15,9 +15,10 @@ import Entities.UserEntity;
  */
 public interface TaskInterFace {
     
-    boolean assignToTask(int assignerId, int assigneeId);
+    boolean assignToTask(int assignerId, int assigneeId, int taskId);
     boolean updateTaskStatus(TaskEntity task, int status);
     boolean acceptTask(int taskId, int userId);
     boolean rejectTask(RequestEntity taskRequest, UserEntity userEntity);
     boolean withdrawFromTask(TaskEntity task, int userId);
+    boolean createNewTask(int status , String description, int itemId);
 }
