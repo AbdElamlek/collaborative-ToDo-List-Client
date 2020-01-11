@@ -5,12 +5,15 @@
  */
 package Controllers;
 
+import Handlers.ToDoCreationHandler;
 import Handlers.Handler;
 import Handlers.NotificationHandler;
 import Handlers.LoginHandler;
 import Handlers.SignUpHandler;
 import ControllerBase.ActionHandler;
 import ControllerBase.SocketInterface;
+import Handlers.ToDoDeleteHandler;
+import Handlers.ToDoUpdateHandler;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
@@ -32,6 +35,7 @@ public class SocketController implements SocketInterface {
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
     private PrintStream printStream;
+    private Boolean isRunning;
     private Thread thread;
 
     private static SocketController socketController;
@@ -41,17 +45,18 @@ public class SocketController implements SocketInterface {
             socket = new Socket("127.0.0.1", 7777);
             dataInputStream = new DataInputStream(socket.getInputStream());
             printStream = new PrintStream(socket.getOutputStream());
-            //dataOutputStream = new DataOutputStream(socket.getOutputStream());
-
+            isRunning = true;
+            
             thread = new Thread() {
                 @Override
                 public void run() {
-                    while (true) {
+                    while (isRunning) {
                         try {
                             String receivedResponse = dataInputStream.readLine();
                             handleResponse(receivedResponse);
                         } catch (IOException ex) {
-                            ex.printStackTrace();
+                            isRunning = false;
+                            //ex.printStackTrace();
                         }
                     }
                 }
@@ -102,24 +107,16 @@ public class SocketController implements SocketInterface {
                     break;
                 case "notification":
                     actionHandler = new NotificationHandler();
+                    break;
                 case "create todo list":
                     actionHandler = new ToDoCreationHandler();
-                    
-                case "create item":
-                    actionHandler = new ItemCreationHandler();
                     break;
-//                    
-//                case "update item":
-//                    actionHandler = new ItemUpdateHandler();
-//                    break;
-//                    
-//                case "delete item":
-//                    //broadCast(jsonObjectStr);
-//                    actionHandler = new ItemDeleteHandler();
-//                    break;   
-//                    
-//                    
-                    
+                case "update todo list":
+                    actionHandler = new ToDoUpdateHandler();
+                    break;
+                case "delete todo list":
+                    actionHandler = new ToDoDeleteHandler();
+                    break;
             }
             Handler handler = new Handler(actionHandler);
             handler.handleAction(jsonObjectStr);

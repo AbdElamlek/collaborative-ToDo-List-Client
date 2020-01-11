@@ -5,10 +5,19 @@
  */
 package collaborative.to.pkgdo.list.client;
 
+import Controllers.ToDoListController;
+import Entities.ToDoEntity;
+import Entities.UserEntity;
+import Handlers.ToDoCreationHandler;
+import Utils.CurrentUser;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -35,17 +44,19 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
-
+import java.time.ZoneId;
 /**
  *
  * @author Abd-Elmalek
  */
 public class FXMLController implements Initializable  {
+    UserEntity currentUser;
+
    
     Friendicon Fitem=new Friendicon();
     Friendicon Fitem2=new Friendicon();
-    Listicon  Litem=new Listicon();
-    Listicon  Litem2=new Listicon();
+    //Listicon  Litem=new Listicon();
+    //Listicon  Litem2=new Listicon();
     Item task=new Item();
     Item task2=new Item();
     Task item=new Task();
@@ -87,6 +98,7 @@ public class FXMLController implements Initializable  {
     public AnchorPane REQUESTPANE;
     public AnchorPane DATEPANE;
     public AnchorPane ADDLISTPANE;
+    public AnchorPane ADDCOLLABORATORPANE;
     
     public JFXButton REQUESTS;
     public JFXButton TODAY;
@@ -97,6 +109,21 @@ public class FXMLController implements Initializable  {
     
     public JFXButton SHOWNOTIFICATIONS;
     public JFXButton CLEARDATE;
+    public JFXButton SAVEDATE;
+    public JFXButton NEWCOLLABORATOR;
+    public JFXButton DONEADDCOLLABORATOR;
+    public JFXButton CANCELLIST;
+    
+    public JFXDatePicker STARTDATE;
+    public JFXDatePicker ENDDATE;
+    
+    public JFXTextField NEWTODOTITLE;
+
+    public Label USERNAME;
+    public Label TITLE;
+    
+    public Circle TODOCOLOR;
+
     void disableUIForNotification(){
         MINIMIZE.setDisable(true);
         EXIT.setDisable(true);
@@ -119,10 +146,13 @@ public class FXMLController implements Initializable  {
         REQUESTS.setDisable(true);
         TODAY.setDisable(true);
         STATUS.setDisable(true);
+        
+        NEWCOLLABORATOR.setDisable(true);
+        ADDCOLLABORATORPANE.setDisable(true);
     } 
     @FXML
        public void nav(MouseEvent event) {
-        
+           
            if(event.getSource()==LISTS){
             
             FRIENDPANE.setVisible(false);
@@ -168,17 +198,29 @@ public class FXMLController implements Initializable  {
             ADDLISTPANE.setVisible(true);
           }
         else if(event.getSource()==CLEARDATE){
-             
-            DATEPANE.setVisible(false);
-            
+             STARTDATE.setValue(null);
+             ENDDATE.setValue(null);
           }
-         
+        else if(event.getSource()==SAVEDATE){
+            DATEPANE.setVisible(false);
+        }
          else if(event.getSource()==SHOWNOTIFICATIONS){
              
             NOTIFIPANE.setVisible(true);
             
           }
-     
+         else if(event.getSource() == NEWCOLLABORATOR){
+             ADDCOLLABORATORPANE.setVisible(true);
+         }
+         else if(event.getSource() == DONEADDCOLLABORATOR){
+             ADDCOLLABORATORPANE.setVisible(false);
+         }
+         else if(event.getSource() == CANCELLIST){
+             ADDLISTPANE.setVisible(false);
+         }
+         else if(event.getSource() == ADDDATE){
+             DATEPANE.setVisible(true);
+         }
      
      
      
@@ -196,12 +238,15 @@ public class FXMLController implements Initializable  {
         
        
     }
+
+     
       public  void actions() {
-         TODOPANE.setVisible(true);
+        TODOPANE.setVisible(true);
             STATUSPANE.setVisible(false);
             REQUESTPANE.setVisible(false);    
             TODAYPANE.setVisible(false);  }
      
+
 //      
 //      public static boolean inHierarchy(Node node, Node potentialHierarchyElement) {
 //    if (potentialHierarchyElement == null) {
@@ -217,14 +262,20 @@ public class FXMLController implements Initializable  {
 //}
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        /*REHAM*/
+        System.out.println("in init in main page");
+        ToDoCreationHandler.setTodoGUIGenerator(this::createTodoListResponse);
+        currentUser = CurrentUser.getCurrentUser();
+        /*REHAM*/
+      
       Fitem =new Friendicon();
      
       FRIENDSLIST.getChildren().add(Fitem);
       FRIENDSLIST.getChildren().add(Fitem2);
      
-      
-      LIST.getChildren().add(Litem);
-      LIST.getChildren().add(Litem2);
+      //LIST.getChildren().add(Litem);
+      //LIST.getChildren().add(Litem2);
+
       
       COLLABORATORS.getChildren().add(col);
       aDDRIENDCOLABLIST.getChildren().add(fc);
@@ -239,7 +290,7 @@ public class FXMLController implements Initializable  {
       linelists.setStroke(javafx.scene.paint.Color.valueOf("#000000"));
       linefriends.setStroke(javafx.scene.paint.Color.valueOf("#d7d0d0"));
       
-      DATEPICK.focusedProperty().addListener(new ChangeListener<Boolean>()
+      /*DATEPICK.focusedProperty().addListener(new ChangeListener<Boolean>()
          {
           @Override
          public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
@@ -254,8 +305,8 @@ public class FXMLController implements Initializable  {
                  DATEPANE.setVisible(false);
               }
             }
-        }); 
-       ADDDATE.focusedProperty().addListener(new ChangeListener<Boolean>()
+        }); */
+       /*ADDDATE.focusedProperty().addListener(new ChangeListener<Boolean>()
          {
           @Override
          public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
@@ -270,13 +321,11 @@ public class FXMLController implements Initializable  {
                  DATEPANE.setVisible(false);
               }
             }
-        }); 
+        }); */
      
-    
+        initiateCurrentUser();
     }  
-    
-    
-    
+       
     
     
     
@@ -530,11 +579,12 @@ class  Collaborator extends AnchorPane {
      
      
      class Listicon extends AnchorPane {
-
+         private ToDoEntity todo;
     protected final ImageView imageView;
     protected  Label label;
-    public Listicon() {
-
+    public Listicon(ToDoEntity todo) {
+        
+        this.todo = todo;
         imageView = new ImageView();
         label = new Label();
 
@@ -556,7 +606,7 @@ class  Collaborator extends AnchorPane {
         label.setPrefWidth(100.0);
         label.setTextFill(javafx.scene.paint.Color.valueOf("#2c2a2a"));
         label.setFont(new Font(16.0));
-        label.setText("omnia's list");
+        label.setText(todo.getTitle());
         getChildren().add(imageView);
         getChildren().add(label);
         
@@ -564,14 +614,11 @@ class  Collaborator extends AnchorPane {
             @Override
             public void handle(MouseEvent event) {
              actions();
+             TITLE.setText(todo.getTitle());
             }
         });
         
     }
-     public void setListName(String s)
-        {
-         label.setText(s);
-        }
 }
 
 
@@ -724,8 +771,9 @@ class Task extends AnchorPane {
 
         label.setLayoutX(64.0);
         label.setLayoutY(7.0);
-         label.setText("omnia");
+         //label.setText("omnia");
         label.setFont(new Font(14.0));
+
 
         getChildren().add(jFXCheckBox);
         getChildren().add(line);
@@ -738,9 +786,43 @@ class Task extends AnchorPane {
         {
          label.setText(s);
         }
+}
+    
+    /*REHAM*/
+    public void initiateCurrentUser(){
+        USERNAME.setText(currentUser.getUserName());
+        for(ToDoEntity todo : currentUser.getTodoList()){
+            Listicon  Litem=new Listicon(todo);
+            LIST.getChildren().add(Litem);
+        }
+            
+    } 
+    
+    public void createTodoListResponse(ToDoEntity todo){
+            Platform.runLater(() ->  {
+                Listicon  Litem=new Listicon(todo);
+                LIST.getChildren().add(Litem);
+            });
     }
-
-
-
-
+    public void setTodoColor(MouseEvent event){
+        TODOCOLOR = (Circle)event.getSource();
+    }
+    public void createTodoListRequest(MouseEvent event){
+        String todoTitle = NEWTODOTITLE.getText();
+        System.out.println(todoTitle);
+        Date startDate = Date.from(STARTDATE.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date endDate = Date.from(ENDDATE.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        
+        if(!todoTitle.equals("") && startDate != null && endDate != null && TODOCOLOR != null){
+            ToDoListController tlc = new ToDoListController();
+            tlc.createToDoList(new ToDoEntity(todoTitle, startDate, endDate, currentUser.getId(), 0, TODOCOLOR.getFill().toString()));
+            
+            NEWTODOTITLE.setText("");
+            STARTDATE.setValue(null);
+            ENDDATE.setValue(null);
+            TODOCOLOR = null;
+            ADDLISTPANE.setVisible(false);
+        }
+    }
+    /*REHAM*/
 }
