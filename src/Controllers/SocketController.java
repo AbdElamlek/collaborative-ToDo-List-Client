@@ -104,6 +104,22 @@ public class SocketController implements SocketInterface {
                     actionHandler = new NotificationHandler();
                 case "create todo list":
                     actionHandler = new ToDoCreationHandler();
+                    
+                case "create item":
+                    actionHandler = new ItemCreationHandler();
+                    break;
+//                    
+//                case "update item":
+//                    actionHandler = new ItemUpdateHandler();
+//                    break;
+//                    
+//                case "delete item":
+//                    //broadCast(jsonObjectStr);
+//                    actionHandler = new ItemDeleteHandler();
+//                    break;   
+//                    
+//                    
+                    
             }
             Handler handler = new Handler(actionHandler);
             handler.handleAction(jsonObjectStr);
