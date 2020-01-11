@@ -35,6 +35,7 @@ public class SocketController implements SocketInterface {
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
     private PrintStream printStream;
+    private Boolean isRunning;
     private Thread thread;
 
     private static SocketController socketController;
@@ -44,17 +45,18 @@ public class SocketController implements SocketInterface {
             socket = new Socket("127.0.0.1", 7777);
             dataInputStream = new DataInputStream(socket.getInputStream());
             printStream = new PrintStream(socket.getOutputStream());
-            //dataOutputStream = new DataOutputStream(socket.getOutputStream());
-
+            isRunning = true;
+            
             thread = new Thread() {
                 @Override
                 public void run() {
-                    while (true) {
+                    while (isRunning) {
                         try {
                             String receivedResponse = dataInputStream.readLine();
                             handleResponse(receivedResponse);
                         } catch (IOException ex) {
-                            ex.printStackTrace();
+                            isRunning = false;
+                            //ex.printStackTrace();
                         }
                     }
                 }

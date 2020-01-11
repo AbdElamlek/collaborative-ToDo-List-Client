@@ -12,7 +12,10 @@ import Handlers.ToDoCreationHandler;
 import Utils.CurrentUser;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -41,7 +44,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
-
+import java.time.ZoneId;
 /**
  *
  * @author Abd-Elmalek
@@ -95,6 +98,7 @@ public class FXMLController implements Initializable  {
     public AnchorPane REQUESTPANE;
     public AnchorPane DATEPANE;
     public AnchorPane ADDLISTPANE;
+    public AnchorPane ADDCOLLABORATORPANE;
     
     public JFXButton REQUESTS;
     public JFXButton TODAY;
@@ -105,9 +109,20 @@ public class FXMLController implements Initializable  {
     
     public JFXButton SHOWNOTIFICATIONS;
     public JFXButton CLEARDATE;
+    public JFXButton SAVEDATE;
+    public JFXButton NEWCOLLABORATOR;
+    public JFXButton DONEADDCOLLABORATOR;
+    public JFXButton CANCELLIST;
+    
+    public JFXDatePicker STARTDATE;
+    public JFXDatePicker ENDDATE;
+    
+    public JFXTextField NEWTODOTITLE;
 
     public Label USERNAME;
     public Label TITLE;
+    
+    public Circle TODOCOLOR;
 
     void disableUIForNotification(){
         MINIMIZE.setDisable(true);
@@ -131,11 +146,13 @@ public class FXMLController implements Initializable  {
         REQUESTS.setDisable(true);
         TODAY.setDisable(true);
         STATUS.setDisable(true);
+        
+        NEWCOLLABORATOR.setDisable(true);
+        ADDCOLLABORATORPANE.setDisable(true);
     } 
     @FXML
        public void nav(MouseEvent event) {
-           ToDoListController tlc = new ToDoListController();
-           tlc.createToDoList(new ToDoEntity("New list", new Date(), new Date(), 11, 1, "0xcc3333ff"));
+           
            if(event.getSource()==LISTS){
             
             FRIENDPANE.setVisible(false);
@@ -181,17 +198,29 @@ public class FXMLController implements Initializable  {
             ADDLISTPANE.setVisible(true);
           }
         else if(event.getSource()==CLEARDATE){
-             
-            DATEPANE.setVisible(false);
-            
+             STARTDATE.setValue(null);
+             ENDDATE.setValue(null);
           }
-         
+        else if(event.getSource()==SAVEDATE){
+            DATEPANE.setVisible(false);
+        }
          else if(event.getSource()==SHOWNOTIFICATIONS){
              
             NOTIFIPANE.setVisible(true);
             
           }
-     
+         else if(event.getSource() == NEWCOLLABORATOR){
+             ADDCOLLABORATORPANE.setVisible(true);
+         }
+         else if(event.getSource() == DONEADDCOLLABORATOR){
+             ADDCOLLABORATORPANE.setVisible(false);
+         }
+         else if(event.getSource() == CANCELLIST){
+             ADDLISTPANE.setVisible(false);
+         }
+         else if(event.getSource() == ADDDATE){
+             DATEPANE.setVisible(true);
+         }
      
      
      
@@ -235,7 +264,7 @@ public class FXMLController implements Initializable  {
     public void initialize(URL url, ResourceBundle rb) {
         /*REHAM*/
         System.out.println("in init in main page");
-        ToDoCreationHandler.setTodoGUIGenerator(this::createTodoList);
+        ToDoCreationHandler.setTodoGUIGenerator(this::createTodoListResponse);
         currentUser = CurrentUser.getCurrentUser();
         /*REHAM*/
       
@@ -261,7 +290,7 @@ public class FXMLController implements Initializable  {
       linelists.setStroke(javafx.scene.paint.Color.valueOf("#000000"));
       linefriends.setStroke(javafx.scene.paint.Color.valueOf("#d7d0d0"));
       
-      DATEPICK.focusedProperty().addListener(new ChangeListener<Boolean>()
+      /*DATEPICK.focusedProperty().addListener(new ChangeListener<Boolean>()
          {
           @Override
          public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
@@ -276,8 +305,8 @@ public class FXMLController implements Initializable  {
                  DATEPANE.setVisible(false);
               }
             }
-        }); 
-       ADDDATE.focusedProperty().addListener(new ChangeListener<Boolean>()
+        }); */
+       /*ADDDATE.focusedProperty().addListener(new ChangeListener<Boolean>()
          {
           @Override
          public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
@@ -292,7 +321,7 @@ public class FXMLController implements Initializable  {
                  DATEPANE.setVisible(false);
               }
             }
-        }); 
+        }); */
      
         initiateCurrentUser();
     }  
@@ -769,11 +798,31 @@ class Task extends AnchorPane {
             
     } 
     
-    public void createTodoList(ToDoEntity todo){
+    public void createTodoListResponse(ToDoEntity todo){
             Platform.runLater(() ->  {
-            Listicon  Litem=new Listicon(todo);
-            LIST.getChildren().add(Litem);
+                Listicon  Litem=new Listicon(todo);
+                LIST.getChildren().add(Litem);
             });
+    }
+    public void setTodoColor(MouseEvent event){
+        TODOCOLOR = (Circle)event.getSource();
+    }
+    public void createTodoListRequest(MouseEvent event){
+        String todoTitle = NEWTODOTITLE.getText();
+        System.out.println(todoTitle);
+        Date startDate = Date.from(STARTDATE.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date endDate = Date.from(ENDDATE.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        
+        if(!todoTitle.equals("") && startDate != null && endDate != null && TODOCOLOR != null){
+            ToDoListController tlc = new ToDoListController();
+            tlc.createToDoList(new ToDoEntity(todoTitle, startDate, endDate, currentUser.getId(), 0, TODOCOLOR.getFill().toString()));
+            
+            NEWTODOTITLE.setText("");
+            STARTDATE.setValue(null);
+            ENDDATE.setValue(null);
+            TODOCOLOR = null;
+            ADDLISTPANE.setVisible(false);
         }
+    }
     /*REHAM*/
 }
