@@ -6,8 +6,10 @@
 package collaborative.to.pkgdo.list.client;
 
 import Controllers.ToDoListController;
+import Entities.TaskEntity;
 import Entities.ToDoEntity;
 import Entities.UserEntity;
+import Handlers.TaskCreationHandler;
 import Handlers.ToDoCreationHandler;
 import Utils.CurrentUser;
 import com.jfoenix.controls.JFXButton;
@@ -59,8 +61,8 @@ public class FXMLController implements Initializable  {
     //Listicon  Litem2=new Listicon();
     Item task=new Item();
     Item task2=new Item();
-    Task item=new Task();
-    Task item2=new Task();
+   // Task item=new Task(null);
+  //  Task item2=new Task(null);
     Collaborator col=new Collaborator();
     Notification notif=new Notification();
     Friendtoadd fc=new Friendtoadd();
@@ -267,6 +269,10 @@ public class FXMLController implements Initializable  {
         ToDoCreationHandler.setTodoGUIGenerator(this::createTodoListResponse);
         currentUser = CurrentUser.getCurrentUser();
         /*REHAM*/
+      /*abd-elmalek */
+      
+        
+      /*abd-elamlek*/
       
       Fitem =new Friendicon();
      
@@ -622,7 +628,7 @@ class  Collaborator extends AnchorPane {
 }
 
 
-class Item extends TitledPane {
+public class Item extends TitledPane {
 
     protected final AnchorPane anchorPane;
     protected final JFXCheckBox jFXCheckBox;
@@ -702,7 +708,10 @@ class Item extends TitledPane {
         anchorPane.getChildren().add(line);
         anchorPane.getChildren().add(line0);
         anchorPane0.getChildren().add(vBox);
-        addItem();
+        
+        TaskEntity taskEntity = new TaskEntity();
+        taskEntity.setDecription("desc");
+        addTask(taskEntity);
         
         this.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -717,14 +726,18 @@ class Item extends TitledPane {
         });
         
         
-        
+        TaskCreationHandler.setTodoGUIGenerator(this::createTaskResponse);
+    }
+
+ public void createTaskResponse(TaskEntity task){
+            Platform.runLater(() ->  {
+                addTask(task);
+            });
     }
 
 
-
-
-   void addItem(){
-     Task i=new Task();
+   void addTask(TaskEntity taskEntity){
+        Task i=new Task(taskEntity);
          vBox.getChildren().add(i);
         
     }
@@ -742,7 +755,7 @@ class Task extends AnchorPane {
     protected  Line line0;
     protected  Label label;
 
-    public Task() {
+    public Task(TaskEntity taskjEntity ) {
 
         jFXCheckBox = new JFXCheckBox();
         line = new Line();
@@ -780,12 +793,16 @@ class Task extends AnchorPane {
        
         getChildren().add(label);
         
-      
+        setTaskname(taskjEntity.getDecription());
+        if(taskjEntity.getStatus()==1){
+            jFXCheckBox.setSelected(true);
+        }
     }
         public void setTaskname(String s)
         {
          label.setText(s);
         }
+        
 }
     
     /*REHAM*/
@@ -804,6 +821,8 @@ class Task extends AnchorPane {
                 LIST.getChildren().add(Litem);
             });
     }
+    
+    
     public void setTodoColor(MouseEvent event){
         TODOCOLOR = (Circle)event.getSource();
     }

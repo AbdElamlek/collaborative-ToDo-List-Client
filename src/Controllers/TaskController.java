@@ -13,7 +13,6 @@ import Entities.UserEntity;
 import DTOs.Accept_RejectTaskDTO;
 import Entities.Accept_RecjectTaskEntity;
 import java.util.Date;
-import javax.json.JsonObject;
 
 /**
  *
@@ -57,7 +56,7 @@ public class TaskController implements TaskInterFace{
     public boolean acceptTask(int taskId, int userId) {
         try {
             Accept_RejectTaskDTO acceptTaskDTO = new Accept_RejectTaskDTO();
-            acceptTaskDTO.setTaskId(taskId);
+            acceptTaskDTO.getTask().setId(taskId);
             acceptTaskDTO.setUserId(userId);
             EntityWrapper entityWrapper = new EntityWrapper("acceptTask", "entity", acceptTaskDTO);
             String taskJsonResponse = adapterController.entity2Json(entityWrapper);
@@ -87,7 +86,7 @@ public class TaskController implements TaskInterFace{
     public boolean withdrawFromTask(TaskEntity task, int userId) {
         try {
             Accept_RejectTaskDTO accept_RejectTaskDTO = new Accept_RejectTaskDTO();
-            accept_RejectTaskDTO.setTaskId(task.getId());
+            accept_RejectTaskDTO.getTask().setId(task.getId());
             accept_RejectTaskDTO.setUserId(userId);
             EntityWrapper entityWrapper = new EntityWrapper("withdrawFromTask", "entity", accept_RejectTaskDTO);
             String taskJsonResponse = adapterController.entity2Json(entityWrapper);
