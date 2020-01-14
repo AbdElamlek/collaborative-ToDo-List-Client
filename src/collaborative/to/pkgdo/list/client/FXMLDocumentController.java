@@ -20,6 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -34,6 +35,9 @@ import javafx.stage.Stage;
 
 public class FXMLDocumentController implements Initializable {
 
+    double xOffset = 0;
+    double yOffset = 0;
+    
     private AuthenticationController authenticationController = new AuthenticationController();
     @FXML
     public ImageView EXIT;
@@ -118,6 +122,25 @@ public class FXMLDocumentController implements Initializable {
             Stage stage = (Stage) UsernameText.getScene().getWindow();
             
             stage.setScene(scene);
+            
+            
+           
+        root.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            }
+        });
+        root.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                stage.setX(event.getScreenX() - xOffset);
+                stage.setY(event.getScreenY() - yOffset);
+            }
+        });
+       
+            
             
         } catch (IOException ex) {
             ex.printStackTrace();
