@@ -35,16 +35,16 @@ public class CollaboratorController implements CollaboratorInterface {
     }
 
     @Override
-    public void acceptCollaboratorRequest(int requestId) {
-        String reqJson = ac.entity2Json(new EntityWrapper("accept collaborator request", "CollaboratorDTO",
-                new CollaboratorDTO(requestId)));
+    public void acceptCollaboratorRequest(CollaborationRequestEntity request) {
+        String reqJson = ac.entity2Json(new EntityWrapper("accept collaborator request", "CollaborationRequestEntity",
+                request));
         sc.sendJsonObject(reqJson);
     }
 
-        @Override
-    public void rejectCollaboratorRequest(int requestId) {
+    @Override
+    public void rejectCollaboratorRequest(CollaborationRequestEntity request) {
         String reqJson = ac.entity2Json(new EntityWrapper("reject collaborator request", "CollaboratorDTO",
-                new CollaboratorDTO(requestId)));
+                request));
         sc.sendJsonObject(reqJson);
     }
 

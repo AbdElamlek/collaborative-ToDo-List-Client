@@ -7,8 +7,10 @@ package Handlers;
 
 import ControllerBase.ActionHandler;
 import Entities.ToDoEntity;
+import Utils.CurrentUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.util.function.Consumer;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,6 +19,11 @@ import org.json.JSONObject;
  * @author Reham
  */
 public class ToDoDeleteHandler implements ActionHandler{
+    private static Consumer<Integer> todoGUIModifier;
+    
+    public static void setTodoGUIModifier(Consumer<Integer> modifier){
+        todoGUIModifier = modifier;
+    }
 
     @Override
     public void handleAction(String responseJsonObject) {
@@ -27,7 +34,13 @@ public class ToDoDeleteHandler implements ActionHandler{
             String todoJsonObject  = jsonObject.getJSONObject("entity").toString();
             ToDoEntity todo = gson.fromJson(todoJsonObject, ToDoEntity.class);
             
-            //send todo object to function in GUIController, it will check if the receiver is one of the collaborators of not
+            int indexOfTodo = CurrentUser.getCurrentUser().getCollaboratorList().indexOf(todo);
+            CurrentUser.getCurrentUser().getCollaboratorList().remove(indexOfTodo);
+            
+            //Update GUI
+            if(todoGUIModifier != null)
+                todoGUIModifier.accept(indexOfTodo + CurrentUser.getCurrentUser().getTodoList().size());
+            
         }catch(JSONException ex){
             ex.printStackTrace();
         }    

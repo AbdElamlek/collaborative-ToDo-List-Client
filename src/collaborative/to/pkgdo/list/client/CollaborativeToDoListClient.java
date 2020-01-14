@@ -31,7 +31,7 @@ public class CollaborativeToDoListClient extends Application {
     public void start(Stage stage) throws Exception {
        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument_1.fxml"));
         
-         stage.initStyle(StageStyle.TRANSPARENT);
+         //stage.initStyle(StageStyle.TRANSPARENT);
         
         root.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override

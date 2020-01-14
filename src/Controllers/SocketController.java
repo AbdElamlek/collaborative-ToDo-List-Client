@@ -12,6 +12,7 @@ import Handlers.LoginHandler;
 import Handlers.SignUpHandler;
 import ControllerBase.ActionHandler;
 import ControllerBase.SocketInterface;
+import Handlers.AcceptCollaboratorRequestHandler;
 import Handlers.ToDoDeleteHandler;
 import Handlers.ToDoUpdateHandler;
 import java.io.DataInputStream;
@@ -53,6 +54,7 @@ public class SocketController implements SocketInterface {
                     while (isRunning) {
                         try {
                             String receivedResponse = dataInputStream.readLine();
+                            System.out.println("received something");
                             handleResponse(receivedResponse);
                         } catch (IOException ex) {
                             isRunning = false;
@@ -112,11 +114,24 @@ public class SocketController implements SocketInterface {
                     actionHandler = new ToDoCreationHandler();
                     break;
                 case "update todo list":
+                    System.out.println("in update todo");
                     actionHandler = new ToDoUpdateHandler();
                     break;
                 case "delete todo list":
                     actionHandler = new ToDoDeleteHandler();
                     break;
+                case "accept collaborator request":
+                    actionHandler = new AcceptCollaboratorRequestHandler();
+                    break;
+                    /*
+                    "accept task assignment request"
+                    "accept friend request"
+                    item
+                    task
+                    comment
+                    withdraw(here for other collaborators and the owner where thay know from server)
+                    
+                    */
             }
             Handler handler = new Handler(actionHandler);
             handler.handleAction(jsonObjectStr);
