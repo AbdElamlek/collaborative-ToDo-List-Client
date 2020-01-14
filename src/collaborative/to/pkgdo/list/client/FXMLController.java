@@ -57,6 +57,7 @@ import javafx.scene.text.Font;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.paint.Color;
 /**
  *
  * @author Abd-Elmalek
@@ -219,8 +220,8 @@ public class FXMLController implements Initializable  {
             DATEPANE.setVisible(false);
         }
          else if(event.getSource()==SHOWNOTIFICATIONS){
-             //CollaboratorController collaboratorController = new CollaboratorController();
-             //collaboratorController.acceptCollaboratorRequest(CurrentUser.getCurrentUser().get);
+             CollaboratorController collaboratorController = new CollaboratorController();
+             collaboratorController.acceptCollaboratorRequest(CurrentUser.getCurrentUser().getCollaborationRequestList().get(0));
              /*if(NOTIFIPANE.isVisible())
                 NOTIFIPANE.setVisible(false);
              else
@@ -235,6 +236,12 @@ public class FXMLController implements Initializable  {
              ADDCOLLABORATORPANE.setVisible(false);
          }
          else if(event.getSource() == CANCELLIST){
+             if(TODOCOLOR != null)
+                 TODOCOLOR.setStroke(Color.TRANSPARENT);
+             TODOCOLOR = null;
+             STARTDATE.setValue(null);
+             ENDDATE.setValue(null);
+             NEWTODOTITLE.setText("");
              ADDLISTPANE.setVisible(false);
          }
          else if(event.getSource() == ADDDATE){
@@ -693,7 +700,6 @@ class  Collaborator extends AnchorPane {
              TITLE.setText(todo.getTitle());
              COLLABORATORS.getChildren().setAll(TODOCOLLABORATORS);
              aDDRIENDCOLABLIST.getChildren().setAll(FRIENDSTOADDASCOLLABORATORS);
-             //TASKLISTS.getPanes().setAll((TitledPane)TODOITEMSLIST);
              
              NEWCOLLABORATOR.setVisible(isOwnedByCurrentUser);
              ADDCOLLAB.setVisible(isOwnedByCurrentUser);
@@ -703,7 +709,9 @@ class  Collaborator extends AnchorPane {
         
     }
     public void addCollaborator(Collaborator collaborator){
-        TODOCOLLABORATORS.getChildren().add(collaborator);
+        Platform.runLater(() ->  {
+            TODOCOLLABORATORS.getChildren().add(collaborator);
+        });
     }
     public boolean getIsOwnedByCurrentUser(){
         return isOwnedByCurrentUser;
@@ -917,23 +925,32 @@ class Task extends AnchorPane {
         }
     } 
     public void acceptTodoCollaborationResponse(UserEntity collaborator, int todoId){
-        for(int i = 0 ; i < LIST.getChildren().size() ; i++)
+        System.out.println("in acceptTodoCollaborationResponse");
+        System.err.println(todoId);
+        for(int i = 0 ; i < LIST.getChildren().size() ; i++){
+            System.out.println(((Listicon)LIST.getChildren().get(i)).getTodo().getId());
            if(((Listicon)LIST.getChildren().get(i)).getTodo().getId() == todoId){
+               System.out.println("I found the todo");
                Collaborator collaboratorItem = new Collaborator(collaborator);
                ((Listicon)LIST.getChildren().get(i)).addCollaborator(collaboratorItem);
                break;
            }
+        }
     }
-    public void createTodoListResponse(ToDoEntity todo){
-            Platform.runLater(() ->  {
-                Listicon  Litem=new Listicon(todo, true);
-                LIST.getChildren().add(Litem);
-            });
+    public void createTodoListResponse(ToDoEntity todo, boolean isOwner){
+        Platform.runLater(() ->  {
+            Listicon  Litem=new Listicon(todo, isOwner);
+            LIST.getChildren().add(Litem);
+        });
     }
     
     
     public void setTodoColor(MouseEvent event){
+        if(TODOCOLOR != null)
+            TODOCOLOR.setStroke(Color.TRANSPARENT);
+        
         TODOCOLOR = (Circle)event.getSource();
+        TODOCOLOR.setStroke(Color.BLACK);
     }
     public void updateTodoListResponse(ToDoEntity todo){
         //boolean isOwnedByCurrentUser = ((Listicon)(LIST.getChildren().get(todoIndex))).getIsOwnedByCurrentUser();

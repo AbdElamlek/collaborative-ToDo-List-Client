@@ -74,7 +74,7 @@ public class TaskController implements TaskInterFace{
             EntityWrapper entityWrapper = new EntityWrapper("rejectTaskRequest", "entity", taskRequest);
             String taskJsonResponse = adapterController.entity2Json(entityWrapper);
             SocketController.getInstance().sendJsonObject(taskJsonResponse);
-            userEntity.getRequestList().remove(userEntity.getRequestList().indexOf(taskRequest));
+            userEntity.getTaskAssignmentRequestList().remove(userEntity.getTaskAssignmentRequestList().indexOf(taskRequest));
             return true;
         } catch (Exception e) {
             e.printStackTrace();

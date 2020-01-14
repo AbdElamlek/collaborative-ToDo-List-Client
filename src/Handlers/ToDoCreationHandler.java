@@ -10,6 +10,7 @@ import Utils.CurrentUser;
 import Entities.ToDoEntity;
 import Entities.UserEntity;
 import com.google.gson.Gson;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,9 +20,9 @@ import org.json.JSONObject;
  * @author Reham
  */
 public class ToDoCreationHandler implements ActionHandler{
-    private static Consumer<ToDoEntity> todoGUIGenerator;
+    private static BiConsumer<ToDoEntity, Boolean> todoGUIGenerator;
     
-    public static void setTodoGUIGenerator(Consumer<ToDoEntity> generator){
+    public static void setTodoGUIGenerator(BiConsumer<ToDoEntity, Boolean> generator){
         todoGUIGenerator = generator;
     }
     @Override
@@ -34,19 +35,22 @@ public class ToDoCreationHandler implements ActionHandler{
             if(!jsonObject.isNull("entity")){
                 String todoJsonObject  = jsonObject.getJSONObject("entity").toString();
                 ToDoEntity todo = gson.fromJson(todoJsonObject, ToDoEntity.class);
-                CurrentUser.getCurrentUser().getTodoList().add(todo);
+                
+                Boolean isOwner = todo.getOwnerId() == CurrentUser.getCurrentUser().getId();
+             
+                System.out.println("owner id :" + todo.getOwnerId());
+                System.out.println("current id : " + CurrentUser.getCurrentUser().getId());
+                if(isOwner)
+                    CurrentUser.getCurrentUser().getTodoList().add(todo);
+                else
+                    CurrentUser.getCurrentUser().getCollaboratorList().add(todo);
                 
                 if(todoGUIGenerator != null){
                     System.out.println("todo added");
-                    todoGUIGenerator.accept(todo);
+                    todoGUIGenerator.accept(todo, isOwner);
                 }
                 
-                
                 System.out.println("id: " + todo.getId());
-                
-            }else{
-                System.out.println("todo not added");
-
                 
             }
         } catch (JSONException ex) {

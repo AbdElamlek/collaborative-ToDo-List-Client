@@ -21,7 +21,9 @@ public class UserEntity implements BaseEntity {
     private String password;
     private int userStatus;
     private ArrayList<UserEntity> friendList;
-    private ArrayList<RequestEntity> requestList;
+    private ArrayList<RequestEntity> friendRequestList;
+    private ArrayList<CollaborationRequestEntity> collaborationRequestList;
+    private ArrayList<Accept_RecjectTaskEntity> taskAssignmentRequestList;
     private ArrayList<NotificationEntity> notificationList;
     private ArrayList<TaskEntity> tasksList;
     private ArrayList<ToDoEntity> todoList;
@@ -108,14 +110,6 @@ public class UserEntity implements BaseEntity {
         return friendList;
     }
 
-    public void setRequestList(ArrayList<RequestEntity> requestList) {
-        this.requestList = requestList;
-    }
-
-    public ArrayList<RequestEntity> getRequestList() {
-        return requestList;
-    }
-
     public void setNotificationList(ArrayList<NotificationEntity> notificationList) {
         this.notificationList = notificationList;
     }
@@ -146,6 +140,30 @@ public class UserEntity implements BaseEntity {
 
     public void setCollaboratorList(ArrayList<ToDoEntity> colaboartedList) {
         this.collaboratorList = colaboartedList;
+    }
+
+    public ArrayList<RequestEntity> getFriendRequestList() {
+        return friendRequestList;
+    }
+
+    public void setFriendRequestList(ArrayList<RequestEntity> friendRequestList) {
+        this.friendRequestList = friendRequestList;
+    }
+
+    public ArrayList<CollaborationRequestEntity> getCollaborationRequestList() {
+        return collaborationRequestList;
+    }
+
+    public void setCollaborationRequestList(ArrayList<CollaborationRequestEntity> collaborationRequestList) {
+        this.collaborationRequestList = collaborationRequestList;
+    }
+
+    public ArrayList<Accept_RecjectTaskEntity> getTaskAssignmentRequestList() {
+        return taskAssignmentRequestList;
+    }
+
+    public void setTaskAssignmentRequestList(ArrayList<Accept_RecjectTaskEntity> taskAssignmentRequestList) {
+        this.taskAssignmentRequestList = taskAssignmentRequestList;
     }
     
     

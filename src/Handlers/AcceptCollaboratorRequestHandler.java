@@ -51,7 +51,7 @@ public class AcceptCollaboratorRequestHandler implements ActionHandler{
             CurrentUser.getCurrentUser().getTodoList().get(indexOfTodo).getRequestedCollaboratorList().remove(collaboratorDTO.getCollaborator());
             
             if(collaboratorsGUIModifier != null)
-                collaboratorsGUIModifier.accept(collaboratorDTO.getCollaborator(), indexOfTodo);
+                collaboratorsGUIModifier.accept(collaboratorDTO.getCollaborator(), todo.getId());
             
             
         } catch (JSONException ex) {
