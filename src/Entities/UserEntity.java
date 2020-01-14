@@ -26,7 +26,8 @@ public class UserEntity implements BaseEntity {
     private ArrayList<TaskEntity> tasksList;
     private ArrayList<ToDoEntity> todoList;
     private ArrayList<ToDoEntity> colaboartedList;
-
+    
+    private ArrayList<ItemEntity> itemList;
     public UserEntity() {
     }
 
@@ -146,6 +147,14 @@ public class UserEntity implements BaseEntity {
 
     public void setColaboartedList(ArrayList<ToDoEntity> colaboartedList) {
         this.colaboartedList = colaboartedList;
+    }
+
+    public ArrayList<ItemEntity> getItemList() {
+        return itemList;
+    }
+
+    public void setItemList(ArrayList<ItemEntity> itemList) {
+        this.itemList = itemList;
     }
     
     

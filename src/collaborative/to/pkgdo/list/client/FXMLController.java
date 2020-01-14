@@ -5,10 +5,15 @@
  */
 package collaborative.to.pkgdo.list.client;
 
+import Controllers.ItemController;
+import Handlers.ItemCreationHandler;
 import Controllers.ToDoListController;
+import Entities.ItemEntity;
 import Entities.TaskEntity;
 import Entities.ToDoEntity;
 import Entities.UserEntity;
+import Handlers.ItemDeletionHandler;
+import Handlers.ItemUpdateHandler;
 import Handlers.TaskCreationHandler;
 import Handlers.ToDoCreationHandler;
 import Utils.CurrentUser;
@@ -47,20 +52,27 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 /**
  *
  * @author Abd-Elmalek
  */
 public class FXMLController implements Initializable  {
     UserEntity currentUser;
-
+    ItemController itemController = new ItemController();
+    ArrayList<Integer> itemsIndecies;
+    int itemsCounter = 0;
    
+    
+    private static ToDoEntity currentToDo = null ;
     Friendicon Fitem=new Friendicon();
     Friendicon Fitem2=new Friendicon();
     //Listicon  Litem=new Listicon();
     //Listicon  Litem2=new Listicon();
-    Item task=new Item();
-    Item task2=new Item();
+   // Item task=new Item();
+   // Item task2=new Item();
    // Task item=new Task(null);
   //  Task item2=new Task(null);
     Collaborator col=new Collaborator();
@@ -84,7 +96,9 @@ public class FXMLController implements Initializable  {
     public ScrollPane FRIENDSSCROLL;
     public ScrollPane LISTSCROLL;
     public ScrollPane COLLABSCROLL;
-    
+    @FXML
+    public ImageView testButton; 
+    public JFXTextField ADDTASK;
     public JFXButton FRIENDS;
     public JFXButton LISTS;
     public JFXButton nEWLIST;
@@ -270,7 +284,28 @@ public class FXMLController implements Initializable  {
         currentUser = CurrentUser.getCurrentUser();
         /*REHAM*/
       /*abd-elmalek */
-      
+      ADDTASK.setOnKeyPressed((KeyEvent event) -> {
+          if(event.getCode()== KeyCode.ENTER){
+              System.out.println(ADDTASK.getText());
+              ItemEntity itemEntity = new ItemEntity();
+              itemEntity.setTitle(ADDTASK.getText());
+              itemEntity.setDecription("descriotion");
+              itemEntity.setTodoId(currentToDo.getId());
+              Item i = new Item(itemEntity);
+             //TASKLISTS.getPanes().add(i);
+             try{
+             CurrentUser.getCurrentUser().getTodoList().get(CurrentUser.getCurrentUser().getTodoList().indexOf(currentToDo)).getItemsList().add(itemEntity);
+             }catch(Exception e){
+                 e.printStackTrace();
+             }
+              itemController.createItem(itemEntity);
+              ADDTASK.clear();
+          }
+      });
+      testButton.setOnMousePressed((MouseEvent event) -> {
+          itemController.deleteItem(currentToDo.getItemsList().get(0));
+          TASKLISTS.getPanes().remove(0);
+        });
         
       /*abd-elamlek*/
       
@@ -289,8 +324,8 @@ public class FXMLController implements Initializable  {
       
       NOTIFICATIONS.getChildren().add(notif);
       
-      TASKLISTS.getPanes().add(task);
-      TASKLISTS.getPanes().add(task2);
+//      TASKLISTS.getPanes().add(task);
+ //     TASKLISTS.getPanes().add(task2);
       FRIENDPANE.setVisible(false);
       LISTPANE.setVisible(true);
       linelists.setStroke(javafx.scene.paint.Color.valueOf("#000000"));
@@ -330,9 +365,19 @@ public class FXMLController implements Initializable  {
         }); */
      
         initiateCurrentUser();
+        
+        
     }  
        
+    private void setItemList(){
     
+    for(ToDoEntity toDoEntity : CurrentUser.getCurrentUser().getTodoList()){
+        for(ItemEntity itemEntity : toDoEntity.getItemsList()){
+        
+        
+        }
+    }
+    }
     
     
     class Notification extends AnchorPane {
@@ -621,6 +666,18 @@ class  Collaborator extends AnchorPane {
             public void handle(MouseEvent event) {
              actions();
              TITLE.setText(todo.getTitle());
+             currentToDo = todo;
+             TASKLISTS.getPanes().clear();
+             
+             for(int i =0 ; i<LIST.getChildren().size();i++){
+                Listicon licon = (Listicon) LIST.getChildren().get(i);
+                for(ItemEntity itemEntity : todo.getItemsList()){
+                    if(licon.todo.getId()== itemEntity.getTodoId()){
+                        Item item = new Item(itemEntity);
+                         TASKLISTS.getPanes().add(item);
+                }
+            }
+            }
             }
         });
         
@@ -639,8 +696,10 @@ public class Item extends TitledPane {
     protected final AnchorPane anchorPane0;
     protected final VBox vBox;
     
-    public Item() {
-
+    
+    public int itemId;
+    public Item(ItemEntity itemEntity) {
+        itemId = itemEntity.getId();
         anchorPane = new AnchorPane();
         jFXCheckBox = new JFXCheckBox();
         label = new Label();
@@ -669,7 +728,7 @@ public class Item extends TitledPane {
         label.setLayoutY(10.0);
         label.setPrefHeight(21.0);
         label.setPrefWidth(374.0);
-        label.setText("Omnias Task");
+        label.setText(itemEntity.getTitle());
         label.setFont(new Font(15.0));
 
         line.setEndX(-121.0);
@@ -725,8 +784,17 @@ public class Item extends TitledPane {
             }
         });
         
+        label.setOnMousePressed((MouseEvent event) -> {
+            deleteItem(itemEntity);
+            itemController.deleteItem(itemEntity);
+            
+            
+        });
         
         TaskCreationHandler.setTodoGUIGenerator(this::createTaskResponse);
+        ItemCreationHandler.setTodoGUIGenerator(this:: createItemResponse);
+        ItemUpdateHandler.setTodoGUIGenerator(this::updateItemResponse);
+        ItemDeletionHandler.setTodoGUIGenerator(this::deleteItemResponse);
     }
 
  public void createTaskResponse(TaskEntity task){
@@ -734,14 +802,49 @@ public class Item extends TitledPane {
                 addTask(task);
             });
     }
-
+public void createItemResponse(ItemEntity item){
+            Platform.runLater(() ->  {
+                addItem(item);
+            });
+    }
 
    void addTask(TaskEntity taskEntity){
         Task i=new Task(taskEntity);
          vBox.getChildren().add(i);
         
     }
-    }     
+   public  void addItem(ItemEntity itemEntity){
+       Item item = new Item(itemEntity);
+       TASKLISTS.getPanes().add(item);
+       
+   }
+   private void deleteItem(ItemEntity itemEntity){
+        TASKLISTS.getPanes().remove(this);
+   }
+   
+   private void deleteItemResponse(ItemEntity itemEntity){
+   
+       for(int i=0; i< TASKLISTS.getPanes().size();i++){
+          Item i1 = (Item) TASKLISTS.getPanes().get(i);
+          if(itemEntity.getId() == i1.itemId){
+              TASKLISTS.getPanes().remove(i1);
+              break;
+          }
+       }
+   }
+   
+   private void updateItemResponse(ItemEntity itemEntity){
+       for(int i=0; i< TASKLISTS.getPanes().size();i++){
+          Item i1 = (Item) TASKLISTS.getPanes().get(i);
+          if(itemEntity.getId() == i1.itemId){
+              Item item = new Item(itemEntity);
+              TASKLISTS.getPanes().set(i,item);
+          }
+       }
+   
+   }
+
+}
      
      
      
@@ -811,6 +914,9 @@ class Task extends AnchorPane {
         for(ToDoEntity todo : currentUser.getTodoList()){
             Listicon  Litem=new Listicon(todo);
             LIST.getChildren().add(Litem);
+            
+            
+            
         }
             
     } 
@@ -844,4 +950,9 @@ class Task extends AnchorPane {
         }
     }
     /*REHAM*/
+    
+    /*abd-elmalek*/
+    
+    
+    /*abd-elmalek*/
 }
