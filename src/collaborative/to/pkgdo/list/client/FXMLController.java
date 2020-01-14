@@ -1053,9 +1053,9 @@ class Task extends AnchorPane {
             }
         
         if(currentUser.getCollaboratorList()!= null){
-            for(ToDoEntity mmtodo : currentUser.getCollaboratorList()){
-                Listicon  mmLitem=new Listicon(mmtodo, false);
-                LIST.getChildren().add(mmLitem);
+            for(ToDoEntity todo : currentUser.getCollaboratorList()){
+                Listicon  Litem=new Listicon(todo, false);
+                LIST.getChildren().add(Litem);
             }
         }
         if(currentUser.getFriendList() != null)
