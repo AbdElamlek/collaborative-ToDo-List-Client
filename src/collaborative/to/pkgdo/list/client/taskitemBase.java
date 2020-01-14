@@ -1,66 +1,50 @@
 package collaborative.to.pkgdo.list.client;
 
-import com.jfoenix.controls.JFXButton;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import com.jfoenix.controls.JFXTextField;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 
 public abstract class taskitemBase extends AnchorPane {
 
-    protected final ImageView imageView;
-    protected final Label label;
-    protected final ImageView imageView0;
-    protected final JFXButton aDDCOLL;
+    protected final AnchorPane anchorPane;
+    protected final JFXTextField ADDTASK1;
+    protected final ContextMenu contextMenu;
+    protected final MenuItem menuItem;
 
     public taskitemBase() {
 
-        imageView = new ImageView();
-        label = new Label();
-        imageView0 = new ImageView();
-        aDDCOLL = new JFXButton();
+        anchorPane = new AnchorPane();
+        ADDTASK1 = new JFXTextField();
+        contextMenu = new ContextMenu();
+        menuItem = new MenuItem();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
         setMinWidth(USE_PREF_SIZE);
-        setPrefHeight(29.0);
-        setPrefWidth(283.0);
+        setPrefHeight(39.0);
+        setPrefWidth(405.0);
         setStyle("-fx-background-color: #fefefe; -fx-background-radius: 2;");
 
-        imageView.setFitHeight(24.0);
-        imageView.setFitWidth(23.0);
-        imageView.setLayoutX(2.0);
-        imageView.setLayoutY(2.0);
-        imageView.setOpacity(0.61);
-        imageView.setPickOnBounds(true);
-        imageView.setPreserveRatio(true);
-        imageView.setImage(new Image(getClass().getResource("icons8_user_24px.png").toExternalForm()));
+        anchorPane.setLayoutX(7.0);
+        anchorPane.setLayoutY(6.0);
+        anchorPane.setPrefHeight(27.0);
+        anchorPane.setPrefWidth(389.0);
+        anchorPane.setStyle("-fx-background-color: #f0f1f5; -fx-background-radius: 5;");
 
-        label.setLayoutX(33.0);
-        label.setLayoutY(3.0);
-        label.setPrefHeight(25.0);
-        label.setPrefWidth(238.0);
-        label.setText("Friend");
-        label.setFont(new Font(16.0));
+        ADDTASK1.setLayoutX(6.0);
+        ADDTASK1.setLayoutY(1.0);
+        ADDTASK1.setFont(new Font("Calibri Light", 12.0));
 
-        imageView0.setFitHeight(29.0);
-        imageView0.setFitWidth(23.0);
-        imageView0.setLayoutX(256.0);
-        imageView0.setLayoutY(3.0);
-        imageView0.setOpacity(0.66);
-        imageView0.setPickOnBounds(true);
-        imageView0.setPreserveRatio(true);
-        imageView0.setImage(new Image(getClass().getResource("icons8_add_24px.png").toExternalForm()));
+        menuItem.setMnemonicParsing(false);
+        menuItem.setText("Delete");
+        ADDTASK1.setContextMenu(contextMenu);
 
-        aDDCOLL.setLayoutX(256.0);
-        aDDCOLL.setLayoutY(2.0);
-
-        getChildren().add(imageView);
-        getChildren().add(label);
-        getChildren().add(imageView0);
-        getChildren().add(aDDCOLL);
+        contextMenu.getItems().add(menuItem);
+        anchorPane.getChildren().add(ADDTASK1);
+        getChildren().add(anchorPane);
 
     }
 }

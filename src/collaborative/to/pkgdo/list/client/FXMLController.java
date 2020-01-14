@@ -326,7 +326,33 @@ public class FXMLController implements Initializable  {
         initiateCurrentUser();
     }  
        
-    
+     class Comment extends AnchorPane {
+
+    protected final Label label;
+
+    public Comment() {
+
+        label = new Label();
+
+        setMaxHeight(USE_PREF_SIZE);
+        setMaxWidth(USE_PREF_SIZE);
+        setMinHeight(USE_PREF_SIZE);
+        setMinWidth(USE_PREF_SIZE);
+        setPrefHeight(29.0);
+        setPrefWidth(250.0);
+        setStyle("-fx-background-color: #fefefe; -fx-background-radius: 2;");
+
+        label.setLayoutX(5.0);
+        label.setLayoutY(2.0);
+        label.setPrefHeight(25.0);
+        label.setPrefWidth(243.0);
+        label.setText("Comment....");
+        label.setFont(new Font("Calibri Light", 12.0));
+
+        getChildren().add(label);
+
+    }
+}
     
     
     class Notification extends AnchorPane {
@@ -634,7 +660,7 @@ class Item extends TitledPane {
     protected final VBox vBox;
     
     public Item() {
-
+        Addtaskpane bar=new Addtaskpane();
         anchorPane = new AnchorPane();
         jFXCheckBox = new JFXCheckBox();
         label = new Label();
@@ -643,7 +669,7 @@ class Item extends TitledPane {
         scrollPane = new ScrollPane();
         anchorPane0 = new AnchorPane();
         vBox = new VBox();
-
+        vBox.getChildren().add(bar);
         setGraphicTextGap(2.0);
         setMaxHeight(450.0);
         setMaxWidth(USE_PREF_SIZE);
@@ -825,4 +851,39 @@ class Task extends AnchorPane {
         }
     }
     /*REHAM*/
+    class Addtaskpane extends AnchorPane {
+
+    protected final AnchorPane anchorPane;
+    protected  JFXTextField ADDTASK1;
+
+    public Addtaskpane() {
+
+        anchorPane = new AnchorPane();
+        ADDTASK1 = new JFXTextField();
+
+        setMaxHeight(USE_PREF_SIZE);
+        setMaxWidth(USE_PREF_SIZE);
+        setMinHeight(USE_PREF_SIZE);
+        setMinWidth(USE_PREF_SIZE);
+        setPrefHeight(39.0);
+        setPrefWidth(405.0);
+        setStyle("-fx-background-color: #fefefe; -fx-background-radius: 2;");
+
+        anchorPane.setLayoutX(7.0);
+        anchorPane.setLayoutY(6.0);
+        anchorPane.setPrefHeight(27.0);
+        anchorPane.setPrefWidth(389.0);
+        anchorPane.setStyle("-fx-background-color: #f0f1f5; -fx-background-radius: 5;");
+
+        ADDTASK1.setLayoutX(6.0);
+        ADDTASK1.setLayoutY(1.0);
+        ADDTASK1.setFont(new Font("Calibri Light", 12.0));
+        ADDTASK1.setPrefWidth(384.0);
+        ADDTASK1.unFocusColorProperty().set(javafx.scene.paint.Color.valueOf("#f0f1f5") );
+        ADDTASK1.setPromptText("Add Task and press enter to save");
+        anchorPane.getChildren().add(ADDTASK1);
+        getChildren().add(anchorPane);
+
+    }
+}
 }
