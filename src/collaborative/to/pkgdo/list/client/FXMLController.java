@@ -337,10 +337,10 @@ public class FXMLController implements Initializable  {
               ADDTASK.clear();
           }
       });
-      testButton.setOnMousePressed((MouseEvent event) -> {
-          itemController.deleteItem(currentToDo.getItemsList().get(0));
-          TASKLISTS.getPanes().remove(0);
-        });
+//      testButton.setOnMousePressed((MouseEvent event) -> {
+  //        itemController.deleteItem(currentToDo.getItemsList().get(0));
+    //      TASKLISTS.getPanes().remove(0);
+      //  });
         
       /*abd-elamlek*/
       
@@ -747,9 +747,12 @@ class  Collaborator extends AnchorPane {
                 Collaborator item = new Collaborator(collaborator);
                 TODOCOLLABORATORS.getChildren().add(item);
             }
-            
+            try {
             todo.getCollaboratorList().forEach((collaborator) -> collaboratorsIds.add(collaborator.getId()));
-            todo.getRequestedCollaboratorList().forEach((collaborator) -> requestedCollaboratorsIds.add(collaborator.getId()));
+            todo.getRequestedCollaboratorList().forEach((collaborator) -> requestedCollaboratorsIds.add(collaborator.getId()));    
+            } catch (Exception e) {
+            }
+            
 
         }
         
@@ -796,6 +799,8 @@ class  Collaborator extends AnchorPane {
              
             }
         });
+        
+        
         
     }
     public void addCollaborator(Collaborator collaborator){
@@ -859,7 +864,6 @@ public class Item extends TitledPane {
         label.setPrefHeight(21.0);
         label.setPrefWidth(374.0);
         label.setText(itemEntity.getTitle());
-        label.setText("Omnias Item");
         label.setFont(new Font(15.0));
 
         line.setEndX(-121.0);
@@ -1041,14 +1045,7 @@ class Task extends AnchorPane {
     
     /*REHAM*/
     public void initiateCurrentUser(){
-        USERNAME.setText(currentUser.getUserName());
-        for(ToDoEntity todo : currentUser.getTodoList()){
-            Listicon  Litem=new Listicon(todo,true);
-            LIST.getChildren().add(Litem);
-            
-            
-            
-        
+        USERNAME.setText(currentUser.getUserName());  
         if(currentUser.getTodoList() != null)
             for(ToDoEntity mtodo : currentUser.getTodoList()){
                 Listicon  mLitem=new Listicon(mtodo, true);
@@ -1066,7 +1063,7 @@ class Task extends AnchorPane {
                 Friendicon Fitem=new Friendicon(friend);
                 FRIENDSLIST.getChildren().add(Fitem);
         }
-    } 
+    
     }
     public void acceptTodoCollaborationResponse(UserEntity collaborator, int todoId){
         System.out.println("in acceptTodoCollaborationResponse");
