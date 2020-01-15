@@ -47,6 +47,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import java.time.ZoneId;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 /**
  *
  * @author Abd-Elmalek
@@ -538,8 +540,15 @@ class  Collaborator extends AnchorPane {
     protected  ImageView imageView;
     protected  Circle circle0;
     protected  Label Friendname;
-
+    protected final ContextMenu menu=new ContextMenu();
+    protected MenuItem delete=new MenuItem("Delete");
+    
     public Friendicon() {
+        delete.setOnAction((event) -> {
+            System.out.println("delete");
+        });
+    
+        menu.getItems().addAll(delete);
 
         circle = new Circle();
         dropShadow = new DropShadow();
@@ -587,7 +596,7 @@ class  Collaborator extends AnchorPane {
         Friendname.setText(" ");
         Friendname.setTextFill(javafx.scene.paint.Color.valueOf("#838080"));
         Friendname.setFont(new Font("Calibri", 12.0));
-        
+        Friendname.setContextMenu(menu);
        
         
         getChildren().add(circle);
@@ -611,11 +620,19 @@ class  Collaborator extends AnchorPane {
      
      
      class Listicon extends AnchorPane {
-         private ToDoEntity todo;
+    private ToDoEntity todo;
     protected final ImageView imageView;
+    protected final ContextMenu menu=new ContextMenu();
+    protected MenuItem delete=new MenuItem("Delete");
+    
     protected  Label label;
     public Listicon(ToDoEntity todo) {
-        
+        delete.setOnAction((event) -> {
+            System.out.println("delete");
+          });
+      
+        menu.getItems().addAll(delete);
+
         this.todo = todo;
         imageView = new ImageView();
         label = new Label();
@@ -641,7 +658,7 @@ class  Collaborator extends AnchorPane {
         label.setText(todo.getTitle());
         getChildren().add(imageView);
         getChildren().add(label);
-        
+        label.setContextMenu(menu);
           label.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -664,8 +681,16 @@ public class Item extends TitledPane {
     protected final ScrollPane scrollPane;
     protected final AnchorPane anchorPane0;
     protected final VBox vBox;
+    protected final ContextMenu menu=new ContextMenu();
+    protected MenuItem delete=new MenuItem("Delete");
     
     public Item() {
+         delete.setOnAction((event) -> {
+            System.out.println("delete");
+        });
+      
+        menu.getItems().addAll(delete);
+
         Addtaskpane bar=new Addtaskpane();
         anchorPane = new AnchorPane();
         jFXCheckBox = new JFXCheckBox();
@@ -734,7 +759,7 @@ public class Item extends TitledPane {
         anchorPane.getChildren().add(line);
         anchorPane.getChildren().add(line0);
         anchorPane0.getChildren().add(vBox);
-        
+        label.setContextMenu(menu);
         TaskEntity taskEntity = new TaskEntity();
         taskEntity.setDecription("desc");
         addTask(taskEntity);
@@ -780,15 +805,22 @@ class Task extends AnchorPane {
     protected  Line line;
     protected  Line line0;
     protected  Label label;
-
+    
+    protected final ContextMenu menu=new ContextMenu();
+    protected MenuItem delete=new MenuItem("Delete");
+    
     public Task(TaskEntity taskjEntity ) {
+        delete.setOnAction((event) -> {
+            System.out.println("delete");
+        });
+      
+        menu.getItems().addAll(delete);
 
         jFXCheckBox = new JFXCheckBox();
         line = new Line();
        
         label = new Label();
 
-        setId("AnchorPane");
         setPrefHeight(35.0);
         setPrefWidth(405);
 
@@ -812,7 +844,8 @@ class Task extends AnchorPane {
         label.setLayoutY(7.0);
          //label.setText("omnia");
         label.setFont(new Font(14.0));
-
+        
+        label.setContextMenu(menu);
 
         getChildren().add(jFXCheckBox);
         getChildren().add(line);
