@@ -12,6 +12,11 @@ import Handlers.LoginHandler;
 import Handlers.SignUpHandler;
 import ControllerBase.ActionHandler;
 import ControllerBase.SocketInterface;
+import Handlers.AcceptFriendHandler;
+import Handlers.AddFriendHandler;
+import Handlers.DeclineFriendHandler;
+import Handlers.DeleteFriendHandler;
+import Handlers.SearchFriendHandler;
 import Handlers.ToDoDeleteHandler;
 import Handlers.ToDoUpdateHandler;
 import java.io.DataInputStream;
@@ -116,6 +121,21 @@ public class SocketController implements SocketInterface {
                     break;
                 case "delete todo list":
                     actionHandler = new ToDoDeleteHandler();
+                    break;
+                case "searchFriend":
+                    actionHandler = new SearchFriendHandler();
+                    break;
+                case "addFriend":
+                    actionHandler = new AddFriendHandler();
+                    break;
+                case "deleteFriend":
+                    actionHandler = new DeleteFriendHandler();
+                    break;
+                case "acceptFriend":
+                    actionHandler = new AcceptFriendHandler();
+                    break;
+                case "declineFriend":
+                    actionHandler = new DeclineFriendHandler();
                     break;
             }
             Handler handler = new Handler(actionHandler);

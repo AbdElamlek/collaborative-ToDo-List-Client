@@ -5,6 +5,7 @@
  */
 package collaborative.to.pkgdo.list.client;
 
+import Controllers.FriendController;
 import Controllers.ToDoListController;
 import Entities.TaskEntity;
 import Entities.ToDoEntity;
@@ -194,9 +195,11 @@ public class FXMLController implements Initializable  {
        }
          @FXML
         public void nav1(MouseEvent event) {
+             
        
         if(event.getSource()==nEWLIST){
-             
+            Controllers.FriendController fc = new FriendController();
+            fc.addFreind(1, 4);
             ADDLISTPANE.setVisible(true);
           }
         else if(event.getSource()==CLEARDATE){
