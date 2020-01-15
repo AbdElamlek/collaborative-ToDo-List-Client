@@ -9,6 +9,7 @@ import Handlers.ToDoCreationHandler;
 import Handlers.Handler;
 import Handlers.NotificationHandler;
 import Handlers.LoginHandler;
+import Handlers.ItemCreationHandler;
 import Handlers.SignUpHandler;
 import ControllerBase.ActionHandler;
 import ControllerBase.SocketInterface;
@@ -17,6 +18,9 @@ import Handlers.AddFriendHandler;
 import Handlers.DeclineFriendHandler;
 import Handlers.DeleteFriendHandler;
 import Handlers.SearchFriendHandler;
+import Handlers.ItemDeletionHandler;
+import Handlers.ItemUpdateHandler;
+import Handlers.AcceptCollaboratorRequestHandler;
 import Handlers.ToDoDeleteHandler;
 import Handlers.ToDoUpdateHandler;
 import java.io.DataInputStream;
@@ -58,6 +62,7 @@ public class SocketController implements SocketInterface {
                     while (isRunning) {
                         try {
                             String receivedResponse = dataInputStream.readLine();
+                            System.out.println("received something");
                             handleResponse(receivedResponse);
                         } catch (IOException ex) {
                             isRunning = false;
@@ -117,6 +122,7 @@ public class SocketController implements SocketInterface {
                     actionHandler = new ToDoCreationHandler();
                     break;
                 case "update todo list":
+                    System.out.println("in update todo");
                     actionHandler = new ToDoUpdateHandler();
                     break;
                 case "delete todo list":
@@ -136,6 +142,18 @@ public class SocketController implements SocketInterface {
                     break;
                 case "declineFriend":
                     actionHandler = new DeclineFriendHandler();
+                    break;
+                case "create item":
+                    actionHandler = new ItemCreationHandler();
+                    break;
+                case "update item":
+                    actionHandler = new ItemUpdateHandler();
+                    break;
+                case "delete item":
+                    actionHandler = new ItemDeletionHandler();
+                    break;    
+                case "accept collaborator request":
+                    actionHandler = new AcceptCollaboratorRequestHandler();
                     break;
             }
             Handler handler = new Handler(actionHandler);

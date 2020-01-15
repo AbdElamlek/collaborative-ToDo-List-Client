@@ -5,6 +5,7 @@
  */
 package ControllerBase;
 
+import Entities.CollaborationRequestEntity;
 import Entities.UserEntity;
 
 /**
@@ -13,6 +14,6 @@ import Entities.UserEntity;
  */
 public interface CollaboratorInterface {
     void addCollaboratorRequest(int collaboratorID, int senderID, int todoId);
-    void acceptCollaboratorRequest(int requsetId);
-    void rejectCollaboratorRequest(int requestId);
+    void acceptCollaboratorRequest(CollaborationRequestEntity request);
+    void rejectCollaboratorRequest(CollaborationRequestEntity request);
 }

@@ -158,7 +158,7 @@
                   <Font size="16.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="SHOWNOTIFICATIONS" layoutX="171.0" layoutY="149.0" prefHeight="25.0" prefWidth="25.0" text=" " />
+            <JFXButton fx:id="SHOWNOTIFICATIONS" layoutX="172.0" layoutY="149.0" onMouseClicked="#nav1" prefHeight="25.0" prefWidth="25.0" text=" " />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="TODOPANE" layoutX="260.0" prefHeight="652.0" prefWidth="769.0" style="-fx-background-color: #FEFEFE;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
@@ -225,7 +225,7 @@
                   </AnchorPane>
                   <ScrollPane fx:id="COLLABSCROLL" hbarPolicy="NEVER" layoutX="29.0" layoutY="397.0" prefHeight="215.0" prefWidth="259.0">
                      <content>
-                        <VBox fx:id="COLLABORATORS" prefHeight="208.0" prefWidth="240.0" visible="false" />
+                        <VBox fx:id="COLLABORATORS" prefHeight="208.0" prefWidth="240.0" />
                      </content>
                   </ScrollPane>
                   <Label layoutX="22.0" layoutY="357.0" prefHeight="36.0" prefWidth="146.0" text="Collaborators">
@@ -506,7 +506,7 @@
             <JFXButton fx:id="DONEADDCOLLABORATOR" layoutX="270.0" layoutY="389.0" onMouseClicked="#nav1" prefHeight="31.0" prefWidth="66.0" style="-fx-background-color: #3b8ef4;" text="Done" textFill="#fffbfb" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="eDITLIST" layoutX="324.0" layoutY="132.0" prefHeight="206.0" prefWidth="350.0" style="-fx-background-color: #FEFEFE; -fx-background-radius: 5;" visible="false">
+      <AnchorPane fx:id="eDITLISTAP" layoutX="324.0" layoutY="132.0" prefHeight="206.0" prefWidth="350.0" style="-fx-background-color: #FEFEFE; -fx-background-radius: 5;" visible="false">
          <effect>
             <DropShadow blurType="TWO_PASS_BOX" color="#6f6868c9" />
          </effect>

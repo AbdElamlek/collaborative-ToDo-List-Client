@@ -22,9 +22,14 @@ public class ToDoEntity implements BaseEntity {
     private int status;
     private String color;
     private ArrayList<UserEntity> collaboratorList;
+    private ArrayList<UserEntity> requestedCollaboratorList;
     private ArrayList<ItemEntity> itemsList;
 
     public ToDoEntity() {
+    }
+    
+    public ToDoEntity(int id) {
+        this.id = id;
     }
 
     public ToDoEntity(int id, String title, Date assignDate, Date deadLineDate, int ownerId, int status, String color) {
@@ -117,6 +122,17 @@ public class ToDoEntity implements BaseEntity {
         this.color = color;
     }
     
-    
+    @Override
+    public boolean equals(Object todo){
+        return (this.id == ((ToDoEntity)todo).id);
+    }
+
+    public ArrayList<UserEntity> getRequestedCollaboratorList() {
+        return requestedCollaboratorList;
+    }
+
+    public void setRequestedCollaboratorList(ArrayList<UserEntity> requestedCollaboratorList) {
+        this.requestedCollaboratorList = requestedCollaboratorList;
+    }
       
 }
