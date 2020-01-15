@@ -6,14 +6,16 @@
 package DTOs;
 
 import Entities.BaseEntity;
+import Entities.TaskEntity;
 
 /**
  *
  * @author Abd-Elmalek
  */
 public class Accept_RejectTaskDTO implements BaseEntity {
-    int userId;
-    int TaskId;
+     int userId;
+    TaskEntity task;
+    int todoId;
 
     public int getUserId() {
         return userId;
@@ -23,12 +25,20 @@ public class Accept_RejectTaskDTO implements BaseEntity {
         this.userId = userId;
     }
 
-    public int getTaskId() {
-        return TaskId;
+    public TaskEntity getTask() {
+        return task;
     }
 
-    public void setTaskId(int TaskId) {
-        this.TaskId = TaskId;
+    public int getTodoId() {
+        return todoId;
+    }
+
+    public void setTask(TaskEntity task) {
+        this.task = task;
+    }
+
+    public void setTodoId(int todoId) {
+        this.todoId = todoId;
     }
     
 }

@@ -14,18 +14,18 @@ import java.util.Date;
 public class NotificationEntity implements BaseEntity {
     
     private int id;
-    private Date time;
-    private String type;
+    private java.sql.Date time;
+    private String msg;
     private int receivedUserId;
     private int sentUserId;
 
     public NotificationEntity() {
     }
 
-    public NotificationEntity(int id, Date time, String type, int receivedUserId, int sentUserId) {
+    public NotificationEntity(int id, java.sql.Date time, String msg, int receivedUserId, int sentUserId) {
         this.id = id;
         this.time = time;
-        this.type = type;
+        this.msg = msg;
         this.receivedUserId = receivedUserId;
         this.sentUserId = sentUserId;
     }
@@ -34,12 +34,12 @@ public class NotificationEntity implements BaseEntity {
         this.id = id;
     }
 
-    public void setTime(Date time) {
+    public void setTime(java.sql.Date time) {
         this.time = time;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setMsg(String msg) {
+        this.msg= msg;
     }
 
     public void setReceivedUserId(int receivedUserId) {
@@ -54,12 +54,12 @@ public class NotificationEntity implements BaseEntity {
         return id;
     }
 
-    public Date getTime() {
+    public java.sql.Date getTime() {
         return time;
     }
 
-    public String getType() {
-        return type;
+    public String getMsg() {
+        return msg;
     }
 
     public int getReceivedUserId() {

@@ -44,7 +44,7 @@
                   <Image url="@icons8_bell_24px.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="206.0" layoutY="149.0" opacity="0.52" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="206.0" layoutY="149.0" onMouseClicked="#setTodoColor" opacity="0.52" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@icons8_refresh_30px.png" />
                </image>
@@ -159,7 +159,7 @@
                   <Font size="16.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="SHOWNOTIFICATIONS" layoutX="172.0" layoutY="149.0" prefHeight="25.0" prefWidth="25.0" text=" " />
+            <JFXButton fx:id="SHOWNOTIFICATIONS" layoutX="172.0" layoutY="149.0" onMouseClicked="#nav1" prefHeight="25.0" prefWidth="25.0" text=" " />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="TODOPANE" layoutX="260.0" prefHeight="652.0" prefWidth="769.0" style="-fx-background-color: #FEFEFE;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
@@ -251,6 +251,7 @@
                         <Image url="@icons8_plus_24px_1.png" />
                      </image>
                   </ImageView>
+                  <JFXButton fx:id="NEWCOLLABORATOR" layoutX="219.0" layoutY="322.0" onMouseClicked="#nav1" prefHeight="30.0" prefWidth="25.0" ripplerFill="BLACK" text=" " />
                </children>
             </AnchorPane>
          </children>
@@ -430,7 +431,7 @@
             </Label>
             <AnchorPane layoutX="17.0" layoutY="49.0" prefHeight="44.0" prefWidth="316.0" style="-fx-background-color: #f0f1f5; -fx-background-radius: 5; -fx-border-color: #6c80d0; -fx-border-radius: 5; -fx-border-width: 2;">
                <children>
-                  <JFXTextField focusColor="#f0f1f5" layoutX="7.0" layoutY="6.0" prefHeight="30.0" prefWidth="260.0" promptText="Name" style="-fx-background-color: #f0f1f5; -fx-background-radius: 4;" unFocusColor="#f0f1f5">
+                  <JFXTextField fx:id="NEWTODOTITLE" focusColor="#f0f1f5" layoutX="7.0" layoutY="6.0" prefHeight="30.0" prefWidth="260.0" promptText="Title" style="-fx-background-color: #f0f1f5; -fx-background-radius: 4;" unFocusColor="#f0f1f5">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -440,18 +441,39 @@
                         <Image url="@icons8_calendar_filled_50px.png" />
                      </image>
                   </ImageView>
-                  <JFXButton fx:id="ADDDATE" layoutX="268.0" layoutY="9.0" prefHeight="25.0" prefWidth="33.0" text=" " />
+                  <JFXButton fx:id="ADDDATE" layoutX="268.0" layoutY="9.0" onMouseClicked="#nav1" prefHeight="25.0" prefWidth="33.0" text=" " />
                </children>
             </AnchorPane>
-            <JFXButton fx:id="SAVELIST" layoutX="162.0" layoutY="170.0" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #3b8ef4;" text="Save" textFill="#fffbfb" />
+            <JFXButton fx:id="SAVELIST" layoutX="162.0" layoutY="170.0" onMouseClicked="#createTodoListRequest" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #3b8ef4;" text="Save" textFill="#fffbfb" />
             <JFXButton fx:id="CANCELLIST" layoutX="252.0" layoutY="170.0" onMouseClicked="#nav1" prefHeight="25.0" prefWidth="78.0" style="-fx-background-color: #f0f1f5;" text="Cancel" />
-            <Circle fx:id="BLUE" fill="DODGERBLUE" layoutX="55.0" layoutY="121.0" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
-            <Circle fx:id="PURPLE" fill="#b022c9" layoutX="94.0" layoutY="121.0" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
-            <Circle fx:id="PINK" fill="#f220ac" layoutX="133.0" layoutY="121.0" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
-            <Circle fx:id="YELLOW" fill="#ffc41f" layoutX="173.0" layoutY="121.0" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
-            <Circle fx:id="GREEN" fill="#70ae3a" layoutX="213.0" layoutY="121.0" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
-            <Circle fx:id="ORANGE" fill="#f87110" layoutX="252.0" layoutY="121.0" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
-            <Circle fx:id="RED" fill="#ff1c07" layoutX="291.0" layoutY="121.0" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+            <Circle fx:id="BLUE" fill="DODGERBLUE" layoutX="55.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+            <Circle fx:id="PURPLE" fill="#b022c9" layoutX="94.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+            <Circle fx:id="PINK" fill="#f220ac" layoutX="133.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+            <Circle fx:id="YELLOW" fill="#ffc41f" layoutX="173.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+            <Circle fx:id="GREEN" fill="#70ae3a" layoutX="213.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+            <Circle fx:id="ORANGE" fill="#f87110" layoutX="252.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+            <Circle fx:id="RED" fill="#ff1c07" layoutX="291.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="DATEPANE" layoutX="571.0" layoutY="137.0" prefHeight="230.0" prefWidth="167.0" style="-fx-background-color: #fefefe; -fx-background-radius: 5;" visible="false">
+         <effect>
+            <DropShadow color="#000000c2" />
+         </effect>
+         <children>
+            <JFXDatePicker fx:id="STARTDATE" defaultColor="#a4a8a7" layoutX="18.0" layoutY="50.0" prefHeight="25.0" prefWidth="135.0" promptText="dd/mm/yy" />
+            <JFXDatePicker fx:id="ENDDATE" defaultColor="#a4a8a7" layoutX="19.0" layoutY="142.0" prefHeight="25.0" prefWidth="135.0" promptText="dd/mm/yy" />
+            <Label layoutX="14.0" layoutY="21.0" text="Start Date">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="15.0" layoutY="105.0" text="Endt Date">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <JFXButton fx:id="SAVEDATE" layoutX="22.0" layoutY="191.0" onMouseClicked="#nav1" prefHeight="25.0" prefWidth="57.0" style="-fx-background-color: #3b8ef4;" text="Save" textFill="#fffbfb" />
+            <JFXButton fx:id="CLEARDATE" layoutX="88.0" layoutY="191.0" onMouseClicked="#nav1" prefHeight="25.0" prefWidth="57.0" style="-fx-background-color: #f0f1f5;" text="Clear" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="ADDFRIENDPANE" layoutX="324.0" layoutY="132.0" prefHeight="424.0" prefWidth="350.0" style="-fx-background-color: #FEFEFE; -fx-background-radius: 5;" visible="false">
@@ -472,7 +494,7 @@
             <JFXButton fx:id="dONEADDFRIEND" layoutX="286.0" layoutY="389.0" prefHeight="25.0" prefWidth="50.0" style="-fx-background-color: #3b8ef4;" text="Done" textFill="#fffbfb" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="aDDCOLLABORATOR" layoutX="334.0" layoutY="133.0" prefHeight="424.0" prefWidth="350.0" style="-fx-background-color: #FEFEFE; -fx-background-radius: 5;" visible="false">
+      <AnchorPane fx:id="ADDCOLLABORATORPANE" layoutX="334.0" layoutY="133.0" prefHeight="424.0" prefWidth="350.0" style="-fx-background-color: #FEFEFE; -fx-background-radius: 5;" visible="false">
          <effect>
             <DropShadow blurType="TWO_PASS_BOX" color="#6f6868c9" />
          </effect>
@@ -491,28 +513,7 @@
                   </ScrollPane>
                </children>
             </AnchorPane>
-            <JFXButton fx:id="dONEADDFRIEND1" layoutX="286.0" layoutY="389.0" prefHeight="25.0" prefWidth="50.0" style="-fx-background-color: #3b8ef4;" text="Done" textFill="#fffbfb" />
-         </children>
-      </AnchorPane>
-      <AnchorPane fx:id="DATEPANE" layoutX="571.0" layoutY="137.0" prefHeight="230.0" prefWidth="167.0" style="-fx-background-color: #fefefe; -fx-background-radius: 5;" visible="false">
-         <effect>
-            <DropShadow color="#000000c2" />
-         </effect>
-         <children>
-            <JFXDatePicker fx:id="STARTDATE" defaultColor="#a4a8a7" layoutX="18.0" layoutY="50.0" prefHeight="25.0" prefWidth="135.0" promptText="dd/mm/yy" />
-            <JFXDatePicker fx:id="ENDDATE" defaultColor="#a4a8a7" layoutX="19.0" layoutY="142.0" prefHeight="25.0" prefWidth="135.0" promptText="dd/mm/yy" />
-            <Label layoutX="14.0" layoutY="21.0" text="Start Date">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <Label layoutX="15.0" layoutY="105.0" text="Endt Date">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <JFXButton fx:id="SAVEDATE" layoutX="22.0" layoutY="191.0" prefHeight="25.0" prefWidth="57.0" style="-fx-background-color: #3b8ef4;" text="Save" textFill="#fffbfb" />
-            <JFXButton fx:id="CLEARDATE" layoutX="88.0" layoutY="191.0" onMouseClicked="#nav1" prefHeight="25.0" prefWidth="57.0" style="-fx-background-color: #f0f1f5;" text="Clear" />
+            <JFXButton fx:id="DONEADDCOLLABORATOR" layoutX="270.0" layoutY="389.0" onMouseClicked="#nav1" prefHeight="31.0" prefWidth="66.0" style="-fx-background-color: #3b8ef4;" text="Done" textFill="#fffbfb" />
          </children>
       </AnchorPane>
    </children>

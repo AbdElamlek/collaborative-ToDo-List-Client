@@ -113,6 +113,8 @@ public class UserEntity implements BaseEntity {
     }
 
     public ArrayList<RequestEntity> getRequestList() {
+        if(requestList == null)
+            requestList = new ArrayList<RequestEntity>();
         return requestList;
     }
 
