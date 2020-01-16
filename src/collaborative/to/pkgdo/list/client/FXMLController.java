@@ -5,12 +5,27 @@
  */
 package collaborative.to.pkgdo.list.client;
 
+
+import Controllers.ItemController;
+import Handlers.ItemCreationHandler;
 import Controllers.ToDoListController;
+import Entities.ItemEntity;
+import Controllers.CollaboratorController;
+import Controllers.ToDoListController;
+import Entities.CollaborationRequestEntity;
+import Entities.ItemEntity;
+import Entities.ToDoEntity;
+import Entities.UserEntity;
+import Handlers.AcceptCollaboratorRequestHandler;
 import Entities.TaskEntity;
 import Entities.ToDoEntity;
 import Entities.UserEntity;
+import Handlers.ItemDeletionHandler;
+import Handlers.ItemUpdateHandler;
 import Handlers.TaskCreationHandler;
 import Handlers.ToDoCreationHandler;
+import Handlers.ToDoDeleteHandler;
+import Handlers.ToDoUpdateHandler;
 import Utils.CurrentUser;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
@@ -49,26 +64,49 @@ import javafx.scene.text.Font;
 import java.time.ZoneId;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import java.util.ArrayList;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import java.util.List;
+import javafx.scene.effect.Glow;
+import javafx.scene.layout.BorderPane;
+import static javafx.scene.layout.Region.USE_PREF_SIZE;
+import javafx.scene.paint.Color;
 /**
  *
  * @author Abd-Elmalek
  */
 public class FXMLController implements Initializable  {
     UserEntity currentUser;
-
+    ItemController itemController = new ItemController();
+    ArrayList<Integer> itemsIndecies;
+    int itemsCounter = 0;
    
-    Friendicon Fitem=new Friendicon();
-    Friendicon Fitem2=new Friendicon();
+    
+    private static ToDoEntity currentToDo = null ;
+   // Friendicon Fitem=new Friendicon();
+   // Friendicon Fitem2=new Friendicon();
     //Listicon  Litem=new Listicon();
     //Listicon  Litem2=new Listicon();
-    Item task=new Item();
-    Item task2=new Item();
+   // Item task=new Item();
+   // Item task2=new Item();
+    //Friendicon Fitem=new Friendicon();
+    //Friendicon Fitem2=new Friendicon();
+    //Listicon  Litem=new Listicon();
+    //Listicon  Litem2=new Listicon();
+    //Item task=new Item();
+    //Item task2=new Item();
+
    // Task item=new Task(null);
   //  Task item2=new Task(null);
-    Collaborator col=new Collaborator();
+    //Collaborator col=new Collaborator();
     Notification notif=new Notification();
-    Friendtoadd fc=new Friendtoadd();
-    Friendtoadd fc2=new Friendtoadd();
+    //Friendtoadd fc=new Friendtoadd();
+    //Friendtoadd fc2=new Friendtoadd();
+    TodoStatstics bar1=new TodoStatstics();
+    TodoStatstics bar2=new TodoStatstics();
+    TodoStatstics bar3=new TodoStatstics();
+    
     
     @FXML
     
@@ -80,13 +118,15 @@ public class FXMLController implements Initializable  {
     public VBox COLLABORATORS; 
     public VBox NOTIFICATIONS;
     public VBox aDDRIENDCOLABLIST;
-    
+    public HBox sSTATISTICS;
     @FXML
     public Accordion TASKLISTS;
     public ScrollPane FRIENDSSCROLL;
     public ScrollPane LISTSCROLL;
     public ScrollPane COLLABSCROLL;
-    
+    @FXML
+    public ImageView testButton; 
+    public JFXTextField ADDTASK;
     public JFXButton FRIENDS;
     public JFXButton LISTS;
     public JFXButton nEWLIST;
@@ -127,7 +167,8 @@ public class FXMLController implements Initializable  {
     public Label TITLE;
     
     public Circle TODOCOLOR;
-
+    public ImageView ADDCOLLAB;
+    public 
     void disableUIForNotification(){
         MINIMIZE.setDisable(true);
         EXIT.setDisable(true);
@@ -155,7 +196,7 @@ public class FXMLController implements Initializable  {
         ADDCOLLABORATORPANE.setDisable(true);
     } 
     @FXML
-       public void nav(MouseEvent event) {
+    public void nav(MouseEvent event) {
            
            if(event.getSource()==LISTS){
             
@@ -195,10 +236,10 @@ public class FXMLController implements Initializable  {
           }
        }
          @FXML
-        public void nav1(MouseEvent event) {
+    public void nav1(MouseEvent event) {
        
         if(event.getSource()==nEWLIST){
-             
+            
             ADDLISTPANE.setVisible(true);
           }
         else if(event.getSource()==CLEARDATE){
@@ -210,7 +251,11 @@ public class FXMLController implements Initializable  {
         }
          else if(event.getSource()==SHOWNOTIFICATIONS){
              
-            NOTIFIPANE.setVisible(true);
+             if(NOTIFIPANE.isVisible())
+                NOTIFIPANE.setVisible(false);
+             else
+                 NOTIFIPANE.setVisible(true);
+             
             
           }
          else if(event.getSource() == NEWCOLLABORATOR){
@@ -220,9 +265,16 @@ public class FXMLController implements Initializable  {
              ADDCOLLABORATORPANE.setVisible(false);
          }
          else if(event.getSource() == CANCELLIST){
+             if(TODOCOLOR != null)
+                 TODOCOLOR.setStroke(Color.TRANSPARENT);
+             TODOCOLOR = null;
+             STARTDATE.setValue(null);
+             ENDDATE.setValue(null);
+             NEWTODOTITLE.setText("");
              ADDLISTPANE.setVisible(false);
          }
          else if(event.getSource() == ADDDATE){
+             
              DATEPANE.setVisible(true);
          }
      
@@ -244,11 +296,11 @@ public class FXMLController implements Initializable  {
     }
 
      
-      public  void actions() {
+    public  void actions() {
         TODOPANE.setVisible(true);
-            STATUSPANE.setVisible(false);
-            REQUESTPANE.setVisible(false);    
-            TODAYPANE.setVisible(false);  }
+        STATUSPANE.setVisible(false);
+        REQUESTPANE.setVisible(false);    
+        TODAYPANE.setVisible(false);  }
      
 
 //      
@@ -267,32 +319,53 @@ public class FXMLController implements Initializable  {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         /*REHAM*/
-        System.out.println("in init in main page");
         ToDoCreationHandler.setTodoGUIGenerator(this::createTodoListResponse);
+        ToDoUpdateHandler.setTodoGUIModifier(this::updateTodoListResponse);
+        ToDoDeleteHandler.setTodoGUIModifier(this::deleteTodoListResponse);
+        sSTATISTICS.getChildren().add(bar1);
+        sSTATISTICS.getChildren().add(bar2);
+        sSTATISTICS.getChildren().add(bar3);
+        AcceptCollaboratorRequestHandler.setCollaboratorsGUIModifier(this::acceptTodoCollaborationResponse);
+        
         currentUser = CurrentUser.getCurrentUser();
         /*REHAM*/
       /*abd-elmalek */
-      
+      ADDTASK.setOnKeyPressed((KeyEvent event) -> {
+          if(event.getCode()== KeyCode.ENTER){
+              System.out.println(ADDTASK.getText());
+              ItemEntity itemEntity = new ItemEntity();
+              itemEntity.setTitle(ADDTASK.getText());
+              itemEntity.setDecription("descriotion");
+              itemEntity.setTodoId(currentToDo.getId());
+              Item i = new Item(itemEntity);
+             //TASKLISTS.getPanes().add(i);
+             try{
+             CurrentUser.getCurrentUser().getTodoList().get(CurrentUser.getCurrentUser().getTodoList().indexOf(currentToDo)).getItemsList().add(itemEntity);
+             }catch(Exception e){
+                 e.printStackTrace();
+             }
+              itemController.createItem(itemEntity);
+              ADDTASK.clear();
+          }
+      });
+//      testButton.setOnMousePressed((MouseEvent event) -> {
+  //        itemController.deleteItem(currentToDo.getItemsList().get(0));
+    //      TASKLISTS.getPanes().remove(0);
+      //  });
         
       /*abd-elamlek*/
       
-      Fitem =new Friendicon();
      
-      FRIENDSLIST.getChildren().add(Fitem);
-      FRIENDSLIST.getChildren().add(Fitem2);
-     
-      //LIST.getChildren().add(Litem);
-      //LIST.getChildren().add(Litem2);
 
       
-      COLLABORATORS.getChildren().add(col);
-      aDDRIENDCOLABLIST.getChildren().add(fc);
-      aDDRIENDCOLABLIST.getChildren().add(fc2);
+      //COLLABORATORS.getChildren().add(col);
+      //aDDRIENDCOLABLIST.getChildren().add(fc);
+      //aDDRIENDCOLABLIST.getChildren().add(fc2);
       
       NOTIFICATIONS.getChildren().add(notif);
       
-      TASKLISTS.getPanes().add(task);
-      TASKLISTS.getPanes().add(task2);
+//      TASKLISTS.getPanes().add(task);
+ //     TASKLISTS.getPanes().add(task2);
       FRIENDPANE.setVisible(false);
       LISTPANE.setVisible(true);
       linelists.setStroke(javafx.scene.paint.Color.valueOf("#000000"));
@@ -332,8 +405,19 @@ public class FXMLController implements Initializable  {
         }); */
      
         initiateCurrentUser();
+        
+        
     }  
        
+    private void setItemList(){
+    
+    for(ToDoEntity toDoEntity : CurrentUser.getCurrentUser().getTodoList()){
+        for(ItemEntity itemEntity : toDoEntity.getItemsList()){
+        
+        
+        }
+    }
+    }
      class Comment extends AnchorPane {
 
     protected final Label label;
@@ -393,13 +477,15 @@ public class FXMLController implements Initializable  {
 
 class Friendtoadd extends AnchorPane {
 
+    private UserEntity friend;
     protected final ImageView imageView;
     protected final Label label;
     protected final ImageView imageView0;
     protected final JFXButton aDDCOLL;
 
-    public Friendtoadd() {
+    public Friendtoadd(UserEntity friend) {
 
+        this.friend = friend;
         imageView = new ImageView();
         label = new Label();
         imageView0 = new ImageView();
@@ -426,7 +512,7 @@ class Friendtoadd extends AnchorPane {
         label.setLayoutY(3.0);
         label.setPrefHeight(25.0);
         label.setPrefWidth(238.0);
-        label.setText("Friend");
+        label.setText(friend.getUserName());
         label.setFont(new Font(16.0));
 
         imageView0.setFitHeight(29.0);
@@ -457,15 +543,19 @@ class  Collaborator extends AnchorPane {
     protected  DropShadow dropShadow;
     protected  ImageView imageView;
     protected  Circle circle0;
-    protected  Label Friendname;
+    protected  Label collaboratorName;
+    
+    private UserEntity collaborator;
 
-    public Collaborator() {
+    public Collaborator(UserEntity collaborator) {
 
+        this.collaborator = collaborator;
+        
         circle = new Circle();
         dropShadow = new DropShadow();
         imageView = new ImageView();
         circle0 = new Circle();
-        Friendname = new Label();
+        collaboratorName = new Label();
 
         setId("AnchorPane");
         setPrefHeight(35.0);
@@ -500,25 +590,25 @@ class  Collaborator extends AnchorPane {
         circle0.setStroke(javafx.scene.paint.Color.valueOf("#0000007c"));
         circle0.setStrokeType(javafx.scene.shape.StrokeType.INSIDE);
 
-        Friendname.setLayoutX(46.0);
-        Friendname.setLayoutY(11.0);
-        Friendname.setPrefHeight(17.0);
-        Friendname.setPrefWidth(82.0);
-        Friendname.setText(" ");
-        Friendname.setTextFill(javafx.scene.paint.Color.valueOf("#838080"));
-        Friendname.setFont(new Font("Calibri", 12.0));
+        collaboratorName.setLayoutX(46.0);
+        collaboratorName.setLayoutY(11.0);
+        collaboratorName.setPrefHeight(17.0);
+        collaboratorName.setPrefWidth(82.0);
+        collaboratorName.setText(collaborator.getUserName());
+        collaboratorName.setTextFill(javafx.scene.paint.Color.valueOf("#838080"));
+        collaboratorName.setFont(new Font("Calibri", 12.0));
         
        
         
         getChildren().add(circle);
         getChildren().add(imageView);
         getChildren().add(circle0);
-        getChildren().add(Friendname);
+        getChildren().add(collaboratorName);
 
     }
      public void setFriendName(String s)
         {
-         Friendname.setText(s);
+         collaboratorName.setText(s);
         }
   
      public void onlinestatus(Boolean b)
@@ -540,16 +630,23 @@ class  Collaborator extends AnchorPane {
     protected  ImageView imageView;
     protected  Circle circle0;
     protected  Label Friendname;
+    private UserEntity friend;
     protected final ContextMenu menu=new ContextMenu();
     protected MenuItem delete=new MenuItem("Delete");
     
-    public Friendicon() {
-        delete.setOnAction((event) -> {
+    
+
+
+    public Friendicon(UserEntity friend) {
+        
+         delete.setOnAction((event) -> {
             System.out.println("delete");
         });
     
         menu.getItems().addAll(delete);
 
+        this.friend = friend;
+        
         circle = new Circle();
         dropShadow = new DropShadow();
         imageView = new ImageView();
@@ -593,7 +690,7 @@ class  Collaborator extends AnchorPane {
         Friendname.setLayoutY(11.0);
         Friendname.setPrefHeight(17.0);
         Friendname.setPrefWidth(82.0);
-        Friendname.setText(" ");
+        Friendname.setText(friend.getUserName());
         Friendname.setTextFill(javafx.scene.paint.Color.valueOf("#838080"));
         Friendname.setFont(new Font("Calibri", 12.0));
         Friendname.setContextMenu(menu);
@@ -620,13 +717,24 @@ class  Collaborator extends AnchorPane {
      
      
      class Listicon extends AnchorPane {
+
     private ToDoEntity todo;
     protected final ImageView imageView;
     protected final ContextMenu menu=new ContextMenu();
     protected MenuItem delete=new MenuItem("Delete");
-    
+    private boolean isOwnedByCurrentUser = false;
     protected  Label label;
-    public Listicon(ToDoEntity todo) {
+    VBox TODOCOLLABORATORS; // create "collaborator" and attach them to this, Collaborator(UserEntity)
+    VBox FRIENDSTOADDASCOLLABORATORS;
+    VBox TODOITEMSLIST;
+   
+    List<Integer> collaboratorsIds = new ArrayList<Integer>();
+    List<Integer> requestedCollaboratorsIds = new ArrayList<Integer>();
+
+   
+
+    public Listicon(ToDoEntity todo, boolean isOwnedByCurrentUser) {
+        
         delete.setOnAction((event) -> {
             System.out.println("delete");
           });
@@ -634,6 +742,8 @@ class  Collaborator extends AnchorPane {
         menu.getItems().addAll(delete);
 
         this.todo = todo;
+        this.isOwnedByCurrentUser = isOwnedByCurrentUser;
+        
         imageView = new ImageView();
         label = new Label();
 
@@ -658,15 +768,89 @@ class  Collaborator extends AnchorPane {
         label.setText(todo.getTitle());
         getChildren().add(imageView);
         getChildren().add(label);
+
         label.setContextMenu(menu);
-          label.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+        
+        TODOCOLLABORATORS = new VBox();
+        FRIENDSTOADDASCOLLABORATORS = new VBox();
+        TODOITEMSLIST = new VBox();
+        
+
+        if(todo.getCollaboratorList()!= null){
+            for(UserEntity collaborator : todo.getCollaboratorList()){
+                
+                Collaborator item = new Collaborator(collaborator);
+                TODOCOLLABORATORS.getChildren().add(item);
+            }
+            try {
+            todo.getCollaboratorList().forEach((collaborator) -> collaboratorsIds.add(collaborator.getId()));
+            todo.getRequestedCollaboratorList().forEach((collaborator) -> requestedCollaboratorsIds.add(collaborator.getId()));    
+            } catch (Exception e) {
+            }
+            
+
+        }
+        
+        if(currentUser.getFriendList()!= null){
+            for(UserEntity friend : currentUser.getFriendList()){
+                
+                if(!collaboratorsIds.contains(friend.getId()) && !requestedCollaboratorsIds.contains(friend.getId())){
+                    System.out.println(friend.getUserName());
+                    Friendtoadd item = new Friendtoadd(friend);
+                    FRIENDSTOADDASCOLLABORATORS.getChildren().add(item);
+                }
+            }
+        
+        
+        /*if(todo.getItemsList() != null){
+            for(ItemEntity todoItem : todo.getItemsList()){
+                Item item = new Item(todoItem);
+                TODOITEMSLIST.getChildren().add(item);
+            }
+            
+        }*/
+        }
+        label.setOnMousePressed(new EventHandler<MouseEvent>() {
+
             @Override
             public void handle(MouseEvent event) {
              actions();
              TITLE.setText(todo.getTitle());
+             currentToDo = todo;
+             TASKLISTS.getPanes().clear();
+             
+             for(int i =0 ; i<LIST.getChildren().size();i++){
+                Listicon licon = (Listicon) LIST.getChildren().get(i);
+                for(ItemEntity itemEntity : todo.getItemsList()){
+                    if(licon.todo.getId()== itemEntity.getTodoId()){
+                        Item item = new Item(itemEntity);
+                         TASKLISTS.getPanes().add(item);
+                }
+            }
+            }
+             COLLABORATORS.getChildren().setAll(TODOCOLLABORATORS);
+             aDDRIENDCOLABLIST.getChildren().setAll(FRIENDSTOADDASCOLLABORATORS);
+             
+             NEWCOLLABORATOR.setVisible(isOwnedByCurrentUser);
+             ADDCOLLAB.setVisible(isOwnedByCurrentUser);
+             
             }
         });
         
+        
+        
+    }
+    void addCollaborator(Collaborator collaborator){
+        Platform.runLater(() ->  {
+            TODOCOLLABORATORS.getChildren().add(collaborator);
+        });
+    }
+    public boolean getIsOwnedByCurrentUser(){
+        return isOwnedByCurrentUser;
+    }
+    public ToDoEntity getTodo(){
+        return todo;
     }
 }
 
@@ -683,15 +867,16 @@ public class Item extends TitledPane {
     protected final VBox vBox;
     protected final ContextMenu menu=new ContextMenu();
     protected MenuItem delete=new MenuItem("Delete");
+    Addtaskpane bar=new Addtaskpane();
     
-    public Item() {
+    public int itemId;
+    public Item(ItemEntity itemEntity) {
          delete.setOnAction((event) -> {
             System.out.println("delete");
         });
       
         menu.getItems().addAll(delete);
-
-        Addtaskpane bar=new Addtaskpane();
+        itemId = itemEntity.getId();
         anchorPane = new AnchorPane();
         jFXCheckBox = new JFXCheckBox();
         label = new Label();
@@ -720,7 +905,7 @@ public class Item extends TitledPane {
         label.setLayoutY(10.0);
         label.setPrefHeight(21.0);
         label.setPrefWidth(374.0);
-        label.setText("Omnias Task");
+        label.setText(itemEntity.getTitle());
         label.setFont(new Font(15.0));
 
         line.setEndX(-121.0);
@@ -776,8 +961,17 @@ public class Item extends TitledPane {
             }
         });
         
+        label.setOnMousePressed((MouseEvent event) -> {
+            deleteItem(itemEntity);
+            itemController.deleteItem(itemEntity);
+            
+            
+        });
         
         TaskCreationHandler.setTodoGUIGenerator(this::createTaskResponse);
+        ItemCreationHandler.setTodoGUIGenerator(this:: createItemResponse);
+        ItemUpdateHandler.setTodoGUIGenerator(this::updateItemResponse);
+        ItemDeletionHandler.setTodoGUIGenerator(this::deleteItemResponse);
     }
 
  public void createTaskResponse(TaskEntity task){
@@ -785,14 +979,49 @@ public class Item extends TitledPane {
                 addTask(task);
             });
     }
-
+public void createItemResponse(ItemEntity item){
+            Platform.runLater(() ->  {
+                addItem(item);
+            });
+    }
 
    void addTask(TaskEntity taskEntity){
         Task i=new Task(taskEntity);
          vBox.getChildren().add(i);
         
     }
-    }     
+   public  void addItem(ItemEntity itemEntity){
+       Item item = new Item(itemEntity);
+       TASKLISTS.getPanes().add(item);
+       
+   }
+   private void deleteItem(ItemEntity itemEntity){
+        TASKLISTS.getPanes().remove(this);
+   }
+   
+   private void deleteItemResponse(ItemEntity itemEntity){
+   
+       for(int i=0; i< TASKLISTS.getPanes().size();i++){
+          Item i1 = (Item) TASKLISTS.getPanes().get(i);
+          if(itemEntity.getId() == i1.itemId){
+              TASKLISTS.getPanes().remove(i1);
+              break;
+          }
+       }
+   }
+   
+   private void updateItemResponse(ItemEntity itemEntity){
+       for(int i=0; i< TASKLISTS.getPanes().size();i++){
+          Item i1 = (Item) TASKLISTS.getPanes().get(i);
+          if(itemEntity.getId() == i1.itemId){
+              Item item = new Item(itemEntity);
+              TASKLISTS.getPanes().set(i,item);
+          }
+       }
+   
+   }
+
+}
      
      
      
@@ -866,32 +1095,99 @@ class Task extends AnchorPane {
     
     /*REHAM*/
     public void initiateCurrentUser(){
-        USERNAME.setText(currentUser.getUserName());
-        for(ToDoEntity todo : currentUser.getTodoList()){
-            Listicon  Litem=new Listicon(todo);
-            LIST.getChildren().add(Litem);
-        }
-            
-    } 
-    
-    public void createTodoListResponse(ToDoEntity todo){
-            Platform.runLater(() ->  {
-                Listicon  Litem=new Listicon(todo);
+        USERNAME.setText(currentUser.getUserName());  
+        if(currentUser.getTodoList() != null)
+            for(ToDoEntity mtodo : currentUser.getTodoList()){
+                Listicon  mLitem=new Listicon(mtodo, true);
+                LIST.getChildren().add(mLitem);
+            }
+        
+        if(currentUser.getCollaboratorList()!= null){
+            for(ToDoEntity todo : currentUser.getCollaboratorList()){
+                Listicon  Litem=new Listicon(todo, false);
                 LIST.getChildren().add(Litem);
-            });
+            }
+        }
+        if(currentUser.getFriendList() != null)
+            for(UserEntity friend : currentUser.getFriendList()){
+                Friendicon Fitem=new Friendicon(friend);
+                FRIENDSLIST.getChildren().add(Fitem);
+        }
+    
+    }
+    public void acceptTodoCollaborationResponse(UserEntity collaborator, int todoId){
+        System.out.println("in acceptTodoCollaborationResponse");
+        System.err.println(todoId);
+        for(int i = 0 ; i < LIST.getChildren().size() ; i++){
+            System.out.println(((Listicon)LIST.getChildren().get(i)).getTodo().getId());
+           if(((Listicon)LIST.getChildren().get(i)).getTodo().getId() == todoId){
+               System.out.println("I found the todo");
+               Collaborator collaboratorItem = new Collaborator(collaborator);
+               ((Listicon)LIST.getChildren().get(i)).addCollaborator(collaboratorItem);
+               break;
+           }
+        }
+    }
+    public void createTodoListResponse(ToDoEntity todo, boolean isOwner){
+        Platform.runLater(() ->  {
+            Listicon  Litem=new Listicon(todo, isOwner);
+            LIST.getChildren().add(Litem);
+        });
     }
     
     
     public void setTodoColor(MouseEvent event){
+        if(TODOCOLOR != null)
+            TODOCOLOR.setStroke(Color.TRANSPARENT);
+        
         TODOCOLOR = (Circle)event.getSource();
+        TODOCOLOR.setStroke(Color.BLACK);
+    }
+    public void updateTodoListResponse(ToDoEntity todo){
+        //boolean isOwnedByCurrentUser = ((Listicon)(LIST.getChildren().get(todoIndex))).getIsOwnedByCurrentUser();
+       Platform.runLater(() ->  {
+        for(int i = 0 ; i < LIST.getChildren().size() ; i++)
+           if(((Listicon)LIST.getChildren().get(i)).getTodo().getId() == todo.getId()){
+               //System.out.println("title: "+((Listicon)node).getTodo().getTitle());
+               System.out.println("my index here is: " + i);
+               LIST.getChildren().set(i, new Listicon(todo, ((Listicon)LIST.getChildren().get(i)).isOwnedByCurrentUser));
+               break;
+           }
+       });
+        /*boolean isOwnedByCurrentUser = false;
+        Listicon Litem = 
+        LIST.getChildren().set(todoIndex, Litem);*/
+    }
+    public void deleteTodoListResponse(Integer todoIndex){
+        LIST.getChildren().remove(todoIndex);
+    }
+    public void acceptCollaborationRequest(CollaborationRequestEntity request){
+        CollaboratorController collaboratorController = new CollaboratorController();
+        //collaboratorController.acceptCollaboratorRequest(CurrentUser.getCurrentUser().getCollaborationRequestList().get(0));
+        collaboratorController.acceptCollaboratorRequest(request);
+
+    }
+    public void deleteTodoListRequest(MouseEvent event){
+        
+    }
+    public void updateTodoListRequest(MouseEvent event){
+        ToDoListController t = new ToDoListController();
+        ToDoEntity newTodo = ((Listicon)LIST.getChildren().get(0)).getTodo();
+        newTodo.setTitle("My Family");
+        newTodo.setStatus(100);
+        //(43, "My House", new Date(), new Date(), 11, 100, null);
+        t.updateToDoList(newTodo);
+        updateTodoListResponse(newTodo);
     }
     public void createTodoListRequest(MouseEvent event){
+        
         String todoTitle = NEWTODOTITLE.getText();
         System.out.println(todoTitle);
-        Date startDate = Date.from(STARTDATE.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Date endDate = Date.from(ENDDATE.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        
-        if(!todoTitle.equals("") && startDate != null && endDate != null && TODOCOLOR != null){
+                
+        if(!todoTitle.equals("") && STARTDATE != null && ENDDATE != null && TODOCOLOR != null){
+            Date startDate = Date.from(STARTDATE.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Date endDate = Date.from(ENDDATE.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+
             ToDoListController tlc = new ToDoListController();
             tlc.createToDoList(new ToDoEntity(todoTitle, startDate, endDate, currentUser.getId(), 0, TODOCOLOR.getFill().toString()));
             
@@ -903,6 +1199,11 @@ class Task extends AnchorPane {
         }
     }
     /*REHAM*/
+    
+    /*abd-elmalek*/
+    
+    
+    /*abd-elmalek*/
     class Addtaskpane extends AnchorPane {
 
     protected final AnchorPane anchorPane;
@@ -938,4 +1239,94 @@ class Task extends AnchorPane {
 
     }
 }
+    
+    class TodoStatstics extends AnchorPane {
+
+    protected final Label label;
+    protected final BorderPane borderPane;
+    protected final AnchorPane anchorPane;
+    protected final AnchorPane anchorPane0;
+    protected final Glow glow;
+    protected final Label label0;
+
+    public TodoStatstics() {
+
+        label = new Label();
+        borderPane = new BorderPane();
+        anchorPane = new AnchorPane();
+        anchorPane0 = new AnchorPane();
+        glow = new Glow();
+        label0 = new Label();
+
+        setMaxHeight(USE_PREF_SIZE);
+        setMaxWidth(USE_PREF_SIZE);
+        setMinHeight(USE_PREF_SIZE);
+        setMinWidth(USE_PREF_SIZE);
+        setPrefHeight(252.0);
+        setPrefWidth(80.0);
+        setStyle("-fx-background-color: #fefefe; -fx-background-radius: 2;");
+
+        label.setAlignment(javafx.geometry.Pos.CENTER);
+        label.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
+        label.setLayoutX(12.0);
+        label.setLayoutY(232.0);
+        label.setPrefHeight(17.0);
+        label.setPrefWidth(57.0);
+        label.setText("list 1");
+        label.setTextAlignment(javafx.scene.text.TextAlignment.JUSTIFY);
+        label.setFont(new Font("System Bold", 13.0));
+
+        borderPane.setLayoutX(20.0);
+        borderPane.setLayoutY(26.0);
+        borderPane.setPrefHeight(200.0);
+        borderPane.setPrefWidth(34.0);
+
+        BorderPane.setAlignment(anchorPane, javafx.geometry.Pos.CENTER);
+
+        anchorPane0.setLayoutX(7.0);
+        anchorPane0.setPrefHeight(167.0);
+        anchorPane0.setPrefWidth(26.0);
+        anchorPane0.setStyle("-fx-background-color: #3b8ef4; -fx-background-radius: 5;");
+
+        //glow.setLevel(0.85);
+       // anchorPane0.setEffect(glow);
+
+        label0.setLayoutX(3.0);
+        label0.setLayoutY(-32.0);
+        label0.setPrefHeight(19.0);
+        label0.setPrefWidth(39.0);
+        label0.setText("100%");
+        label0.setTextFill(javafx.scene.paint.Color.valueOf("#6991dd"));
+        label0.setFont(new Font("System Bold", 13.0));
+        borderPane.setBottom(anchorPane);
+
+        getChildren().add(label);
+        anchorPane.getChildren().add(anchorPane0);
+        anchorPane.getChildren().add(label0);
+        getChildren().add(borderPane);
+        setBarname("7amada");
+        int x=20;
+        String s=x+"%";
+        setBarpercent(s);
+        
+    }
+    void setBarname(String s)
+      {
+        label.setText(s);
+      }
+    
+    void setBarpercent(String s )
+      { label0.setText(s);
+      }
+    
+    void setBarheight(int i)
+      {
+        anchorPane.setPrefHeight(i);
+      }
+    
+}
+
+    
+    
+    
 }

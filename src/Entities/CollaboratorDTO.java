@@ -10,12 +10,12 @@ package Entities;
  * @author pc
  */
 public class CollaboratorDTO implements BaseEntity{
-    private int collaboratorID;
+    private UserEntity collaborator;
     private int senderID;
     private int todoId;
-    private int reqId;
+    //private int reqId;
 
-    public int getReqId() {
+    /*public int getReqId() {
         return reqId;
     }
 
@@ -25,7 +25,7 @@ public class CollaboratorDTO implements BaseEntity{
 
     public CollaboratorDTO(int reqId) {
         this.reqId = reqId;
-    }
+    }*/
     
     public CollaboratorDTO(int senderID, int todoId) {
         this.senderID = senderID;
@@ -33,18 +33,18 @@ public class CollaboratorDTO implements BaseEntity{
     }
 
     
-    public CollaboratorDTO(int collaboratorID, int senderID, int todoId) {
-        this.collaboratorID = collaboratorID;
+    public CollaboratorDTO(UserEntity collaborator, int senderID, int todoId) {
+        this.collaborator = collaborator;
         this.senderID = senderID;
         this.todoId = todoId;
     }
 
-    public int getCollaboratorID() {
-        return collaboratorID;
+    public UserEntity getCollaborator() {
+        return collaborator;
     }
 
-    public void setCollaboratorID(int collaboratorID) {
-        this.collaboratorID = collaboratorID;
+    public void setCollaborator(UserEntity collaborator) {
+        this.collaborator = collaborator;
     }
 
     public int getSenderID() {
@@ -64,5 +64,5 @@ public class CollaboratorDTO implements BaseEntity{
     }
 
   
-    
+     
 }
