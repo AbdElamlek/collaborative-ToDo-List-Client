@@ -8,6 +8,7 @@ package Handlers;
 import ControllerBase.ActionHandler;
 import Entities.FriendRequestEntity;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,7 +22,7 @@ public class AddFriendHandler implements ActionHandler {
     public void handleAction(String responseJsonObject) {
         
         try {
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().serializeNulls().setDateFormat("MMM dd, yyyy h:mm:ss a").create();
             JSONObject jsonObject = new JSONObject(responseJsonObject);
             String friendRequestEntityJson = jsonObject.getJSONObject("entity").toString();
             FriendRequestEntity friendRequestEntity = gson.fromJson(friendRequestEntityJson, FriendRequestEntity.class);

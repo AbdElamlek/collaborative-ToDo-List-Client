@@ -232,7 +232,7 @@ public class FXMLController implements Initializable  {
        
         if(event.getSource()==nEWLIST){
             Controllers.FriendController fc = new FriendController();
-            fc.addFreind(1, 4);
+            fc.addFreind(3, 4);
             ADDLISTPANE.setVisible(true);
           }
         else if(event.getSource()==CLEARDATE){

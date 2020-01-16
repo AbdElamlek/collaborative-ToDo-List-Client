@@ -9,6 +9,7 @@ import ControllerBase.FriendIntrface;
 import Entities.EntityWrapper;
 import Entities.RequestEntity;
 import Entities.UserEntity;
+import java.sql.Date;
 
 /**
  *
@@ -40,6 +41,7 @@ public class FriendController implements FriendIntrface {
             RequestEntity requestEntity = new RequestEntity();
             requestEntity.setSentUserId(sentUserId);
             requestEntity.setReceivedUserId(receivedUserId);
+            requestEntity.setTime(new Date(System.currentTimeMillis()));
             EntityWrapper entityWrapper = new EntityWrapper("addFriend", "RequestEntity", requestEntity);
             String taskJsonResponse = adapterController.entity2Json(entityWrapper);
             socketController.sendJsonObject(taskJsonResponse);
