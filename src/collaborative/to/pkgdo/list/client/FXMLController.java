@@ -27,6 +27,9 @@ import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -64,7 +67,7 @@ import javafx.scene.paint.Color;
  */
 public class FXMLController implements Initializable  {
     UserEntity currentUser;
-
+    Listicon currentlyViewedTodoList;
    
     //Friendicon Fitem=new Friendicon();
     //Friendicon Fitem2=new Friendicon();
@@ -90,6 +93,10 @@ public class FXMLController implements Initializable  {
     public VBox COLLABORATORS; 
     public VBox NOTIFICATIONS;
     public VBox aDDRIENDCOLABLIST;
+    public VBox FRIENDREQS;
+    public VBox COLLABORATIONREQS;
+    
+    FriendRequest f = new FriendRequest();
     
     @FXML
     public Accordion TASKLISTS;
@@ -101,6 +108,7 @@ public class FXMLController implements Initializable  {
     public JFXButton LISTS;
     public JFXButton nEWLIST;
     public JFXButton ADDDATE;
+    public JFXButton ADDDATE1;
     public JFXButton DATEPICK;
     
     public AnchorPane TODOPANE;
@@ -113,6 +121,7 @@ public class FXMLController implements Initializable  {
     public AnchorPane DATEPANE;
     public AnchorPane ADDLISTPANE;
     public AnchorPane ADDCOLLABORATORPANE;
+    public AnchorPane EDITLISTAP;
     
     public JFXButton REQUESTS;
     public JFXButton TODAY;
@@ -127,17 +136,22 @@ public class FXMLController implements Initializable  {
     public JFXButton NEWCOLLABORATOR;
     public JFXButton DONEADDCOLLABORATOR;
     public JFXButton CANCELLIST;
+    public JFXButton CANCELLIST1;
+    public JFXButton EDITLIST;
     
     public JFXDatePicker STARTDATE;
     public JFXDatePicker ENDDATE;
     
     public JFXTextField NEWTODOTITLE;
+    public JFXTextField NEWTODOTITLE1;
 
     public Label USERNAME;
     public Label TITLE;
     
     public Circle TODOCOLOR;
+    public Circle TODOEDITCOLOR;
     public ImageView ADDCOLLAB;
+    public ImageView EDITLISTIMG;
 
     void disableUIForNotification(){
         MINIMIZE.setDisable(true);
@@ -212,6 +226,14 @@ public class FXMLController implements Initializable  {
             
             ADDLISTPANE.setVisible(true);
           }
+        else if(event.getSource() == EDITLIST){
+            NEWTODOTITLE1.setText(currentlyViewedTodoList.getTodo().getTitle());
+                        
+            STARTDATE.setValue(LocalDateTime.ofInstant(Instant.ofEpochMilli(currentlyViewedTodoList.getTodo().getAssignDate().getTime()), ZoneId.systemDefault()).toLocalDate());
+            ENDDATE.setValue(LocalDateTime.ofInstant(Instant.ofEpochMilli(currentlyViewedTodoList.getTodo().getDeadLineDate().getTime()), ZoneId.systemDefault()).toLocalDate());
+            
+            EDITLISTAP.setVisible(true);
+        }
         else if(event.getSource()==CLEARDATE){
              STARTDATE.setValue(null);
              ENDDATE.setValue(null);
@@ -234,7 +256,7 @@ public class FXMLController implements Initializable  {
          else if(event.getSource() == DONEADDCOLLABORATOR){
              ADDCOLLABORATORPANE.setVisible(false);
          }
-         else if(event.getSource() == CANCELLIST){
+         else if(event.getSource() == CANCELLIST || event.getSource() == CANCELLIST1){
              if(TODOCOLOR != null)
                  TODOCOLOR.setStroke(Color.TRANSPARENT);
              TODOCOLOR = null;
@@ -242,8 +264,9 @@ public class FXMLController implements Initializable  {
              ENDDATE.setValue(null);
              NEWTODOTITLE.setText("");
              ADDLISTPANE.setVisible(false);
+             EDITLISTAP.setVisible(false);
          }
-         else if(event.getSource() == ADDDATE){
+         else if(event.getSource() == ADDDATE || event.getSource() == ADDDATE1){
              
              DATEPANE.setVisible(true);
          }
@@ -304,7 +327,9 @@ public class FXMLController implements Initializable  {
       
      
 
-      
+      FRIENDREQS.getChildren().add(f);
+      COLLABORATIONREQS.getChildren().add(new CollaborationRequest());
+      COLLABORATIONREQS.getChildren().add(new TaskAssignmentRequest());
       //COLLABORATORS.getChildren().add(col);
       //aDDRIENDCOLABLIST.getChildren().add(fc);
       //aDDRIENDCOLABLIST.getChildren().add(fc2);
@@ -649,9 +674,10 @@ class  Collaborator extends AnchorPane {
          List<Integer> requestedCollaboratorsIds = new ArrayList<Integer>();
 
          VBox FRIENDSTOADDASCOLLABORATORS;
-         VBox TODOITEMSLIST;
+         
+         
          protected final ImageView imageView;
-    protected  Label label;
+         protected  Label label;
 
     public Listicon(ToDoEntity todo, boolean isOwnedByCurrentUser) {
         
@@ -685,8 +711,7 @@ class  Collaborator extends AnchorPane {
         
         TODOCOLLABORATORS = new VBox();
         FRIENDSTOADDASCOLLABORATORS = new VBox();
-        TODOITEMSLIST = new VBox();
-        
+
 
         if(todo.getCollaboratorList() != null){
             for(UserEntity collaborator : todo.getCollaboratorList()){
@@ -711,27 +736,14 @@ class  Collaborator extends AnchorPane {
             }
         }
         
-        /*if(todo.getItemsList() != null){
-            for(ItemEntity todoItem : todo.getItemsList()){
-                Item item = new Item(todoItem);
-                TODOITEMSLIST.getChildren().add(item);
-            }
-            
-        }*/
+        viewTodo();
         label.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
              actions();
-             TITLE.setText(todo.getTitle());
-             COLLABORATORS.getChildren().setAll(TODOCOLLABORATORS);
-             aDDRIENDCOLABLIST.getChildren().setAll(FRIENDSTOADDASCOLLABORATORS);
-             
-             NEWCOLLABORATOR.setVisible(isOwnedByCurrentUser);
-             ADDCOLLAB.setVisible(isOwnedByCurrentUser);
-             
+             viewTodo();             
             }
-        });
-        
+        }); 
     }
     public void addCollaborator(Collaborator collaborator){
         Platform.runLater(() ->  {
@@ -743,6 +755,19 @@ class  Collaborator extends AnchorPane {
     }
     public ToDoEntity getTodo(){
         return todo;
+    }
+    public void viewTodo(){
+        TITLE.setText(todo.getTitle());
+        COLLABORATORS.getChildren().setAll(TODOCOLLABORATORS);
+        aDDRIENDCOLABLIST.getChildren().setAll(FRIENDSTOADDASCOLLABORATORS);
+
+        NEWCOLLABORATOR.setVisible(isOwnedByCurrentUser);
+        ADDCOLLAB.setVisible(isOwnedByCurrentUser);
+        
+        EDITLIST.setVisible(isOwnedByCurrentUser);
+        EDITLISTIMG.setVisible(isOwnedByCurrentUser);
+        
+        currentlyViewedTodoList = Listicon.this;
     }
 }
 
@@ -926,26 +951,220 @@ class Task extends AnchorPane {
 }
     
     /*REHAM*/
+
+    public class FriendRequest extends AnchorPane {
+
+        protected final ImageView imageView;
+        protected final JFXButton jFXButton;
+        protected final JFXButton jFXButton0;
+        protected final Label label;
+
+        public FriendRequest() {
+
+            imageView = new ImageView();
+            jFXButton = new JFXButton();
+            jFXButton0 = new JFXButton();
+            label = new Label();
+
+            setMaxHeight(USE_PREF_SIZE);
+            setMaxWidth(USE_PREF_SIZE);
+            setMinHeight(USE_PREF_SIZE);
+            setMinWidth(USE_PREF_SIZE);
+            setPrefHeight(47.0);
+            setPrefWidth(413.0);
+
+            imageView.setFitHeight(32.0);
+            imageView.setFitWidth(32.0);
+            imageView.setLayoutX(14.0);
+            imageView.setLayoutY(11.0);
+            imageView.setPickOnBounds(true);
+            imageView.setPreserveRatio(true);
+            imageView.setImage(new Image(getClass().getResource("icons8-user-30.png").toExternalForm()));
+            imageView.setOpacity(0.46);
+
+            jFXButton.setLayoutX(225.0);
+            jFXButton.setLayoutY(10.0);
+            jFXButton.setPrefWidth(79);
+            jFXButton.setPrefHeight(25);
+            jFXButton.setText("Accept");
+            jFXButton.setStyle("-fx-background-color: #3b8ef4;");
+            jFXButton.setTextFill(Color.web("#fffbfb"));
+
+            jFXButton0.setLayoutX(317.0);
+            jFXButton0.setLayoutY(10.0);
+            jFXButton0.setPrefWidth(79);
+            jFXButton0.setPrefHeight(25);
+            jFXButton0.setText("Reject");
+            jFXButton0.setStyle("-fx-background-color:  #f0f1f5;");
+
+            label.setLayoutX(54.0);
+            label.setLayoutY(17.0);
+            label.setText("MonaEzzat");
+            label.setPrefWidth(152);
+            label.prefHeight(21);
+
+            getChildren().add(imageView);
+            getChildren().add(jFXButton);
+            getChildren().add(jFXButton0);
+            getChildren().add(label);
+
+        }
+    }
+    public class CollaborationRequest extends AnchorPane {
+
+        protected final ImageView imageView;
+        protected final JFXButton jFXButton;
+        protected final JFXButton jFXButton0;
+        protected final Label label;
+
+        public CollaborationRequest() {
+
+            imageView = new ImageView();
+            jFXButton = new JFXButton();
+            jFXButton0 = new JFXButton();
+            label = new Label();
+
+            setMaxHeight(USE_PREF_SIZE);
+            setMaxWidth(USE_PREF_SIZE);
+            setMinHeight(USE_PREF_SIZE);
+            setMinWidth(USE_PREF_SIZE);
+            setPrefHeight(47.0);
+            setPrefWidth(413.0);
+
+            imageView.setFitHeight(32.0);
+            imageView.setFitWidth(28.0);
+            imageView.setLayoutX(14.0);
+            imageView.setLayoutY(11.0);
+            //imageView.setOpacity(0.75);
+            imageView.setPickOnBounds(true);
+            imageView.setPreserveRatio(true);
+            imageView.setImage(new Image(getClass().getResource("icons8_menu_filled_50px_1.png").toExternalForm()));
+            imageView.setOpacity(0.54);
+            
+            //imageView.setFitHeight(19.0);
+            //imageView.setFitWidth(21.0);
+       
+        
+        
+
+            jFXButton.setLayoutX(225.0);
+            jFXButton.setLayoutY(10.0);
+            jFXButton.setPrefWidth(79);
+            jFXButton.setPrefHeight(25);
+            jFXButton.setText("Accept");
+            jFXButton.setStyle("-fx-background-color: #3b8ef4;");
+            jFXButton.setTextFill(Color.web("#fffbfb"));
+
+            jFXButton0.setLayoutX(317.0);
+            jFXButton0.setLayoutY(10.0);
+            jFXButton0.setPrefWidth(79);
+            jFXButton0.setPrefHeight(25);
+            jFXButton0.setText("Reject");
+            jFXButton0.setStyle("-fx-background-color:  #f0f1f5;");
+
+            label.setLayoutX(54.0);
+            label.setLayoutY(17.0);
+            label.setText("My Todo");
+            label.setPrefWidth(152);
+            label.prefHeight(21);
+
+            getChildren().add(imageView);
+            getChildren().add(jFXButton);
+            getChildren().add(jFXButton0);
+            getChildren().add(label);
+
+        }
+    }
+    
+    public class TaskAssignmentRequest extends AnchorPane {
+
+        protected final ImageView imageView;
+        protected final JFXButton jFXButton;
+        protected final JFXButton jFXButton0;
+        protected final Label label;
+
+        public TaskAssignmentRequest() {
+
+            imageView = new ImageView();
+            jFXButton = new JFXButton();
+            jFXButton0 = new JFXButton();
+            label = new Label();
+
+            setMaxHeight(USE_PREF_SIZE);
+            setMaxWidth(USE_PREF_SIZE);
+            setMinHeight(USE_PREF_SIZE);
+            setMinWidth(USE_PREF_SIZE);
+            setPrefHeight(47.0);
+            setPrefWidth(413.0);
+
+            imageView.setFitHeight(32.0);
+            imageView.setFitWidth(32.0);
+            imageView.setLayoutX(14.0);
+            imageView.setLayoutY(11.0);
+            //imageView.setOpacity(0.75);
+            imageView.setPickOnBounds(true);
+            imageView.setPreserveRatio(true);
+            imageView.setImage(new Image(getClass().getResource("icons8-task-planning-24.png").toExternalForm()));
+            imageView.setOpacity(0.54);
+            
+            //imageView.setFitHeight(19.0);
+            //imageView.setFitWidth(21.0);
+       
+        
+        
+
+            jFXButton.setLayoutX(225.0);
+            jFXButton.setLayoutY(10.0);
+            jFXButton.setPrefWidth(79);
+            jFXButton.setPrefHeight(25);
+            jFXButton.setText("Accept");
+            jFXButton.setStyle("-fx-background-color: #3b8ef4;");
+            jFXButton.setTextFill(Color.web("#fffbfb"));
+
+            jFXButton0.setLayoutX(317.0);
+            jFXButton0.setLayoutY(10.0);
+            jFXButton0.setPrefWidth(79);
+            jFXButton0.setPrefHeight(25);
+            jFXButton0.setText("Reject");
+            jFXButton0.setStyle("-fx-background-color:  #f0f1f5;");
+
+            label.setLayoutX(54.0);
+            label.setLayoutY(17.0);
+            label.setText("My Task");
+            label.setPrefWidth(152);
+            label.prefHeight(21);
+
+            getChildren().add(imageView);
+            getChildren().add(jFXButton);
+            getChildren().add(jFXButton0);
+            getChildren().add(label);
+
+        }
+    }
+    
     public void initiateCurrentUser(){
         USERNAME.setText(currentUser.getUserName());
         
         if(currentUser.getTodoList() != null)
             for(ToDoEntity todo : currentUser.getTodoList()){
-                Listicon  Litem=new Listicon(todo, true);
-                LIST.getChildren().add(Litem);
+                Listicon  item = new Listicon(todo, true);
+                LIST.getChildren().add(item);
             }
         
-        if(currentUser.getCollaboratorList()!= null){
+        
+        if(currentUser.getCollaboratorList()!= null)
             for(ToDoEntity todo : currentUser.getCollaboratorList()){
-                Listicon  Litem=new Listicon(todo, false);
-                LIST.getChildren().add(Litem);
+                Listicon  item = new Listicon(todo, false);
+                LIST.getChildren().add(item);
             }
-        }
+        
         if(currentUser.getFriendList() != null)
             for(UserEntity friend : currentUser.getFriendList()){
                 Friendicon Fitem=new Friendicon(friend);
                 FRIENDSLIST.getChildren().add(Fitem);
-        }
+            }
+        
+        
     } 
     public void acceptTodoCollaborationResponse(UserEntity collaborator, int todoId){
         System.out.println("in acceptTodoCollaborationResponse");
@@ -1004,12 +1223,23 @@ class Task extends AnchorPane {
     }
     public void updateTodoListRequest(MouseEvent event){
         ToDoListController t = new ToDoListController();
-        ToDoEntity newTodo = ((Listicon)LIST.getChildren().get(0)).getTodo();
-        newTodo.setTitle("My Family");
-        newTodo.setStatus(100);
-        //(43, "My House", new Date(), new Date(), 11, 100, null);
+        ToDoEntity newTodo = currentlyViewedTodoList.getTodo();
+        
+        newTodo.setTitle(NEWTODOTITLE1.getText());
+        newTodo.setAssignDate(Date.from(STARTDATE.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        newTodo.setDeadLineDate(Date.from(ENDDATE.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        
+        if(TODOCOLOR != null)
+            newTodo.setColor(TODOCOLOR.getFill().toString());
+        
         t.updateToDoList(newTodo);
         updateTodoListResponse(newTodo);
+        
+        NEWTODOTITLE.setText("");
+        STARTDATE.setValue(null);
+        ENDDATE.setValue(null);
+        TODOCOLOR = null;
+        ADDLISTPANE.setVisible(false);
     }
     public void createTodoListRequest(MouseEvent event){
         
