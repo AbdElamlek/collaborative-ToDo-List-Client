@@ -18,17 +18,17 @@ public class NotificationEntity implements BaseEntity {
     private String msg;
     private int receivedUserId;
     private int sentUserId;
-    private String message;
 
     public NotificationEntity() {
     }
 
-    public NotificationEntity(int id, Date time, int receivedUserId, int sentUserId, String message) {
+    public NotificationEntity(int id, Date time,  String message,int receivedUserId, int sentUserId) {
         this.id = id;
         this.time = time;
+        this.msg=msg;
         this.receivedUserId = receivedUserId;
         this.sentUserId = sentUserId;
-        this.message = message;
+        
     }
 
     public void setId(int id) {
@@ -71,12 +71,5 @@ public class NotificationEntity implements BaseEntity {
         return sentUserId;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
 }
