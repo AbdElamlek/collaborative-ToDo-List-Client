@@ -12,6 +12,10 @@ import Entities.EntityWrapper;
 import Entities.RequestEntity;
 import java.sql.Date;
 import Entities.Types;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -30,7 +34,8 @@ public class CollaboratorController implements CollaboratorInterface {
     @Override
     public void addCollaboratorRequest(int collaboratorID, int senderID, int todoId) {
         String reqJson = ac.entity2Json(new EntityWrapper("add collaborator request", "CollaborationRequestEntity",
-                new CollaborationRequestEntity(todoId, 0, new Date(System.currentTimeMillis()), Types.REQUEST_ADD_COLLABORATOR, collaboratorID, senderID)));
+                new CollaborationRequestEntity(todoId, 0, new Date(System.currentTimeMillis()), collaboratorID, senderID)));
+        System.out.println("client sender:\n"+reqJson);
         sc.sendJsonObject(reqJson);
     }
 

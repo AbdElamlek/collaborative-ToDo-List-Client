@@ -5,40 +5,43 @@
  */
 package Entities;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  *
  * @author Abd-Elmalek
  */
 public class NotificationEntity implements BaseEntity {
-    
+
     private int id;
     private Date time;
+    private String msg;
     private int receivedUserId;
     private int sentUserId;
-    private String message;
 
     public NotificationEntity() {
     }
 
-    public NotificationEntity(int id, Date time, int receivedUserId, int sentUserId, String message) {
+    public NotificationEntity(int id, Date time,  String message,int receivedUserId, int sentUserId) {
         this.id = id;
         this.time = time;
+        this.msg=msg;
         this.receivedUserId = receivedUserId;
         this.sentUserId = sentUserId;
-        this.message = message;
+        
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setTime(Date time) {
+    public void setTime(java.sql.Date time) {
         this.time = time;
     }
 
-
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
 
     public void setReceivedUserId(int receivedUserId) {
         this.receivedUserId = receivedUserId;
@@ -52,11 +55,13 @@ public class NotificationEntity implements BaseEntity {
         return id;
     }
 
-    public Date getTime() {
+    public java.sql.Date getTime() {
         return time;
     }
 
-
+    public String getMsg() {
+        return msg;
+    }
 
     public int getReceivedUserId() {
         return receivedUserId;
@@ -66,14 +71,5 @@ public class NotificationEntity implements BaseEntity {
         return sentUserId;
     }
 
-    public String getMessage() {
-        return message;
-    }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-    
-    
-    
 }
