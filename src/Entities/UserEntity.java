@@ -27,6 +27,9 @@ public class UserEntity implements BaseEntity {
     private ArrayList<NotificationEntity> notificationList;
     private ArrayList<TaskEntity> tasksList;
     private ArrayList<ToDoEntity> todoList;
+    private ArrayList<ToDoEntity> colaboartedList;
+    
+    private ArrayList<ItemEntity> itemList;
     private ArrayList<ToDoEntity> collaboratorList;
 
     public UserEntity() {
@@ -164,6 +167,14 @@ public class UserEntity implements BaseEntity {
 
     public void setTaskAssignmentRequestList(ArrayList<Accept_RecjectTaskEntity> taskAssignmentRequestList) {
         this.taskAssignmentRequestList = taskAssignmentRequestList;
+    }
+
+    public ArrayList<ItemEntity> getItemList() {
+        return itemList;
+    }
+
+    public void setItemList(ArrayList<ItemEntity> itemList) {
+        this.itemList = itemList;
     }
     
     

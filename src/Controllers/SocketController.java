@@ -9,10 +9,14 @@ import Handlers.ToDoCreationHandler;
 import Handlers.Handler;
 import Handlers.NotificationHandler;
 import Handlers.LoginHandler;
+import Handlers.ItemCreationHandler;
 import Handlers.SignUpHandler;
 import ControllerBase.ActionHandler;
 import ControllerBase.SocketInterface;
+import Handlers.ItemDeletionHandler;
+import Handlers.ItemUpdateHandler;
 import Handlers.AcceptCollaboratorRequestHandler;
+import Handlers.FriendStatusHandler;
 import Handlers.ToDoDeleteHandler;
 import Handlers.ToDoUpdateHandler;
 import java.io.DataInputStream;
@@ -34,7 +38,7 @@ public class SocketController implements SocketInterface {
 
     private Socket socket;
     private DataInputStream dataInputStream;
-    private DataOutputStream dataOutputStream;
+    //private DataOutputStream dataOutputStream;
     private PrintStream printStream;
     private Boolean isRunning;
     private Thread thread;
@@ -43,6 +47,7 @@ public class SocketController implements SocketInterface {
 
     private SocketController() {
         try {
+            System.out.println("try to connect");
             socket = new Socket("127.0.0.1", 7777);
             dataInputStream = new DataInputStream(socket.getInputStream());
             printStream = new PrintStream(socket.getOutputStream());
@@ -64,18 +69,25 @@ public class SocketController implements SocketInterface {
                 }
             };
         } catch (IOException ex) {
-            ex.printStackTrace();
+            System.out.println("NO SERVER");
+            //ex.printStackTrace();
         }
     }
 
     @Override
-    public void connect() {
+    public boolean connect() {
+        if(thread == null){
+            socketController = null;
+            return false;
+        }
+        
         thread.start();
+        return true;
     }
 
     @Override
     public void disconnect() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
 
     @Override
@@ -120,8 +132,20 @@ public class SocketController implements SocketInterface {
                 case "delete todo list":
                     actionHandler = new ToDoDeleteHandler();
                     break;
+                case "create item":
+                    actionHandler = new ItemCreationHandler();
+                    break;
+                case "update item":
+                    actionHandler = new ItemUpdateHandler();
+                    break;
+                case "delete item":
+                    actionHandler = new ItemDeletionHandler();
+                    break;    
                 case "accept collaborator request":
                     actionHandler = new AcceptCollaboratorRequestHandler();
+                    break;
+                case "online friend":
+                    actionHandler = new FriendStatusHandler();
                     break;
                     /*
                     "accept task assignment request"

@@ -10,6 +10,8 @@ import Controllers.SocketController;
 import Controllers.ToDoListController;
 import Entities.ToDoEntity;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -27,6 +29,7 @@ public class CollaborativeToDoListClient extends Application {
     private double xOffset = 0; 
     private double yOffset = 0;
     
+    private static boolean isConnectedToServer;
     @Override
     public void start(Stage stage) throws Exception {
        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument_1.fxml"));
@@ -52,6 +55,10 @@ public class CollaborativeToDoListClient extends Application {
         stage.setScene(scene);
         stage.show();
     }
+    
+    public static boolean isConnectedToServer(){
+        return isConnectedToServer;
+    }
 
     /**
      * @param args the command line arguments
@@ -61,7 +68,24 @@ public class CollaborativeToDoListClient extends Application {
         //sc.connect();
         //AuthenticationController authenticationController = new AuthenticationController();
         //authenticationController.logIn("ReeeEzzat", "123");
-        SocketController.getInstance().connect();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                isConnectedToServer = SocketController.getInstance().connect();
+                while(!isConnectedToServer){
+                    try {
+                        
+                        Thread.sleep(1000);
+                        System.out.println("Server is closeddd"); 
+                        isConnectedToServer = SocketController.getInstance().connect();
+                        
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+            
         //ToDoListController tlc = new ToDoListController();
         //tlc.createToDoList(new ToDoEntity("New list", new Date(), new Date(), 11, 1, "0xcc3333ff")); 
         launch(args);

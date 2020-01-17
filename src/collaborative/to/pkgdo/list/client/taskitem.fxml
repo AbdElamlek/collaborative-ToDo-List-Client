@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXTextField?>
-<?import javafx.scene.control.ContextMenu?>
-<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="39.0" prefWidth="405.0" style="-fx-background-color: #fefefe; -fx-background-radius: 2;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="252.0" prefWidth="80.0" style="-fx-background-color: #fefefe; -fx-background-radius: 2;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AnchorPane layoutX="7.0" layoutY="6.0" prefHeight="27.0" prefWidth="389.0" style="-fx-background-color: #f0f1f5; -fx-background-radius: 5;">
-         <children>
-            <JFXTextField fx:id="ADDTASK1" focusColor="#b7bac3" layoutX="6.0" layoutY="1.0" prefHeight="25.0" prefWidth="369.0" promptText="Add Task and press Enter to save" unFocusColor="#4d4d4d00">
-               <font>
-                  <Font name="Calibri Light" size="12.0" />
-               </font>
-               <contextMenu>
-                  <ContextMenu>
-                    <items>
-                      <MenuItem mnemonicParsing="false" text="Delete" />
-                    </items>
-                  </ContextMenu>
-               </contextMenu>
-            </JFXTextField>
-         </children>
-      </AnchorPane>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="12.0" layoutY="232.0" prefHeight="17.0" prefWidth="57.0" text="list 1" textAlignment="JUSTIFY">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <BorderPane layoutX="20.0" layoutY="26.0" prefHeight="200.0" prefWidth="34.0">
+         <bottom>
+            <AnchorPane BorderPane.alignment="CENTER">
+               <children>
+                  <AnchorPane layoutX="7.0" prefHeight="167.0" prefWidth="26.0" style="-fx-background-color: #3b8ef4; -fx-background-radius: 5;">
+                     <effect>
+                        <Glow level="0.85" />
+                     </effect>
+                  </AnchorPane>
+                  <Label layoutX="3.0" layoutY="-32.0" prefHeight="19.0" prefWidth="39.0" text="100%" textFill="#6991dd">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </bottom>
+      </BorderPane>
    </children>
 </AnchorPane>

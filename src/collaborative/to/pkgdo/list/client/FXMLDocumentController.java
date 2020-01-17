@@ -56,6 +56,13 @@ public class FXMLDocumentController implements Initializable {
 //    
       public JFXTextField UsernameText;
       public JFXPasswordField PasswordText;
+      
+      private boolean isConnectedToServer = false;
+      
+      /*public void updateIsConnectedToServer(boolean isConnectedToServer){
+          this.isConnectedToServer = isConnectedToServer;
+      }*/
+      
     @FXML
     private void exit(MouseEvent event) {
         Platform.exit();
@@ -104,10 +111,13 @@ public class FXMLDocumentController implements Initializable {
     }
     @FXML
      private void login (MouseEvent event) {
-         String username = UsernameText.getText();
-         String password = PasswordText.getText();
-         
-         authenticationController.logIn(username, password);
+         if(isConnectedToServer){
+            String username = UsernameText.getText();
+            String password = PasswordText.getText();
+            
+            authenticationController = new AuthenticationController();
+            authenticationController.logIn(username, password);
+         }
     }
      
     public void navigateToMainPage(Object o){
@@ -225,6 +235,22 @@ public class FXMLDocumentController implements Initializable {
         LoginHandler.setMainPageNavigator(this::navigateToMainPage);
         LOGINPANE.setVisible(true);
         SIGNUPPANE.setVisible(false);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                isConnectedToServer = CollaborativeToDoListClient.isConnectedToServer();
+                while(!isConnectedToServer){
+                    try {
+                        Thread.sleep(1000); 
+                        isConnectedToServer = CollaborativeToDoListClient.isConnectedToServer();
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                System.out.println("you can login now :)");
+            }
+        }).start();
+        
     }
 
     @FXML
