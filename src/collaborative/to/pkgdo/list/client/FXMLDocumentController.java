@@ -125,6 +125,10 @@ public class FXMLDocumentController implements Initializable {
              
            }
      }
+       
+    public void showNotValid(Object o){
+        nOTVALID.setVisible(true);
+    }
      
     public void navigateToMainPage(Object o){
         
@@ -251,6 +255,7 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         LoginHandler.setMainPageNavigator(this::navigateToMainPage);
+        LoginHandler.setNotvalidlogin(this::showNotValid);
         
 //        LoginHandler.setNotvalidlogin(this::);
         LOGINPANE.setVisible(true);

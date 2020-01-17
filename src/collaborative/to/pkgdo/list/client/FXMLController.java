@@ -35,6 +35,7 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -70,10 +71,14 @@ import java.util.ArrayList;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import java.util.List;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.effect.Glow;
 import javafx.scene.layout.BorderPane;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 /**
  *
  * @author Abd-Elmalek
@@ -83,7 +88,8 @@ public class FXMLController implements Initializable  {
     ItemController itemController = new ItemController();
     ArrayList<Integer> itemsIndecies;
     int itemsCounter = 0;
-   
+    double xOffset = 0;
+    double yOffset = 0;
     
     private static ToDoEntity currentToDo = null ;
    // Friendicon Fitem=new Friendicon();
@@ -137,6 +143,7 @@ public class FXMLController implements Initializable  {
     public JFXButton nEWLIST;
     public JFXButton ADDDATE;
     public JFXButton DATEPICK;
+     public JFXButton lOGOUT;
     
     public AnchorPane TODOPANE;
     public AnchorPane LISTPANE;
@@ -163,7 +170,7 @@ public class FXMLController implements Initializable  {
     public JFXButton DONEADDCOLLABORATOR;
     public JFXButton CANCELLIST;
     public JFXButton rETRYCONNECTION;
-    
+    public JFXButton aDDCOLAB;
     public JFXDatePicker STARTDATE;
     public JFXDatePicker ENDDATE;
     
@@ -290,7 +297,46 @@ public class FXMLController implements Initializable  {
     }
        
         
-        
+        @FXML
+     public void logOut(MouseEvent event) {
+         
+         SocketController.getInstance().disconnect();
+            Platform.runLater(()->{
+        try {
+            System.out.println("loading main page ....");
+            
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLDocument_1.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            Stage stage = (Stage) MINIMIZE.getScene().getWindow();
+            
+            stage.setScene(scene);
+            
+            
+           
+        root.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            }
+        });
+        root.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                stage.setX(event.getScreenX() - xOffset);
+                stage.setY(event.getScreenY() - yOffset);
+            }
+        });
+       
+            
+            
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        });
+    }    
         
       @FXML
      public void exit(MouseEvent event) {

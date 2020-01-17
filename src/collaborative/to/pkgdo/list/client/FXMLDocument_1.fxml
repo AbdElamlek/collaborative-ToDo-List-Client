@@ -20,7 +20,7 @@
          <right>
             <AnchorPane prefHeight="541.0" prefWidth="327.0" style="-fx-background-color: #3b8ef4;" BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane fx:id="SIGNUPPANE" layoutX="13.0" layoutY="8.0" prefHeight="543.0" prefWidth="314.0" style="-fx-background-color: #3b8ef4;">
+                  <AnchorPane fx:id="SIGNUPPANE" layoutX="13.0" layoutY="8.0" prefHeight="543.0" prefWidth="314.0" style="-fx-background-color: #3b8ef4;" visible="false">
                      <children>
                         <AnchorPane layoutX="53.0" layoutY="93.0" prefHeight="313.0" prefWidth="207.0">
                            <children>
@@ -53,7 +53,7 @@
                         <Bloom threshold="0.8" />
                      </effect>
                   </AnchorPane>
-                  <AnchorPane fx:id="LOGINPANE" layoutX="14.0" layoutY="8.0" prefHeight="543.0" prefWidth="311.0" visible="false" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="8.0">
+                  <AnchorPane fx:id="LOGINPANE" layoutX="14.0" layoutY="8.0" prefHeight="543.0" prefWidth="311.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="8.0">
                      <children>
                         <AnchorPane layoutX="53.0" layoutY="87.0" prefHeight="318.0" prefWidth="185.0">
                            <children>
@@ -89,6 +89,7 @@
                                     <Label layoutX="34.0" layoutY="9.0" text="No Connection!" />
                                  </children>
                               </AnchorPane>
+                              <Label fx:id="notvalid" layoutX="77.0" layoutY="80.0" text="user name not valid !" visible="false" />
                            </children>
                         </AnchorPane>
                         <Label layoutX="55.0" layoutY="230.0" text="Password" textFill="#fefefe" />

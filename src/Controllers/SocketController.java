@@ -121,12 +121,14 @@ public class SocketController implements SocketInterface {
 
     @Override
     public void disconnect() {
-        thread.stop();
+        
         try {
             dataInputStream.close();
             printStream.close();
             socket.close();
             socketController=null;
+            isRunning=false;
+            
             
         } catch (IOException ex) {
             Logger.getLogger(SocketController.class.getName()).log(Level.SEVERE, null, ex);
