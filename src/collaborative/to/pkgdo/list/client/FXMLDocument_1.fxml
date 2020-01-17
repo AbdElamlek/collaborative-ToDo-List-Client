@@ -14,14 +14,13 @@
 <?import javafx.scene.shape.Ellipse?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="597.0" prefWidth="880.0" style="-fx-background-color: TRANSPARENT;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="collaborative.to.pkgdo.list.client.FXMLDocumentController">
    <children>
       <BorderPane fx:id="borderPane" layoutX="6.0" layoutY="10.0" maxHeight="581.0" maxWidth="867.0" minHeight="543.0" minWidth="867.0" prefHeight="581.0" prefWidth="867.0">
          <right>
             <AnchorPane prefHeight="541.0" prefWidth="327.0" style="-fx-background-color: #3b8ef4;" BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane fx:id="SIGNUPPANE" layoutX="13.0" layoutY="8.0" prefHeight="543.0" prefWidth="314.0" style="-fx-background-color: #3b8ef4;">
+                  <AnchorPane fx:id="SIGNUPPANE" layoutX="13.0" layoutY="8.0" prefHeight="543.0" prefWidth="314.0" style="-fx-background-color: #3b8ef4;" visible="false">
                      <children>
                         <AnchorPane layoutX="53.0" layoutY="93.0" prefHeight="313.0" prefWidth="207.0">
                            <children>
@@ -46,6 +45,7 @@
                                  </font>
                               </Label>
                               <Label fx:id="BACKTOLOGIN" layoutX="58.0" layoutY="299.0" onMouseClicked="#backToLogin" prefHeight="35.0" prefWidth="94.0" text="Have an account?" textFill="#fefefe" />
+                              <Label fx:id="nOTVALID" layoutX="81.0" layoutY="68.0" text="Username not valid !" visible="false" />
                            </children>
                         </AnchorPane>
                      </children>
@@ -53,7 +53,7 @@
                         <Bloom threshold="0.8" />
                      </effect>
                   </AnchorPane>
-                  <AnchorPane fx:id="LOGINPANE" layoutX="14.0" layoutY="8.0" prefHeight="543.0" prefWidth="311.0" visible="false" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="8.0">
+                  <AnchorPane fx:id="LOGINPANE" layoutX="14.0" layoutY="8.0" prefHeight="543.0" prefWidth="311.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="8.0">
                      <children>
                         <AnchorPane layoutX="53.0" layoutY="87.0" prefHeight="318.0" prefWidth="185.0">
                            <children>
@@ -79,6 +79,17 @@
                                     <Font size="10.0" />
                                  </font>
                               </JFXButton>
+                              <AnchorPane fx:id="nOCONNECTIONPANE" layoutX="39.0" layoutY="210.0" prefHeight="35.0" prefWidth="133.0" visible="false">
+                                 <children>
+                                    <ImageView fitHeight="26.0" fitWidth="54.0" layoutX="1.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@icons8_error_64px.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Label layoutX="34.0" layoutY="9.0" text="No Connection!" />
+                                 </children>
+                              </AnchorPane>
+                              <Label fx:id="notvalid" layoutX="77.0" layoutY="80.0" text="user name not valid !" visible="false" />
                            </children>
                         </AnchorPane>
                         <Label layoutX="55.0" layoutY="230.0" text="Password" textFill="#fefefe" />

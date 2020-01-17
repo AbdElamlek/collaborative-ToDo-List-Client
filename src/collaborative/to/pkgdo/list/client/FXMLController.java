@@ -5,12 +5,15 @@
  */
 package collaborative.to.pkgdo.list.client;
 
+
+import Controllers.AuthenticationController;
 import Controllers.ItemController;
 import Handlers.ItemCreationHandler;
 import Controllers.ToDoListController;
 import Entities.ItemEntity;
 import Controllers.CollaboratorController;
 import Controllers.TaskController;
+import Controllers.SocketController;
 import Controllers.ToDoListController;
 import Entities.CollaborationRequestEntity;
 import Entities.ItemEntity;
@@ -37,6 +40,7 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -74,11 +78,14 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import java.util.List;
 import javafx.event.Event;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.effect.Glow;
 import javafx.scene.layout.BorderPane;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.paint.Color;
-
+import javafx.stage.Stage;
 /**
  *
  * @author Abd-Elmalek
@@ -96,6 +103,10 @@ public class FXMLController implements Initializable {
     public static TaskEntity currentTask;
    // Friendicon Fitem=new Friendicon();
    // Friendicon Fitem2=new Friendicon();
+    double xOffset = 0;
+    double yOffset = 0;
+    
+    
     //Listicon  Litem=new Listicon();
     //Listicon  Litem2=new Listicon();
     // Item task=new Item();
@@ -128,10 +139,13 @@ public class FXMLController implements Initializable {
     public VBox NOTIFICATIONS;
     public VBox aDDRIENDCOLABLIST;
     public HBox sSTATISTICS;
+    public VBox lISTSTATUS;
     @FXML
     public Accordion TASKLISTS;
     public ScrollPane FRIENDSSCROLL;
     public ScrollPane LISTSCROLL;
+    
+    public ScrollPane nOTIFISCROLL;
     public ScrollPane COLLABSCROLL;
     @FXML
     public ImageView testButton;
@@ -141,7 +155,8 @@ public class FXMLController implements Initializable {
     public JFXButton nEWLIST;
     public JFXButton ADDDATE;
     public JFXButton DATEPICK;
-
+    public JFXButton lOGOUT; 
+     
     public AnchorPane TODOPANE;
     public AnchorPane LISTPANE;
     public AnchorPane NOTIFIPANE;
@@ -152,7 +167,8 @@ public class FXMLController implements Initializable {
     public AnchorPane DATEPANE;
     public AnchorPane ADDLISTPANE;
     public AnchorPane ADDCOLLABORATORPANE;
-
+    public AnchorPane cONNECTIONLOST;
+    
     public JFXButton REQUESTS;
     public JFXButton TODAY;
     public JFXButton STATUS;
@@ -166,7 +182,8 @@ public class FXMLController implements Initializable {
     public JFXButton NEWCOLLABORATOR;
     public JFXButton DONEADDCOLLABORATOR;
     public JFXButton CANCELLIST;
-
+    public JFXButton rETRYCONNECTION;
+    public JFXButton aDDCOLAB;
     public JFXDatePicker STARTDATE;
     public JFXDatePicker ENDDATE;
 
@@ -240,7 +257,7 @@ public class FXMLController implements Initializable {
             TODAYPANE.setVisible(false);
         }
     }
-
+   /*omnia*/
     @FXML
     public void nav1(MouseEvent event) {
 
@@ -252,17 +269,21 @@ public class FXMLController implements Initializable {
             ENDDATE.setValue(null);
         } else if (event.getSource() == SAVEDATE) {
             DATEPANE.setVisible(false);
-        } else if (event.getSource() == SHOWNOTIFICATIONS) {
+        }
+        else if (event.getSource() == SHOWNOTIFICATIONS) {
 
             if (NOTIFIPANE.isVisible()) {
                 NOTIFIPANE.setVisible(false);
+
             } else {
                 NOTIFIPANE.setVisible(true);
             }
 
-        } else if (event.getSource() == NEWCOLLABORATOR) {
+        } 
+        else if (event.getSource() == NEWCOLLABORATOR) {
             ADDCOLLABORATORPANE.setVisible(true);
-        } else if (event.getSource() == DONEADDCOLLABORATOR) {
+        }
+        else if (event.getSource() == DONEADDCOLLABORATOR) {
             ADDCOLLABORATORPANE.setVisible(false);
         } else if (event.getSource() == CANCELLIST) {
             if (TODOCOLOR != null) {
@@ -278,18 +299,79 @@ public class FXMLController implements Initializable {
             DATEPANE.setVisible(true);
         }
 
+    } 
+        
+        @FXML
+     public void logOut(MouseEvent event) {
+         
+         SocketController.getInstance().disconnect();
+            Platform.runLater(()->{
+        try {
+            System.out.println("loading main page ....");
+            
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLDocument_1.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            Stage stage = (Stage) MINIMIZE.getScene().getWindow();
+            
+            stage.setScene(scene);
+            
+            
+           
+        root.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            }
+        });
+        root.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                stage.setX(event.getScreenX() - xOffset);
+                stage.setY(event.getScreenY() - yOffset);
+            }
+        });
+       
+            
+            
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        });
+    }    
+        
+      @FXML
+     public void exit(MouseEvent event) {
+       
+          SocketController.getInstance().disconnect();
+            Platform.exit();
+    }  
+      @FXML
+     public void retryConnection(MouseEvent event) {
+         AuthenticationController  authenticationController = new AuthenticationController();
+                 
+        if(SocketController.reConnect())
+        {
+         String username = CurrentUser.getCurrentUser().getUserName();
+         String password = CurrentUser.getCurrentUser().getPassword();
+         
+         authenticationController.logIn(username, password);
+         cONNECTIONLOST.setVisible(false);
+         }
+        
     }
 
-    @FXML
-    public void exit(MouseEvent event) {
-        Platform.exit();
+    public  void conFaild(Integer i) {
+       cONNECTIONLOST.setVisible(true);
+        
     }
+    
+    /*omnia*/
+    
+    public  void actions() {
 
-    private void handleButtonAction(ActionEvent event) {
-
-    }
-
-    public void actions() {
         TODOPANE.setVisible(true);
         STATUSPANE.setVisible(false);
         REQUESTPANE.setVisible(false);
@@ -322,7 +404,9 @@ public class FXMLController implements Initializable {
         AcceptCollaboratorRequestHandler.setCollaboratorsGUIModifier(this::acceptTodoCollaborationResponse);
 
         currentUser = CurrentUser.getCurrentUser();
+        
         /*REHAM*/
+
       /*abd-elmalek */
       ADDTASK.setOnKeyPressed((KeyEvent event) -> {
           if(event.getCode()== KeyCode.ENTER){
@@ -362,45 +446,51 @@ public class FXMLController implements Initializable {
    //   NOTIFICATIONS.getChildren().add(notif);
       
 
-//      TASKLISTS.getPanes().add(task);
-        //     TASKLISTS.getPanes().add(task2);
-        FRIENDPANE.setVisible(false);
-        LISTPANE.setVisible(true);
-        linelists.setStroke(javafx.scene.paint.Color.valueOf("#000000"));
-        linefriends.setStroke(javafx.scene.paint.Color.valueOf("#d7d0d0"));
 
-        /*DATEPICK.focusedProperty().addListener(new ChangeListener<Boolean>()
+        /*omnia*/
+        SocketController.setConnectionFailed(this::conFaild);
+        
+        
+        /*omnia*/
+ 
+//      TASKLISTS.getPanes().add(task);
+
+ //     TASKLISTS.getPanes().add(task2);
+      FRIENDPANE.setVisible(false);
+      LISTPANE.setVisible(true);
+      linelists.setStroke(javafx.scene.paint.Color.valueOf("#000000"));
+      linefriends.setStroke(javafx.scene.paint.Color.valueOf("#d7d0d0"));
+      /*omnia*/
+       SHOWNOTIFICATIONS.focusedProperty().addListener(new ChangeListener<Boolean>()
+
+       {
+          @Override
+         public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
+            {
+             if ((!newPropertyValue&&!(nOTIFISCROLL.isFocused())&&!(NOTIFIPANE.isFocused())&&!(NOTIFICATIONS.isFocused())))
+                {
+                NOTIFIPANE.setVisible(false);
+                
+              }
+        
+            }
+        }); 
+         nOTIFISCROLL.focusedProperty().addListener(new ChangeListener<Boolean>()
          {
           @Override
          public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
             {
-             if (newPropertyValue||DATEPANE.isFocused())
+             if ((!newPropertyValue&&!(NOTIFICATIONS.isFocused())))
                 {
-                DATEPANE.setVisible(true);
+                NOTIFIPANE.setVisible(false);
               }
-            else
-              {
-               
-                 DATEPANE.setVisible(false);
-              }
+        
             }
-        }); */
- /*ADDDATE.focusedProperty().addListener(new ChangeListener<Boolean>()
-         {
-          @Override
-         public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
-            {
-             if (newPropertyValue||DATEPANE.isFocused())
-                {
-                DATEPANE.setVisible(true);
-              }
-            else
-              {
-               
-                 DATEPANE.setVisible(false);
-              }
-            }
-        }); */
+
+        }); 
+        
+          /*omnia*/
+       
         initiateCurrentUser();
 
     }
@@ -480,6 +570,7 @@ public class FXMLController implements Initializable {
         });
     }
 
+
     class Friendtoadd extends AnchorPane {
 
         private UserEntity friend;
@@ -538,6 +629,7 @@ public class FXMLController implements Initializable {
             getChildren().add(aDDCOLL);
 
         }
+
     }
 
     class Collaborator extends AnchorPane {
@@ -1314,7 +1406,16 @@ public  void addTask(TaskEntity taskEntity){
         String todoTitle = NEWTODOTITLE.getText();
         System.out.println(todoTitle);
 
-        if (!todoTitle.equals("") && STARTDATE != null && ENDDATE != null && TODOCOLOR != null) {
+       /*OMNIA*/
+        String empty="JFXDatePicker[id=STARTDATE, styleClass=combo-box-base date-picker jfx-date-picker]";        
+        
+        if(!todoTitle.equals("") && STARTDATE.equals(empty) && ENDDATE.equals(empty) && TODOCOLOR != null){
+       
+        /*OMNIA*/ 
+
+
+        //if (!todoTitle.equals("") && STARTDATE != null && ENDDATE != null && TODOCOLOR != null) {
+
             Date startDate = Date.from(STARTDATE.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
             Date endDate = Date.from(ENDDATE.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
@@ -1466,4 +1567,49 @@ public  void addTask(TaskEntity taskEntity){
         }
 
     }
+
+
+  class Liststate extends AnchorPane {
+
+    protected final AnchorPane anchorPane;
+    protected final JFXButton jFXButton;
+    protected final ImageView imageView;
+
+    public Liststate() {
+
+        anchorPane = new AnchorPane();
+        jFXButton = new JFXButton();
+        imageView = new ImageView();
+
+        setMaxHeight(USE_PREF_SIZE);
+        setMaxWidth(USE_PREF_SIZE);
+        setMinHeight(USE_PREF_SIZE);
+        setMinWidth(USE_PREF_SIZE);
+        setPrefHeight(42.0);
+        setPrefWidth(473.0);
+
+        anchorPane.setLayoutY(-61.0);
+        anchorPane.setPrefHeight(32.0);
+        anchorPane.setPrefWidth(445.0);
+        anchorPane.setStyle("-fx-background-color: #edc4a8; -fx-background-radius: 7;");
+
+        jFXButton.setLayoutX(14.0);
+        jFXButton.setLayoutY(5.0);
+        jFXButton.setStyle("-fx-background-radius: 7; -fx-background-color: #e8f2fd;");
+
+        imageView.setFitHeight(22.0);
+        imageView.setFitWidth(25.0);
+        imageView.setPickOnBounds(true);
+        imageView.setPreserveRatio(true);
+        imageView.setImage(new Image(getClass().getResource("icons8_bulleted_list_40px.png").toExternalForm()));
+        jFXButton.setGraphic(imageView);
+        jFXButton.setFont(new Font("System Bold", 14.0));
+
+        getChildren().add(anchorPane);
+        getChildren().add(jFXButton);
+
+     }
+   }
+  
+    
 }
