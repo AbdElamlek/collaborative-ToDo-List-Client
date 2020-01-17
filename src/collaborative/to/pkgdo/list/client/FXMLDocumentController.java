@@ -5,7 +5,6 @@ import Handlers.LoginHandler;
 import Entities.ToDoEntity;
 import Controllers.CollaboratorController;
 import Entities.UserEntity;
-import Handlers.SignUpHandler;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -21,6 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -35,6 +35,9 @@ import javafx.stage.Stage;
 
 public class FXMLDocumentController implements Initializable {
 
+    double xOffset = 0;
+    double yOffset = 0;
+    
     private AuthenticationController authenticationController = new AuthenticationController();
     @FXML
     public ImageView EXIT;
@@ -42,36 +45,36 @@ public class FXMLDocumentController implements Initializable {
     public AnchorPane SIGNUPPANE;
 
     @FXML
-    //public JFXButton Login;
+     //public JFXButton Login;
     //public JFXButton Create;
     //public JFXButton Sihnup;
     //public JFXTextField UsernameText;
     //public JFXTextField PasswordText;
-    public JFXTextField ConfirmText1;
-    public JFXTextField PasswordText1;
-    public JFXTextField UsernameText1;
+      public JFXTextField ConfirmText1;
+      public JFXTextField PasswordText1;
+      public JFXTextField UsernameText1;
 //    
-    public JFXTextField UsernameText;
-    public JFXPasswordField PasswordText;
-
+      public JFXTextField UsernameText;
+      public JFXPasswordField PasswordText;
     @FXML
     private void exit(MouseEvent event) {
         Platform.exit();
     }
-
-    /*Eman Kamal*/
-    @FXML
+     
+ /*Eman Kamal*/
+     @FXML
     private void toSignUp(MouseEvent event) {
         LOGINPANE.setVisible(false);
         SIGNUPPANE.setVisible(true);
-        //System.out.println("just test collaborator controller");
-        //CollaboratorController c=new CollaboratorController();
-        //c.addCollaboratorRequest(1, 2, 15);
+        /*System.out.println("just test collaborator controller");
+        CollaboratorController c=new CollaboratorController();
+        //c.addCollaboratorRequest(1, 2, 10);
         //c.acceptCollaboratorRequest(4);
         //c.rejectCollaboratorRequest(5);*/
-
+        
+        
     }
-
+    
     @FXML
     private void SignUp(MouseEvent event) {
         String email = "eman@gmail.com";
@@ -96,56 +99,56 @@ public class FXMLDocumentController implements Initializable {
             //SocketController.getInstance().connect();
             //SocketController controller = SocketController.getInstance();
             //controller.sendJsonObject("hhihihihihihi");
-            
 
         }
     }
-
     @FXML
-    private void login(MouseEvent event) {
-        String username = UsernameText.getText();
-        String password = PasswordText.getText();
-
-        authenticationController.logIn(username, password);
+     private void login (MouseEvent event) {
+         String username = UsernameText.getText();
+         String password = PasswordText.getText();
+         
+         authenticationController.logIn(username, password);
     }
-
-    public void navigateToMainPage(Object o) {
-
-        Platform.runLater(() -> {
-            try {
-                System.out.println("loading main page ....");
-
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXML.fxml"));
-                Parent root = (Parent) fxmlLoader.load();
-                Scene scene = new Scene(root);
-                Stage stage = (Stage) UsernameText.getScene().getWindow();
-
-                stage.setScene(scene);
-
-            } catch (IOException ex) {
-                ex.printStackTrace();
+     
+    public void navigateToMainPage(Object o){
+        
+       Platform.runLater(()->{
+        try {
+            System.out.println("loading main page ....");
+            
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXML.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) UsernameText.getScene().getWindow();
+            
+            stage.setScene(scene);
+            
+            
+           
+        root.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
             }
         });
-
-    }
-
-    public void navigateToLoginPage(Object o) {
-
-        Platform.runLater(() -> {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLDocument_1.fxml"));
-                Parent root = (Parent) fxmlLoader.load();
-                Scene scene = new Scene(root);
-                Stage stage = (Stage) UsernameText.getScene().getWindow();
-                stage.setScene(scene);
-
-            } catch (IOException ex) {
-                ex.printStackTrace();
+        root.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                stage.setX(event.getScreenX() - xOffset);
+                stage.setY(event.getScreenY() - yOffset);
             }
         });
-
+       
+            
+            
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        });
+        
     }
-
+     
     private boolean isValidData(String email, String password, String cpassword, String firstname, String lastname, String username) {
         boolean isValid = true;
         if (!isValidEmail(email)) {
@@ -220,7 +223,6 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         LoginHandler.setMainPageNavigator(this::navigateToMainPage);
-        SignUpHandler.setLoginPageNavigator(this::navigateToLoginPage);
         LOGINPANE.setVisible(true);
         SIGNUPPANE.setVisible(false);
     }

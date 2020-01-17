@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author Abd-Elmalek
  */
 public class UserEntity implements BaseEntity {
-    
+
     private int id;
     private String firstName;
     private String lastName;
@@ -21,11 +21,16 @@ public class UserEntity implements BaseEntity {
     private String password;
     private int userStatus;
     private ArrayList<UserEntity> friendList;
-    private ArrayList<RequestEntity> requestList;
+    private ArrayList<RequestEntity> friendRequestList;
+    private ArrayList<CollaborationRequestEntity> collaborationRequestList;
+    private ArrayList<Accept_RecjectTaskEntity> taskAssignmentRequestList;
     private ArrayList<NotificationEntity> notificationList;
     private ArrayList<TaskEntity> tasksList;
     private ArrayList<ToDoEntity> todoList;
     private ArrayList<ToDoEntity> colaboartedList;
+
+    private ArrayList<ItemEntity> itemList;
+    private ArrayList<ToDoEntity> collaboratorList;
 
     public UserEntity() {
     }
@@ -108,16 +113,6 @@ public class UserEntity implements BaseEntity {
         return friendList;
     }
 
-    public void setRequestList(ArrayList<RequestEntity> requestList) {
-        this.requestList = requestList;
-    }
-
-    public ArrayList<RequestEntity> getRequestList() {
-        if(requestList == null)
-            requestList = new ArrayList<RequestEntity>();
-        return requestList;
-    }
-
     public void setNotificationList(ArrayList<NotificationEntity> notificationList) {
         this.notificationList = notificationList;
     }
@@ -142,18 +137,47 @@ public class UserEntity implements BaseEntity {
         this.todoList = todoList;
     }
 
-    public ArrayList<ToDoEntity> getColaboartedList() {
-        return colaboartedList;
+    public ArrayList<ToDoEntity> getCollaboratorList() {
+        return collaboratorList;
     }
 
-    public void setColaboartedList(ArrayList<ToDoEntity> colaboartedList) {
-        this.colaboartedList = colaboartedList;
+    public void setCollaboratorList(ArrayList<ToDoEntity> colaboartedList) {
+        this.collaboratorList = colaboartedList;
     }
-    
-    
-    
-    
-    
-    
-    
+
+    public ArrayList<RequestEntity> getFriendRequestList() {
+        return friendRequestList;
+    }
+
+    public void setFriendRequestList(ArrayList<RequestEntity> friendRequestList) {
+        this.friendRequestList = friendRequestList;
+    }
+
+    public ArrayList<CollaborationRequestEntity> getCollaborationRequestList() {
+        if (collaborationRequestList == null) {
+            collaborationRequestList = new ArrayList<CollaborationRequestEntity>();
+        }
+        return collaborationRequestList;
+    }
+
+    public void setCollaborationRequestList(ArrayList<CollaborationRequestEntity> collaborationRequestList) {
+        this.collaborationRequestList = collaborationRequestList;
+    }
+
+    public ArrayList<Accept_RecjectTaskEntity> getTaskAssignmentRequestList() {
+        return taskAssignmentRequestList;
+    }
+
+    public void setTaskAssignmentRequestList(ArrayList<Accept_RecjectTaskEntity> taskAssignmentRequestList) {
+        this.taskAssignmentRequestList = taskAssignmentRequestList;
+    }
+
+    public ArrayList<ItemEntity> getItemList() {
+        return itemList;
+    }
+
+    public void setItemList(ArrayList<ItemEntity> itemList) {
+        this.itemList = itemList;
+    }
+
 }

@@ -30,7 +30,7 @@ public class CollaboratorRequestHandler implements ActionHandler {
             System.out.println("client reciever: "+cre.getReceivedUserId()+"\n" +  "collaborator recieved request " + requestJsonObject);
             if (cre != null) {
                 //add request to UI
-                 CurrentUser.getCurrentUser().getRequestList().add(cre);
+                 CurrentUser.getCurrentUser().getCollaborationRequestList().add(cre);          
             }
         } catch (JSONException ex) {
             ex.printStackTrace();

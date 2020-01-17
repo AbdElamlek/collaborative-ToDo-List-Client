@@ -19,7 +19,7 @@ import org.json.JSONObject;
  */
 public class TaskCreationHandler implements ActionHandler{
     
-     private static Consumer<TaskEntity> taskGUIGenerator;
+    private static Consumer<TaskEntity> taskGUIGenerator;
     
     public static void setTodoGUIGenerator(Consumer<TaskEntity> generator){
         taskGUIGenerator = generator;
