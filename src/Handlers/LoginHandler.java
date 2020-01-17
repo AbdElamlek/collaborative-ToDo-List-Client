@@ -22,10 +22,15 @@ import org.json.JSONObject;
  */
 public class LoginHandler implements ActionHandler{
     private static Consumer mainPageNavigator;
+    private static Consumer lOGINNOTVALID;
     
     public static void setMainPageNavigator(Consumer navigator){
         mainPageNavigator = navigator;
         System.out.println("settting navigator");
+    }
+      public static void setNotvalidlogin(Consumer navigator){
+        lOGINNOTVALID = navigator;
+        System.out.println("notvalid");
     }
 
     @Override
@@ -49,6 +54,11 @@ public class LoginHandler implements ActionHandler{
                 }
                 // LOGGEDIN SUCCESSFULLY 
             }else{
+                 if(lOGINNOTVALID != null){
+                    
+                    System.out.println("nooottt nuuulllllllll");
+                    lOGINNOTVALID.accept(null);
+                }
                 System.out.println("user not found");
 
                 // NOT LOGGEDIN SUCCESSFULLY 
@@ -57,5 +67,6 @@ public class LoginHandler implements ActionHandler{
             ex.printStackTrace();
         }
     }
+    
     
 }

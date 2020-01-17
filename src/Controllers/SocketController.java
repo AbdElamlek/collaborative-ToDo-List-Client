@@ -18,12 +18,14 @@ import Handlers.ItemUpdateHandler;
 import Handlers.AcceptCollaboratorRequestHandler;
 import Handlers.ToDoDeleteHandler;
 import Handlers.ToDoUpdateHandler;
+import collaborative.to.pkgdo.list.client.FXMLDocumentController;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.JSONException;
@@ -39,8 +41,9 @@ public class SocketController implements SocketInterface {
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
     private PrintStream printStream;
-    private Boolean isRunning;
+    public static Boolean isRunning=false;
     private Thread thread;
+    private static Consumer<Integer> connectionFailed;
 
     private static SocketController socketController;
 
@@ -58,27 +61,78 @@ public class SocketController implements SocketInterface {
                         try {
                             String receivedResponse = dataInputStream.readLine();
                             System.out.println("received something");
+                            if(receivedResponse!=null){
                             handleResponse(receivedResponse);
+                            }
+                            else{
+                                 
+                                 System.out.println("server is down!");
+                                  isRunning = false; 
+                                  connectionFailed.accept(null);
+                                  
+                                 
+                            
+                            }
                         } catch (IOException ex) {
                             isRunning = false;
-                            //ex.printStackTrace();
+                            System.out.println(isRunning+"in siderun");
+                            
                         }
                     }
                 }
             };
         } catch (IOException ex) {
             ex.printStackTrace();
+             isRunning = false;
+             System.out.println(isRunning+"in socet");
+          
+             
         }
     }
 
+    
+    public static void setConnectionFailed(Consumer<Integer> failed) {
+       connectionFailed=failed;
+        
+        
+    }
+    
+     
+    public static boolean reConnect() {
+       
+       socketController=null;
+       return getInstance().connect();
+    }
+    
+    
     @Override
-    public void connect() {
-        thread.start();
+    
+    public boolean connect() {
+       if(thread==null){
+           
+           socketController=null;
+           
+        return false;
+       }
+       
+       thread.start();
+       return true;
     }
 
     @Override
     public void disconnect() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        thread.stop();
+        try {
+            dataInputStream.close();
+            printStream.close();
+            socket.close();
+            socketController=null;
+            
+        } catch (IOException ex) {
+            Logger.getLogger(SocketController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -99,6 +153,7 @@ public class SocketController implements SocketInterface {
 
     public void handleResponse(String jsonObjectStr) {
         try {
+            
             JSONObject jsonObject = new JSONObject(jsonObjectStr);
             String action = jsonObject.getString("action");
             ActionHandler actionHandler = null;
