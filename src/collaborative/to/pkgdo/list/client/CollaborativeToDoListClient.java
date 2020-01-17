@@ -26,6 +26,7 @@ import javafx.stage.StageStyle;
 public class CollaborativeToDoListClient extends Application {
     private double xOffset = 0; 
     private double yOffset = 0;
+    public static Stage mPrimaryStage;
     
     @Override
     public void start(Stage stage) throws Exception {
@@ -51,6 +52,7 @@ public class CollaborativeToDoListClient extends Application {
         scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);
         stage.show();
+        mPrimaryStage = stage;
     }
 
     /**

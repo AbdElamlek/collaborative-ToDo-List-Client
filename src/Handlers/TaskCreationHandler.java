@@ -10,6 +10,7 @@ import Entities.TaskEntity;
 import Utils.CurrentUser;
 import com.google.gson.Gson;
 import java.util.function.Consumer;
+import javafx.application.Platform;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,12 +32,14 @@ public class TaskCreationHandler implements ActionHandler{
             JSONObject jsonObject = new JSONObject(responseJsonObject);
             
             if(!jsonObject.isNull("entity")){
-                String todoJsonObject  = jsonObject.getJSONObject("entity").toString();
-                TaskEntity task = gson.fromJson(todoJsonObject, TaskEntity.class);
-                CurrentUser.getCurrentUser().getTasksList().add(task);
-                
+                String taskJsonObject  = jsonObject.getJSONObject("entity").toString();
+                TaskEntity task = gson.fromJson(taskJsonObject, TaskEntity.class);
+                 System.out.println("-----------------------create---"+taskJsonObject);          
                 if(taskGUIGenerator != null){
+                    Platform.runLater(()->{
                     taskGUIGenerator.accept(task);
+                        System.out.println("accept generator invoked");
+                    });
                 }
                 
             }else{

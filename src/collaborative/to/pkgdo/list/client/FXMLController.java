@@ -11,6 +11,7 @@ import Handlers.ItemCreationHandler;
 import Controllers.ToDoListController;
 import Entities.ItemEntity;
 import Controllers.CollaboratorController;
+import Controllers.TaskController;
 import Controllers.ToDoListController;
 import Entities.CollaborationRequestEntity;
 import Entities.ItemEntity;
@@ -23,9 +24,11 @@ import Entities.UserEntity;
 import Handlers.ItemDeletionHandler;
 import Handlers.ItemUpdateHandler;
 import Handlers.TaskCreationHandler;
+import Handlers.TaskDeleteHandler;
 import Handlers.ToDoCreationHandler;
 import Handlers.ToDoDeleteHandler;
 import Handlers.ToDoUpdateHandler;
+import Handlers.TaskUpdateStatusHandler;
 import Utils.CurrentUser;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
@@ -63,9 +66,11 @@ import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import java.util.List;
+import javafx.event.Event;
 import javafx.scene.paint.Color;
 /**
  *
@@ -74,11 +79,13 @@ import javafx.scene.paint.Color;
 public class FXMLController implements Initializable  {
     UserEntity currentUser;
     ItemController itemController = new ItemController();
+    TaskController taskController = new TaskController();
     ArrayList<Integer> itemsIndecies;
     int itemsCounter = 0;
-   
     
-    private static ToDoEntity currentToDo = null ;
+    public static ToDoEntity currentToDo = null ;
+    public static ItemEntity currentItem =null;
+    public static TaskEntity currentTask;
    // Friendicon Fitem=new Friendicon();
    // Friendicon Fitem2=new Friendicon();
     //Listicon  Litem=new Listicon();
@@ -329,7 +336,7 @@ public class FXMLController implements Initializable  {
               Item i = new Item(itemEntity);
              //TASKLISTS.getPanes().add(i);
              try{
-             CurrentUser.getCurrentUser().getTodoList().get(CurrentUser.getCurrentUser().getTodoList().indexOf(currentToDo)).getItemsList().add(itemEntity);
+             //CurrentUser.getCurrentUser().getTodoList().get(CurrentUser.getCurrentUser().getTodoList().indexOf(currentToDo)).getItemsList().add(itemEntity);
              }catch(Exception e){
                  e.printStackTrace();
              }
@@ -337,14 +344,17 @@ public class FXMLController implements Initializable  {
               ADDTASK.clear();
           }
       });
-//      testButton.setOnMousePressed((MouseEvent event) -> {
-  //        itemController.deleteItem(currentToDo.getItemsList().get(0));
-    //      TASKLISTS.getPanes().remove(0);
-      //  });
+           // testButton.setOnMousePressed((MouseEvent event) -> {
+            //    itemController.deleteItem(currentToDo.getItemsList().get(0));
+             //   TASKLISTS.getPanes().remove(0);
+            //});
         
       /*abd-elamlek*/
       
      
+      MINIMIZE.setOnMousePressed((MouseEvent event) -> {
+           CollaborativeToDoListClient.mPrimaryStage.setIconified(true);
+      });
 
       
       //COLLABORATORS.getChildren().add(col);
@@ -787,7 +797,7 @@ class  Collaborator extends AnchorPane {
                 for(ItemEntity itemEntity : todo.getItemsList()){
                     if(licon.todo.getId()== itemEntity.getTodoId()){
                         Item item = new Item(itemEntity);
-                         TASKLISTS.getPanes().add(item);
+                         TASKLISTS.getPanes().add(item);                    
                 }
             }
             }
@@ -827,13 +837,14 @@ public class Item extends TitledPane {
     protected final ScrollPane scrollPane;
     protected final AnchorPane anchorPane0;
     protected final VBox vBox;
-    //private ItemEntity item;
+    public ItemEntity mItemEntity;
     
     
     public int itemId;
     public Item(ItemEntity itemEntity) {
         itemId = itemEntity.getId();
-    
+        
+        mItemEntity = itemEntity;
         Addtaskpane bar=new Addtaskpane();
         anchorPane = new AnchorPane();
         jFXCheckBox = new JFXCheckBox();
@@ -897,20 +908,37 @@ public class Item extends TitledPane {
         scrollPane.setContent(anchorPane0);
         setContent(scrollPane);
 
-        anchorPane.getChildren().add(jFXCheckBox);
+       // anchorPane.getChildren().add(jFXCheckBox);
         anchorPane.getChildren().add(label);
         anchorPane.getChildren().add(line);
         anchorPane.getChildren().add(line0);
         anchorPane0.getChildren().add(vBox);
         
-        TaskEntity taskEntity = new TaskEntity();
-        taskEntity.setDecription("desc");
-        addTask(taskEntity);
+        
+        label.setOnMousePressed((MouseEvent event) -> {
+        
+            
+        });
+        //TaskEntity taskEntity = new TaskEntity();
+        //taskEntity.setDecription("desc");
+        //addTask(taskEntity);
         
         this.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-             if(TASKLISTS.getHeight()>((TASKLISTS.getChildrenUnmodifiable().size()*40)+259))
+            currentItem = mItemEntity;
+                vBox.getChildren().clear();
+                vBox.getChildren().add(bar);
+                ArrayList<TaskEntity> taskList = mItemEntity.getTasksList();
+                         if(taskList!=null){
+                             for(TaskEntity taskEntity : taskList){
+                            if(taskEntity!=null){
+                                 Task task = new Task(taskEntity);
+                                 vBox.getChildren().add(task);
+                            }
+                         }
+                         }
+            if(TASKLISTS.getHeight()>((TASKLISTS.getChildrenUnmodifiable().size()*40)+259))
              { 
                TASKLISTS.setPrefHeight((TASKLISTS.getChildrenUnmodifiable().size()*40.0)+259.0);
              setPrefHeight(259.0);
@@ -919,34 +947,112 @@ public class Item extends TitledPane {
             }
         });
         
+       
+        
+        /*
         label.setOnMousePressed((MouseEvent event) -> {
-            deleteItem(itemEntity);
+            //deleteItem(itemEntity);
+            if(currentToDo.getOwnerId() == currentUser.getId()){
+            currentToDo.getItemsList().remove(itemEntity);
             itemController.deleteItem(itemEntity);
-            
+            }
             
         });
+        */
         
         TaskCreationHandler.setTodoGUIGenerator(this::createTaskResponse);
         ItemCreationHandler.setTodoGUIGenerator(this:: createItemResponse);
         ItemUpdateHandler.setTodoGUIGenerator(this::updateItemResponse);
         ItemDeletionHandler.setTodoGUIGenerator(this::deleteItemResponse);
+        TaskUpdateStatusHandler.setTodoGUIGenerator(this::updateTaskResponse);
+        TaskDeleteHandler.setTodoGUIGenerator(this::deleteTaskResponse);
     }
-
+     public void updateTaskResponse(TaskEntity task){
+            Platform.runLater(() ->  {
+                updateTAsk(task);
+             //  TaskEntity entity = currentItem.getTasksList().get(currentItem.getTasksList().indexOf(task));
+              // entity.setStatus(task.getStatus());
+            //  currentTask.setStatus(task.getStatus());
+            });
+    }
+    public void updateTAsk(TaskEntity taskEntity){
+         for(int i=0; i< TASKLISTS.getPanes().size();i++){
+          Item i1 = (Item) TASKLISTS.getPanes().get(i);
+          if(taskEntity.getItemId() == i1.itemId){
+              for(int j =1; j< i1.vBox.getChildren().size(); j++){
+                  Task task = (Task) i1.vBox.getChildren().get(j);
+                  if(task.taskId == taskEntity.getId()){
+                      if (taskEntity.getStatus() == 1) {
+                            task.jFXCheckBox.setSelected(true);
+                        }else{
+                            task.jFXCheckBox.setSelected(false);
+                        }
+                  }
+              }
+              break;
+          }
+       }         
+    }
+    
+     public void deleteTaskResponse(TaskEntity task){
+            Platform.runLater(() ->  {
+                deleteTAsk(task);
+                //currentUser.getTodoList().get(currentUser.getTodoList().indexOf(currentToDo)).getItemsList().get(currentToDo.getItemsList().indexOf(currentItem)).getTasksList().remove(task);
+                //currentItem.getTasksList().remove(task);
+                //mItemEntity.getTasksList().remove(task);
+            });
+    }
+        public void deleteTAsk(TaskEntity taskEntity){
+         for(int i=0; i< TASKLISTS.getPanes().size();i++){
+          Item i1 = (Item) TASKLISTS.getPanes().get(i);
+          if(taskEntity.getItemId() == i1.itemId){
+              for(int j =1; j< i1.vBox.getChildren().size(); j++){
+                  Task task = (Task) i1.vBox.getChildren().get(j);
+                  if(task.taskId == taskEntity.getId()){
+                      i1.vBox.getChildren().remove(task);
+                      try{
+                          ArrayList<TaskEntity> taskArrayList =i1.mItemEntity.getTasksList();
+                          for(TaskEntity te : taskArrayList){
+                          if(te.getId() == taskEntity.getId()){
+                              i1.mItemEntity.getTasksList().remove(te);
+                          }
+                      }
+                      }catch(ConcurrentModificationException e){e.printStackTrace();}
+                      break;
+                  }
+              }
+             
+          }
+       }         
+    }
  public void createTaskResponse(TaskEntity task){
             Platform.runLater(() ->  {
                 addTask(task);
-            });
-    }
-public void createItemResponse(ItemEntity item){
-            Platform.runLater(() ->  {
-                addItem(item);
+                currentToDo.getItemsList().get(currentToDo.getItemsList().indexOf(currentItem)).getTasksList().add(task);
+                
+               // currentItem.getTasksList().add(task);
+               
             });
     }
 
-   void addTask(TaskEntity taskEntity){
-        Task i=new Task(taskEntity);
-         vBox.getChildren().add(i);
-        
+public void createItemResponse(ItemEntity item){
+            Platform.runLater(() ->  {
+                addItem(item);
+    //            currentToDo.getItemsList().add(item);
+            });
+    }
+
+public  void addTask(TaskEntity taskEntity){
+    Task task = new Task(taskEntity);   
+
+    for(int i=0; i< TASKLISTS.getPanes().size();i++){
+          Item i1 = (Item) TASKLISTS.getPanes().get(i);
+          if(taskEntity.getItemId() == i1.itemId){
+              i1.vBox.getChildren().add(task);
+              break;
+          }
+       }
+     
     }
    public  void addItem(ItemEntity itemEntity){
        Item item = new Item(itemEntity);
@@ -955,6 +1061,7 @@ public void createItemResponse(ItemEntity item){
    }
    private void deleteItem(ItemEntity itemEntity){
         TASKLISTS.getPanes().remove(this);
+        currentToDo.getItemsList().remove(itemEntity);
    }
    
    private void deleteItemResponse(ItemEntity itemEntity){
@@ -963,6 +1070,7 @@ public void createItemResponse(ItemEntity item){
           Item i1 = (Item) TASKLISTS.getPanes().get(i);
           if(itemEntity.getId() == i1.itemId){
               TASKLISTS.getPanes().remove(i1);
+              currentToDo.getItemsList().remove(itemEntity);
               break;
           }
        }
@@ -992,9 +1100,11 @@ class Task extends AnchorPane {
     protected  Line line;
     protected  Line line0;
     protected  Label label;
+    public  int taskId;
 
     public Task(TaskEntity taskjEntity ) {
-
+        
+        taskId = taskjEntity.getId();
         jFXCheckBox = new JFXCheckBox();
         line = new Line();
        
@@ -1032,14 +1142,38 @@ class Task extends AnchorPane {
         getChildren().add(label);
         
         setTaskname(taskjEntity.getDecription());
-        if(taskjEntity.getStatus()==1){
+        if(taskjEntity.getStatus() == 1){
             jFXCheckBox.setSelected(true);
+        }else{
+            jFXCheckBox.setSelected(false);
         }
+        
+      
+        jFXCheckBox.selectedProperty().addListener(new  ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                int status = 0;   
+                if(newValue){
+                        status =1;
+                   }
+        taskController.updateTaskStatus(taskjEntity, status);
+            }
+        });
+        
+        label.setOnMousePressed((MouseEvent event) -> {
+            taskController.deleteTask(taskjEntity);
+        });
+        
+        this.setOnMousePressed((MouseEvent event) -> {
+            currentTask = taskjEntity;
+        });
     }
         public void setTaskname(String s)
         {
          label.setText(s);
         }
+        
+          
         
 }
     
@@ -1050,6 +1184,8 @@ class Task extends AnchorPane {
             for(ToDoEntity mtodo : currentUser.getTodoList()){
                 Listicon  mLitem=new Listicon(mtodo, true);
                 LIST.getChildren().add(mLitem);
+               
+                
             }
         
         if(currentUser.getCollaboratorList()!= null){
@@ -1157,7 +1293,7 @@ class Task extends AnchorPane {
     class Addtaskpane extends AnchorPane {
 
     protected final AnchorPane anchorPane;
-    protected  JFXTextField ADDTASK1;
+    public  JFXTextField ADDTASK1;
 
     public Addtaskpane() {
 
@@ -1186,6 +1322,13 @@ class Task extends AnchorPane {
         ADDTASK1.setPromptText("Add Task and press enter to save");
         anchorPane.getChildren().add(ADDTASK1);
         getChildren().add(anchorPane);
+        
+        ADDTASK1.setOnKeyPressed((KeyEvent event) -> {
+            if(event.getCode()== KeyCode.ENTER){
+                taskController.createNewTask(0, ADDTASK1.getText(), currentItem.getId());
+                ADDTASK1.clear();
+            }
+        });
 
     }
 }

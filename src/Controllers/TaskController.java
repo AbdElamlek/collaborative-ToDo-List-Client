@@ -44,6 +44,7 @@ public class TaskController implements TaskInterFace{
             task.setStatus(status);
             EntityWrapper entityWrapper = new EntityWrapper("changeTaskStatus", "entity", task);
             String taskJsonResponse = adapterController.entity2Json(entityWrapper);
+            System.out.println("sending update task----------"+taskJsonResponse);
             SocketController.getInstance().sendJsonObject(taskJsonResponse);
             return true;
         } catch (Exception e) {
@@ -106,7 +107,21 @@ public class TaskController implements TaskInterFace{
             taskEntity.setStatus(status);
             taskEntity.setDecription(description);
             taskEntity.setItemId(itemId);
-            EntityWrapper entityWrapper = new EntityWrapper("createNewTask", "entity", taskEntity);
+            EntityWrapper entityWrapper = new EntityWrapper("create task", "entity", taskEntity);
+            String taskJsonResponse = adapterController.entity2Json(entityWrapper);
+            SocketController.getInstance().sendJsonObject(taskJsonResponse);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteTask(TaskEntity taskEntity) {
+       
+        try {
+            EntityWrapper entityWrapper = new EntityWrapper("delete task", "entity", taskEntity);
             String taskJsonResponse = adapterController.entity2Json(entityWrapper);
             SocketController.getInstance().sendJsonObject(taskJsonResponse);
             return true;
