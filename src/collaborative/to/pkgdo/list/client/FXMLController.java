@@ -14,6 +14,7 @@ import Controllers.CollaboratorController;
 import Controllers.ToDoListController;
 import Entities.CollaborationRequestEntity;
 import Entities.ItemEntity;
+import Entities.NotificationEntity;
 import Entities.ToDoEntity;
 import Entities.UserEntity;
 import Handlers.AcceptCollaboratorRequestHandler;
@@ -22,6 +23,7 @@ import Entities.ToDoEntity;
 import Entities.UserEntity;
 import Handlers.ItemDeletionHandler;
 import Handlers.ItemUpdateHandler;
+import Handlers.NotificationHandler;
 import Handlers.TaskCreationHandler;
 import Handlers.ToDoCreationHandler;
 import Handlers.ToDoDeleteHandler;
@@ -100,7 +102,7 @@ public class FXMLController implements Initializable  {
    // Task item=new Task(null);
   //  Task item2=new Task(null);
     //Collaborator col=new Collaborator();
-    Notification notif=new Notification();
+    //Notification notif=new Notification();
     //Friendtoadd fc=new Friendtoadd();
     //Friendtoadd fc2=new Friendtoadd();
     TodoStatstics bar1=new TodoStatstics();
@@ -318,6 +320,7 @@ public class FXMLController implements Initializable  {
 //}
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        NotificationHandler.setNotificationGUIGenerator(this::createNotificationResponse);
         /*REHAM*/
         ToDoCreationHandler.setTodoGUIGenerator(this::createTodoListResponse);
         ToDoUpdateHandler.setTodoGUIModifier(this::updateTodoListResponse);
@@ -362,7 +365,7 @@ public class FXMLController implements Initializable  {
       //aDDRIENDCOLABLIST.getChildren().add(fc);
       //aDDRIENDCOLABLIST.getChildren().add(fc2);
       
-      NOTIFICATIONS.getChildren().add(notif);
+      //NOTIFICATIONS.getChildren().add(notif);
       
 //      TASKLISTS.getPanes().add(task);
  //     TASKLISTS.getPanes().add(task2);
@@ -447,34 +450,44 @@ public class FXMLController implements Initializable  {
 }
     
     
-    class Notification extends AnchorPane {
+class Notification extends AnchorPane {
 
-    protected final JFXTextArea jFXTextArea;
+        private NotificationEntity ne;
+        protected final JFXTextArea jFXTextArea;
 
-    public Notification() {
+ // public Notification()
+public Notification(NotificationEntity ne)
+         {
+            this.ne = ne;
 
-        jFXTextArea = new JFXTextArea();
+            jFXTextArea = new JFXTextArea();
+            setMaxHeight(USE_PREF_SIZE);
+            setMaxWidth(USE_PREF_SIZE);
+            setMinHeight(USE_PREF_SIZE);
+            setMinWidth(USE_PREF_SIZE);
+            setPrefHeight(50.0);
+            setPrefWidth(319.0);
+            setStyle("-fx-background-color: #fefefe; -fx-background-radius: 2;");
 
-        setMaxHeight(USE_PREF_SIZE);
-        setMaxWidth(USE_PREF_SIZE);
-        setMinHeight(USE_PREF_SIZE);
-        setMinWidth(USE_PREF_SIZE);
-        setPrefHeight(50.0);
-        setPrefWidth(319.0);
-        setStyle("-fx-background-color: #fefefe; -fx-background-radius: 2;");
+            jFXTextArea.setLayoutX(8.0);
+            jFXTextArea.setStyle("-fx-background-color: #fefefe;");
+            jFXTextArea.setPromptText(ne.getMsg());
+            jFXTextArea.setEditable(false);
+            jFXTextArea.setPrefHeight(43.0);
+            jFXTextArea.setPrefWidth(311.0);
+            jFXTextArea.unFocusColorProperty().set(javafx.scene.paint.Color.valueOf("#c2bdbd"));
+            getChildren().add(jFXTextArea);
 
-        jFXTextArea.setLayoutX(8.0);
-        jFXTextArea.setStyle("-fx-background-color: #fefefe;");
-        jFXTextArea.setPromptText("Notifications are here");
-        jFXTextArea.setEditable(false);
-        jFXTextArea. setPrefHeight(43.0);
-        jFXTextArea. setPrefWidth(311.0);
-        jFXTextArea.unFocusColorProperty().set(javafx.scene.paint.Color.valueOf("#c2bdbd"));
-        getChildren().add(jFXTextArea);
+
+        }
 
     }
-}
-
+    public void createNotificationResponse(NotificationEntity ne) {
+            Platform.runLater(() -> {
+                System.out.println("hererrrrrrr");
+                NOTIFICATIONS.getChildren().add(new Notification(ne));
+            });
+        }
 class Friendtoadd extends AnchorPane {
 
     private UserEntity friend;
