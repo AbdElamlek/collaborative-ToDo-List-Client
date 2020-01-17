@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author Abd-Elmalek
  */
 public class UserEntity implements BaseEntity {
-    
+
     private int id;
     private String firstName;
     private String lastName;
@@ -28,7 +28,7 @@ public class UserEntity implements BaseEntity {
     private ArrayList<TaskEntity> tasksList;
     private ArrayList<ToDoEntity> todoList;
     private ArrayList<ToDoEntity> colaboartedList;
-    
+
     private ArrayList<ItemEntity> itemList;
     private ArrayList<ToDoEntity> collaboratorList;
 
@@ -154,6 +154,9 @@ public class UserEntity implements BaseEntity {
     }
 
     public ArrayList<CollaborationRequestEntity> getCollaborationRequestList() {
+        if (collaborationRequestList == null) {
+            collaborationRequestList = new ArrayList<CollaborationRequestEntity>();
+        }
         return collaborationRequestList;
     }
 
@@ -176,11 +179,5 @@ public class UserEntity implements BaseEntity {
     public void setItemList(ArrayList<ItemEntity> itemList) {
         this.itemList = itemList;
     }
-    
-    
-    
-    
-    
-    
-    
+
 }

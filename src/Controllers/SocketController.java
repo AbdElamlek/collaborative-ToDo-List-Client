@@ -13,6 +13,7 @@ import Handlers.ItemCreationHandler;
 import Handlers.SignUpHandler;
 import ControllerBase.ActionHandler;
 import ControllerBase.SocketInterface;
+import Handlers.CollaboratorRequestHandler;
 import Handlers.ItemDeletionHandler;
 import Handlers.ItemUpdateHandler;
 import Handlers.AcceptCollaboratorRequestHandler;
@@ -179,6 +180,12 @@ public class SocketController implements SocketInterface {
                     break;
                 case "delete todo list":
                     actionHandler = new ToDoDeleteHandler();
+                    break;
+                case "recieve collaborator notification":
+                    actionHandler = new NotificationHandler();
+                    break;
+                case "recieve collaborator request":  
+                    actionHandler = new CollaboratorRequestHandler();
                     break;
                 case "create item":
                     actionHandler = new ItemCreationHandler();
