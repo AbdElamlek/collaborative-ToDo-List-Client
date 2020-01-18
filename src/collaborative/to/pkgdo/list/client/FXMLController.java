@@ -345,6 +345,8 @@ public class FXMLController implements Initializable {
         
         @FXML
      public void logOut(MouseEvent event) {
+         AuthenticationController authenticationController = new AuthenticationController();
+         authenticationController.logout(currentUser);
          
          SocketController.getInstance().disconnect();
             Platform.runLater(()->{
