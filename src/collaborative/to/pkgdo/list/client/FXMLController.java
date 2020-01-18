@@ -76,6 +76,7 @@ import java.util.List;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.effect.Glow;
 import javafx.scene.layout.BorderPane;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
@@ -124,6 +125,8 @@ public class FXMLController implements Initializable {
     public VBox FRIENDSLIST;
     @FXML
     public VBox LIST;
+    
+    public VBox aSSIGNEDTOTASK;
     public VBox COLLABORATORS;
     public VBox NOTIFICATIONS;
     public VBox aDDRIENDCOLABLIST;
@@ -168,11 +171,11 @@ public class FXMLController implements Initializable {
     public JFXButton SHOWNOTIFICATIONS;
     public JFXButton CLEARDATE;
     public JFXButton SAVEDATE;
-    public JFXButton NEWCOLLABORATOR;
+    public JFXButton aDDCOLAB;
     public JFXButton DONEADDCOLLABORATOR;
     public JFXButton CANCELLIST;
     public JFXButton rETRYCONNECTION;
-    public JFXButton aDDCOLAB;
+    //public JFXButton aDDCOLAB;
     public JFXDatePicker STARTDATE;
     public JFXDatePicker ENDDATE;
 
@@ -183,33 +186,9 @@ public class FXMLController implements Initializable {
 
     public Circle TODOCOLOR;
     public ImageView ADDCOLLAB;
+    public PieChart piechart;
 
-    public void disableUIForNotification() {
-        MINIMIZE.setDisable(true);
-        EXIT.setDisable(true);
-        FRIENDSLIST.setDisable(true);
-        LISTSCROLL.setDisable(true);
-        COLLABSCROLL.setDisable(true);
-        FRIENDS.setDisable(true);
-        LISTS.setDisable(true);
-        nEWLIST.setDisable(true);
-        ADDDATE.setDisable(true);
-        DATEPICK.setDisable(true);
-        TODOPANE.setDisable(true);
-        LISTPANE.setDisable(true);
-        FRIENDPANE.setDisable(true);
-        TODAYPANE.setDisable(true);
-        STATUSPANE.setDisable(true);
-        REQUESTPANE.setDisable(true);
-        DATEPANE.setDisable(true);
-        ADDLISTPANE.setDisable(true);
-        REQUESTS.setDisable(true);
-        TODAY.setDisable(true);
-        STATUS.setDisable(true);
-
-        NEWCOLLABORATOR.setDisable(true);
-        ADDCOLLABORATORPANE.setDisable(true);
-    }
+ 
 
     @FXML
     public void nav(MouseEvent event) {
@@ -269,7 +248,7 @@ public class FXMLController implements Initializable {
             }
 
         } 
-        else if (event.getSource() == NEWCOLLABORATOR) {
+        else if (event.getSource() == aDDCOLAB) {
             ADDCOLLABORATORPANE.setVisible(true);
         }
         else if (event.getSource() == DONEADDCOLLABORATOR) {
@@ -290,8 +269,8 @@ public class FXMLController implements Initializable {
 
     } 
         
-        @FXML
-     public void logOut(MouseEvent event) {
+     @FXML
+    public void logOut(MouseEvent event) {
          
          SocketController.getInstance().disconnect();
             Platform.runLater(()->{
@@ -391,11 +370,18 @@ public class FXMLController implements Initializable {
         sSTATISTICS.getChildren().add(bar2);
         sSTATISTICS.getChildren().add(bar3);
         AcceptCollaboratorRequestHandler.setCollaboratorsGUIModifier(this::acceptTodoCollaborationResponse);
-
+         
         currentUser = CurrentUser.getCurrentUser();
         
         /*REHAM*/
-
+       //piechart.setStartAngle(180); 
+       //pieChart = new PieChart(); 
+        
+        
+        
+        
+        
+        
         /*omnia*/
         SocketController.setConnectionFailed(this::conFaild);
         
@@ -884,7 +870,7 @@ public class FXMLController implements Initializable {
                     COLLABORATORS.getChildren().setAll(TODOCOLLABORATORS);
                     aDDRIENDCOLABLIST.getChildren().setAll(FRIENDSTOADDASCOLLABORATORS);
 
-                    NEWCOLLABORATOR.setVisible(isOwnedByCurrentUser);
+                    aDDCOLAB.setVisible(isOwnedByCurrentUser);
                     ADDCOLLAB.setVisible(isOwnedByCurrentUser);
 
                 }
@@ -1391,13 +1377,13 @@ public class FXMLController implements Initializable {
     }
 
 
-  class Liststate extends AnchorPane {
+  class Itemstate extends AnchorPane {
 
     protected final AnchorPane anchorPane;
     protected final JFXButton jFXButton;
     protected final ImageView imageView;
 
-    public Liststate() {
+    public Itemstate() {
 
         anchorPane = new AnchorPane();
         jFXButton = new JFXButton();
