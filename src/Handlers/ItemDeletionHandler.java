@@ -11,6 +11,7 @@ import Utils.CurrentUser;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.function.Consumer;
+import javafx.application.Platform;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,14 +37,20 @@ public class ItemDeletionHandler implements ActionHandler{
                 String todoJsonObject  = jsonObject.getJSONObject("entity").toString();
                 ItemEntity item = gson.fromJson(todoJsonObject, ItemEntity.class);
                 ArrayList<ItemEntity> itemList = CurrentUser.getCurrentUser().getItemList();
+                if(itemList!=null)
                 for(ItemEntity mItem : itemList){
                     if(mItem.getId() == item.getId()){
                         itemList.remove(mItem);
+                        break;
                     }
                 }
                 
                 if(itemGUIGenerator != null){
-                    itemGUIGenerator.accept(item);
+                Platform.runLater(()->{
+                         itemGUIGenerator.accept(item);
+                });
+               
+                  
                 }
                 
             }else{

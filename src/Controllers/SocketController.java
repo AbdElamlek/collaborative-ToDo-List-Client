@@ -18,17 +18,24 @@ import Handlers.AddFriendHandler;
 import Handlers.DeclineFriendHandler;
 import Handlers.DeleteFriendHandler;
 import Handlers.SearchFriendHandler;
+import Handlers.CollaboratorRequestHandler;
 import Handlers.ItemDeletionHandler;
 import Handlers.ItemUpdateHandler;
 import Handlers.AcceptCollaboratorRequestHandler;
+import Handlers.FriendStatusHandler;
+import Handlers.TaskCreationHandler;
+import Handlers.TaskDeleteHandler;
 import Handlers.ToDoDeleteHandler;
 import Handlers.ToDoUpdateHandler;
+import Handlers.TaskUpdateStatusHandler;
+import collaborative.to.pkgdo.list.client.FXMLDocumentController;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.JSONException;
@@ -42,15 +49,17 @@ public class SocketController implements SocketInterface {
 
     private Socket socket;
     private DataInputStream dataInputStream;
-    private DataOutputStream dataOutputStream;
+    //private DataOutputStream dataOutputStream;
     private PrintStream printStream;
-    private Boolean isRunning;
+    public static Boolean isRunning=false;
     private Thread thread;
+    private static Consumer<Integer> connectionFailed;
 
     private static SocketController socketController;
 
     private SocketController() {
         try {
+            System.out.println("try to connect");
             socket = new Socket("127.0.0.1", 7777);
             dataInputStream = new DataInputStream(socket.getInputStream());
             printStream = new PrintStream(socket.getOutputStream());
@@ -64,27 +73,82 @@ public class SocketController implements SocketInterface {
                             String receivedResponse = dataInputStream.readLine();
                             System.out.println("received something");
                             System.out.println(receivedResponse);
+                            if(receivedResponse!=null){
                             handleResponse(receivedResponse);
+                            }
+                            else{
+                                 
+                                 System.out.println("server is down!");
+                                  isRunning = false; 
+                                  connectionFailed.accept(null);
+                                  
+                                 
+                            
+                            }
                         } catch (IOException ex) {
                             isRunning = false;
-                            //ex.printStackTrace();
+                            System.out.println(isRunning+"in siderun");
+                            
                         }
                     }
                 }
             };
         } catch (IOException ex) {
+
             ex.printStackTrace();
+             isRunning = false;
+             System.out.println(isRunning+"in socet");
+
         }
     }
 
+    
+    public static void setConnectionFailed(Consumer<Integer> failed) {
+       connectionFailed=failed;
+        
+        
+    }
+    
+     
+    public static boolean reConnect() {
+       
+       socketController=null;
+       return getInstance().connect();
+    }
+    
+    
     @Override
-    public void connect() {
-        thread.start();
+
+    
+    public boolean connect() {
+       if(thread==null){
+           
+           socketController=null;
+           
+        return false;
+       }
+       
+       thread.start();
+       return true;
     }
 
     @Override
     public void disconnect() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        
+        try {
+            dataInputStream.close();
+            printStream.close();
+            socket.close();
+            socketController=null;
+            isRunning=false;
+            
+            
+        } catch (IOException ex) {
+            Logger.getLogger(SocketController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -105,6 +169,7 @@ public class SocketController implements SocketInterface {
 
     public void handleResponse(String jsonObjectStr) {
         try {
+            
             JSONObject jsonObject = new JSONObject(jsonObjectStr);
             String action = jsonObject.getString("action");
             ActionHandler actionHandler = null;
@@ -143,6 +208,11 @@ public class SocketController implements SocketInterface {
                     break;
                 case "declineFriend":
                     actionHandler = new DeclineFriendHandler();
+                case "recieve collaborator notification":
+                    actionHandler = new NotificationHandler();
+                    break;
+                case "recieve collaborator request":  
+                    actionHandler = new CollaboratorRequestHandler();
                     break;
                 case "create item":
                     actionHandler = new ItemCreationHandler();
@@ -156,6 +226,34 @@ public class SocketController implements SocketInterface {
                 case "accept collaborator request":
                     actionHandler = new AcceptCollaboratorRequestHandler();
                     break;
+                case "online friend":
+                    actionHandler = new FriendStatusHandler();
+                case "create task":
+                    actionHandler = new TaskCreationHandler();
+                    break;
+                case "changeTaskStatus":
+                    actionHandler = new TaskUpdateStatusHandler();
+                    break;
+                case "delete task":
+                    actionHandler = new TaskDeleteHandler();
+                    break;
+                    /*
+                    "accept task assignment request"
+                    "accept friend request"
+                    item
+                    task
+                    comment
+                    withdraw(here for other collaborators and the owner where thay know from server)
+                    
+                    */                    /*
+                    "accept task assignment request"
+                    "accept friend request"
+                    item
+                    task
+                    comment
+                    withdraw(here for other collaborators and the owner where thay know from server)
+                    
+                    */
             }
             Handler handler = new Handler(actionHandler);
             handler.handleAction(jsonObjectStr);

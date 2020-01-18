@@ -12,7 +12,7 @@ import javax.json.JsonObject;
  */
 public interface SocketInterface {
     
-    void connect();
+    boolean connect();
     void disconnect();
     void sendJsonObject(String jsonObject); 
     
