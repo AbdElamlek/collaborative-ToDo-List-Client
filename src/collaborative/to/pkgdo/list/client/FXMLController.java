@@ -73,6 +73,7 @@ import java.time.ZoneId;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -892,16 +893,15 @@ public class FXMLController implements Initializable {
              TITLE.setText(todo.getTitle());
              currentToDo = todo;
              TASKLISTS.getPanes().clear();
-             
-             for(int i =0 ; i<LIST.getChildren().size();i++){
-                Listicon licon = (Listicon) LIST.getChildren().get(i);
+            
+             if(todo.getItemsList()!=null){
                 for(ItemEntity itemEntity : todo.getItemsList()){
-                    if(licon.todo.getId()== itemEntity.getTodoId()){
                         Item item = new Item(itemEntity);
                          TASKLISTS.getPanes().add(item);                    
+                
                 }
             }
-            }
+            
              COLLABORATORS.getChildren().setAll(TODOCOLLABORATORS);
              aDDRIENDCOLABLIST.getChildren().setAll(FRIENDSTOADDASCOLLABORATORS);
              
@@ -1128,13 +1128,14 @@ public class Item extends TitledPane {
                   if(task.taskId == taskEntity.getId()){
                       i1.vBox.getChildren().remove(task);
                       try{
-                          ArrayList<TaskEntity> taskArrayList =i1.mItemEntity.getTasksList();
+                          List<TaskEntity> taskArrayList =Collections.synchronizedList(i1.mItemEntity.getTasksList());
                           for(TaskEntity te : taskArrayList){
                           if(te.getId() == taskEntity.getId()){
                               i1.mItemEntity.getTasksList().remove(te);
                           }
                       }
-                      }catch(ConcurrentModificationException e){e.printStackTrace();}
+                      }catch(ConcurrentModificationException e){//e.printStackTrace();
+                      }
                       break;
                   }
               }
