@@ -4,6 +4,7 @@ import Controllers.AuthenticationController;
 import Handlers.LoginHandler;
 import Entities.ToDoEntity;
 import Controllers.CollaboratorController;
+import Controllers.SocketController;
 import Entities.UserEntity;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
@@ -31,19 +32,21 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class FXMLDocumentController implements Initializable {
-
+     static boolean isonline;
     double xOffset = 0;
     double yOffset = 0;
     
-    private AuthenticationController authenticationController = new AuthenticationController();
+    private AuthenticationController authenticationController;
     @FXML
     public ImageView EXIT;
     public AnchorPane LOGINPANE;
     public AnchorPane SIGNUPPANE;
-
+    public AnchorPane nOCONNECTIONPANE;
+    public Label nOTVALID;
     @FXML
      //public JFXButton Login;
     //public JFXButton Create;
@@ -108,16 +111,31 @@ public class FXMLDocumentController implements Initializable {
             //controller.sendJsonObject("hhihihihihihi");
 
         }
+       
     }
     @FXML
      private void login (MouseEvent event) {
-         if(isConnectedToServer){
-            String username = UsernameText.getText();
-            String password = PasswordText.getText();
-            
-            authenticationController = new AuthenticationController();
-            authenticationController.logIn(username, password);
-         }
+
+       //   isonline=SocketController.isRunning;
+         if(SocketController.getInstance().connect()){
+                authenticationController = new AuthenticationController();
+             if(!( UsernameText.getText().equals(""))&&!( PasswordText.getText().equals(""))){
+                 
+         String username = UsernameText.getText();
+         String password = PasswordText.getText();
+         
+         authenticationController.logIn(username, password);
+         }}
+         
+         else
+           {
+             nOCONNECTIONPANE.setVisible(true);
+             
+           }
+     }
+       
+    public void showNotValid(Object o){
+        nOTVALID.setVisible(true);
     }
      
     public void navigateToMainPage(Object o){
@@ -129,6 +147,7 @@ public class FXMLDocumentController implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXML.fxml"));
             Parent root = (Parent) fxmlLoader.load();
             Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
             Stage stage = (Stage) UsernameText.getScene().getWindow();
             
             stage.setScene(scene);
@@ -157,8 +176,19 @@ public class FXMLDocumentController implements Initializable {
         }
         });
         
-    }
-     
+   }
+//     public void showNotvalidlogin(Object o){
+//        
+//       Platform.runLater(()->{
+//       
+//       try{
+//        
+//       
+//       
+//       }catch{}
+//       
+//       });}
+//     
     private boolean isValidData(String email, String password, String cpassword, String firstname, String lastname, String username) {
         boolean isValid = true;
         if (!isValidEmail(email)) {
@@ -233,24 +263,11 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         LoginHandler.setMainPageNavigator(this::navigateToMainPage);
+        LoginHandler.setNotvalidlogin(this::showNotValid);
+        
+//        LoginHandler.setNotvalidlogin(this::);
         LOGINPANE.setVisible(true);
         SIGNUPPANE.setVisible(false);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                isConnectedToServer = CollaborativeToDoListClient.isConnectedToServer();
-                while(!isConnectedToServer){
-                    try {
-                        Thread.sleep(1000); 
-                        isConnectedToServer = CollaborativeToDoListClient.isConnectedToServer();
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                System.out.println("you can login now :)");
-            }
-        }).start();
-        
     }
 
     @FXML

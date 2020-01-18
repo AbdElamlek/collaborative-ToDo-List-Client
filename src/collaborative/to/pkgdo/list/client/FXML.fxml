@@ -162,6 +162,7 @@
                </font>
             </JFXButton>
             <JFXButton fx:id="SHOWNOTIFICATIONS" layoutX="172.0" layoutY="149.0" onMouseClicked="#nav1" prefHeight="25.0" prefWidth="25.0" text=" " />
+                  <JFXButton fx:id="lOGOUT" layoutX="206.0" layoutY="149.0" onMouseClicked="#logOut" prefHeight="25.0" prefWidth="25.0" text=" " />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="TODOPANE" layoutX="260.0" prefHeight="652.0" prefWidth="769.0" style="-fx-background-color: #FEFEFE;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
@@ -169,7 +170,7 @@
             <DropShadow blurType="ONE_PASS_BOX" color="#00000053" height="4.875" radius="1.96875" width="5.0" />
          </effect>
          <children>
-            <Label fx:id="TITLE" layoutX="35.0" layoutY="45.0" prefHeight="36.0" prefWidth="235.0" text="Title">
+            <Label fx:id="TITLE" layoutX="35.0" layoutY="45.0" prefHeight="36.0" prefWidth="235.0" text="Title" visible="false">
                <font>
                   <Font name="Calibri Bold" size="31.0" />
                </font>
@@ -226,7 +227,7 @@
                            <children>
                               <ScrollPane fx:id="COLLABSCROLL1" hbarPolicy="NEVER" layoutY="35.0" prefHeight="431.0" prefWidth="259.0" stylesheets="@tabpane.css">
                                  <content>
-                                    <VBox fx:id="COLLABORATORS1" prefHeight="227.0" prefWidth="240.0" visible="false" />
+                                    <VBox fx:id="COLLABORATORS1" prefHeight="427.0" prefWidth="240.0" style="-fx-background-color: TRANSPARENT;" />
                                  </content>
                               </ScrollPane>
                               <Label prefHeight="36.0" prefWidth="146.0" text="Collaborators">
@@ -235,6 +236,12 @@
                                  </font>
                               </Label>
                               <JFXButton fx:id="NEWCOLLABORATOR1" onMouseClicked="#nav1" prefHeight="21.0" prefWidth="25.0" ripplerFill="BLACK" text=" " />
+                              <ImageView fx:id="ADDCOLLAB1" fitHeight="21.0" fitWidth="17.0" layoutX="189.0" layoutY="13.0" opacity="0.68" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons8_plus_24px_1.png" />
+                                 </image>
+                              </ImageView>
+                              <JFXButton fx:id="aDDCOLAB" layoutX="185.0" layoutY="10.0" onMouseClicked="#nav1" prefHeight="21.0" prefWidth="25.0" ripplerFill="BLACK" text=" " />
                            </children>
                         </AnchorPane>
                         <AnchorPane fx:id="tASKINFO" layoutX="18.0" layoutY="105.0" visible="false">
@@ -262,7 +269,7 @@
                                     </AnchorPane>
                                  </children>
                               </AnchorPane>
-                              <Label layoutX="4.0" layoutY="252.0" prefHeight="36.0" prefWidth="146.0" text="Collaborators">
+                              <Label layoutX="4.0" layoutY="252.0" prefHeight="36.0" prefWidth="146.0" text="Assigned to task">
                                  <font>
                                     <Font name="Calibri Bold" size="20.0" />
                                  </font>
@@ -272,7 +279,7 @@
                                     <Image url="@icons8_plus_24px_1.png" />
                                  </image>
                               </ImageView>
-                              <JFXButton fx:id="NEWCOLLABORATOR" layoutX="201.0" layoutY="258.0" onMouseClicked="#nav1" prefHeight="21.0" prefWidth="25.0" ripplerFill="BLACK" text=" " />
+                              <JFXButton fx:id="assighntotask" layoutX="201.0" layoutY="258.0" onMouseClicked="#nav1" prefHeight="21.0" prefWidth="25.0" ripplerFill="BLACK" text=" " />
                               <Line endX="118.0" endY="-1.52587890625E-5" layoutX="134.0" layoutY="237.0" startX="-130.0" startY="-1.52587890625E-5" stroke="#bfb8b896" />
                               <ScrollPane fx:id="COLLABSCROLL" hbarPolicy="NEVER" layoutX="11.0" layoutY="292.0" prefHeight="215.0" prefWidth="259.0">
                                  <content>
@@ -284,7 +291,7 @@
                      </children>
                   </AnchorPane>
 
-                  <JFXButton fx:id="eDITLIST" layoutX="393.0" layoutY="53.0" onMouseClicked="#nav1" prefHeight="25.0" prefWidth="25.0" text=" " />
+                  <JFXButton fx:id="eDITLIST" layoutX="393.0" layoutY="53.0" prefHeight="25.0" prefWidth="25.0" text=" " />
                </children>
             </AnchorPane>
             <AnchorPane fx:id="TODAYPANE" layoutX="256.0" prefHeight="652.0" prefWidth="769.0" style="-fx-background-color: #FEFEFE;" visible="false">
@@ -356,77 +363,46 @@
                   <DropShadow blurType="ONE_PASS_BOX" color="#00000053" height="4.875" radius="1.96875" width="5.0" />
                </effect>
                <children>
-                  <Label layoutX="35.0" layoutY="45.0" prefHeight="36.0" prefWidth="108.0" text="Status">
+                  <Label layoutX="36.0" layoutY="33.0" prefHeight="36.0" prefWidth="108.0" text="Status">
                      <font>
                         <Font name="Calibri Bold" size="31.0" />
                      </font>
                   </Label>
-                  <AnchorPane layoutX="25.0" layoutY="143.0" prefHeight="215.0" prefWidth="480.0">
+                  <AnchorPane layoutX="14.0" layoutY="83.0" prefHeight="241.0" prefWidth="473.0">
                      <children>
-                        <ScrollPane layoutX="-1.0" prefHeight="251.0" prefWidth="480.0" vbarPolicy="NEVER">
+                        <ScrollPane layoutX="-1.0" prefHeight="251.0" prefWidth="473.0" vbarPolicy="NEVER">
                            <content>
                               <HBox fx:id="sSTATISTICS" prefHeight="252.0" prefWidth="200.0" />
                            </content>
                         </ScrollPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="STATUSPANE12" layoutX="465.0" layoutY="-13.0" prefHeight="652.0" prefWidth="298.0" style="-fx-background-color: #FEFEFE;">
+                  <AnchorPane layoutX="498.0" prefHeight="654.0" prefWidth="270.0" style="-fx-background-color: #FEFEFE;">
                      <effect>
                         <DropShadow blurType="ONE_PASS_BOX" color="#00000053" height="4.875" radius="1.96875" width="5.0" />
                      </effect>
                      <children>
-                        <Line endX="118.0" endY="-1.52587890625E-5" layoutX="149.0" layoutY="102.0" startX="-130.0" startY="-1.52587890625E-5" stroke="#bfb8b896" />
-                        <ImageView fitHeight="230.0" fitWidth="272.0" layoutX="53.0" layoutY="423.0" opacity="0.57" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="230.0" fitWidth="260.0" layoutX="2.0" layoutY="397.0" opacity="0.6" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@WhatsApp%20Image%202020-01-13%20at%201.21.54%20PM.jpeg" />
+                              <Image url="@IMG_20200116_223854.jpg" />
                            </image>
                         </ImageView>
-                        <AnchorPane fx:id="tASKINFO1" layoutX="18.0" layoutY="105.0" visible="false">
-                           <children>
-                              <AnchorPane fx:id="iTEMCOMMENTs2" prefHeight="230.0" prefWidth="259.0" style="-fx-background-color: #fefefe;">
-                                 <children>
-                                    <Label fx:id="iTEMNAME2" layoutX="3.0" layoutY="14.0" prefHeight="36.0" prefWidth="50.0" text="Task">
-                                       <font>
-                                          <Font name="Calibri Bold" size="20.0" />
-                                       </font>
-                                    </Label>
-                                    <ScrollPane hbarPolicy="NEVER" layoutX="1.0" layoutY="80.0" prefHeight="144.0" prefWidth="259.0">
-                                       <content>
-                                          <VBox fx:id="cOMMENTS2" prefHeight="143.0" prefWidth="250.0" style="-fx-background-color: #fefefefe; -fx-background-radius: 4;" />
-                                       </content>
-                                    </ScrollPane>
-                                    <AnchorPane layoutY="50.0" prefHeight="27.0" prefWidth="250.0" style="-fx-background-color: #f0f1f5; -fx-background-radius: 5;">
-                                       <children>
-                                          <JFXTextField fx:id="ADDTASK12" focusColor="#b7bac3" layoutX="6.0" layoutY="1.0" prefHeight="25.0" prefWidth="235.0" promptText="Add comment" unFocusColor="#4d4d4d00">
-                                             <font>
-                                                <Font name="Calibri Light" size="12.0" />
-                                             </font>
-                                          </JFXTextField>
-                                       </children>
-                                    </AnchorPane>
-                                 </children>
-                              </AnchorPane>
-                              <Label layoutX="4.0" layoutY="252.0" prefHeight="36.0" prefWidth="146.0" text="Collaborators">
-                                 <font>
-                                    <Font name="Calibri Bold" size="20.0" />
-                                 </font>
-                              </Label>
-                              <ImageView fx:id="ADDCOLLAB1" fitHeight="21.0" fitWidth="17.0" layoutX="205.0" layoutY="262.0" opacity="0.68" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@icons8_plus_24px_1.png" />
-                                 </image>
-                              </ImageView>
-                              <JFXButton fx:id="NEWCOLLABORATOR1" layoutX="201.0" layoutY="258.0" onMouseClicked="#nav1" prefHeight="21.0" prefWidth="25.0" ripplerFill="BLACK" text=" " />
-                              <Line endX="118.0" endY="-1.52587890625E-5" layoutX="134.0" layoutY="237.0" startX="-130.0" startY="-1.52587890625E-5" stroke="#bfb8b896" />
-                              <ScrollPane fx:id="COLLABSCROLL1" hbarPolicy="NEVER" layoutX="11.0" layoutY="292.0" prefHeight="215.0" prefWidth="259.0">
-                                 <content>
-                                    <VBox fx:id="COLLABORATORS1" prefHeight="208.0" prefWidth="240.0" visible="false" />
-                                 </content>
-                              </ScrollPane>
-                           </children>
-                        </AnchorPane>
                      </children>
                   </AnchorPane>
+                  <AnchorPane layoutX="14.0" layoutY="403.0" prefHeight="222.0" prefWidth="473.0">
+                     <children>
+                        <ScrollPane layoutX="-2.0" prefHeight="241.0" prefWidth="473.0" vbarPolicy="NEVER">
+                           <content>
+                              <VBox fx:id="lISTSTATUS" prefHeight="249.0" prefWidth="469.0" />
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </AnchorPane>
+                  <Label layoutX="36.0" layoutY="353.0" prefHeight="36.0" prefWidth="64.0" text="Lists ">
+                     <font>
+                        <Font name="Calibri Bold" size="24.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
             <AnchorPane fx:id="REQUESTPANE" layoutX="259.0" layoutY="1.0" prefHeight="652.0" prefWidth="769.0" style="-fx-background-color: #FEFEFE;" visible="false">
@@ -439,31 +415,36 @@
                         <Font name="Calibri Bold" size="21.0" />
                      </font>
                   </Label>
-                  <ImageView fitHeight="25.0" fitWidth="17.0" layoutX="395.0" layoutY="59.0" opacity="0.55" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@icons8_more_26px_2.png" />
-                     </image>
-                  </ImageView>
                   <Label layoutX="35.0" layoutY="103.0" prefHeight="36.0" prefWidth="175.0" text="Collaboration requests">
                      <font>
                         <Font name="Calibri Bold" size="14.0" />
                      </font>
                   </Label>
-                  <Label layoutX="35.0" layoutY="305.0" prefHeight="36.0" prefWidth="175.0" text="Friend requests">
+                  <Label layoutX="35.0" layoutY="375.0" prefHeight="36.0" prefWidth="175.0" text="Friend requests">
                      <font>
                         <Font name="Calibri Bold" size="14.0" />
                      </font>
                   </Label>
-                  <ScrollPane fx:id="TASKSLISTSCROLL1" hbarPolicy="NEVER" layoutX="36.0" layoutY="141.0" prefHeight="166.0" prefWidth="411.0" style="-fx-background-color: #FEFEFE;">
+                  <ScrollPane fx:id="TASKSLISTSCROLL1" hbarPolicy="NEVER" layoutX="36.0" layoutY="151.0" prefHeight="207.0" prefWidth="283.0" style="-fx-background-color: #FEFEFE;">
                      <content>
-                        <VBox fx:id="TASKLISTS1" prefHeight="164.0" prefWidth="413.0" style="-fx-background-color: #fefefe;" />
+                        <VBox fx:id="TASKLISTS1" prefHeight="164.0" prefWidth="267.0" style="-fx-background-color: #fefefe;" />
                      </content>
                   </ScrollPane>
-                  <ScrollPane fx:id="TASKSLISTSCROLL11" hbarPolicy="NEVER" layoutX="36.0" layoutY="356.0" prefHeight="206.0" prefWidth="411.0" style="-fx-background-color: #FEFEFE;">
+                  <ScrollPane fx:id="TASKSLISTSCROLL11" hbarPolicy="NEVER" layoutX="28.0" layoutY="411.0" prefHeight="206.0" prefWidth="411.0" style="-fx-background-color: #FEFEFE;">
                      <content>
                         <VBox fx:id="TASKLISTS11" prefHeight="205.0" prefWidth="413.0" style="-fx-background-color: #fefefe;" />
                      </content>
                   </ScrollPane>
+                  <ScrollPane fx:id="TASKSLISTSCROLL111" hbarPolicy="NEVER" layoutX="395.0" layoutY="151.0" prefHeight="207.0" prefWidth="283.0" style="-fx-background-color: #FEFEFE;">
+                     <content>
+                        <VBox fx:id="Taskreq" prefHeight="205.0" prefWidth="271.0" style="-fx-background-color: #fefefe;" />
+                     </content>
+                  </ScrollPane>
+                  <Label layoutX="395.0" layoutY="99.0" prefHeight="36.0" prefWidth="175.0" text="Task assignment requests">
+                     <font>
+                        <Font name="Calibri Bold" size="14.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
             <ImageView fitHeight="17.0" fitWidth="17.0" layoutX="989.0" layoutY="14.0" onMouseClicked="#exit" opacity="0.59" pickOnBounds="true" preserveRatio="true">
@@ -480,7 +461,7 @@
             <JFXButton fx:id="MINIMIZE" layoutX="954.0" layoutY="10.0" prefHeight="25.0" prefWidth="25.0" ripplerFill="#f0eb3e" text=" " />
             <AnchorPane fx:id="NOTIFIPANE" layoutX="116.0" layoutY="179.0" prefHeight="314.0" prefWidth="350.0" style="-fx-background-color: #FEFEFE; -fx-background-radius: 5;" visible="false">
                <children>
-                  <ScrollPane hbarPolicy="NEVER" layoutX="6.0" prefHeight="314.0" prefWidth="332.0">
+                  <ScrollPane fx:id="nOTIFISCROLL" hbarPolicy="NEVER" layoutX="6.0" prefHeight="314.0" prefWidth="332.0">
                      <content>
                         <AnchorPane prefWidth="319.0">
                            <children>
@@ -528,65 +509,6 @@
                   <Circle fx:id="GREEN" fill="#70ae3a" layoutX="213.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
                   <Circle fx:id="ORANGE" fill="#f87110" layoutX="252.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
                   <Circle fx:id="RED" fill="#ff1c07" layoutX="291.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
-               </children>
-            </AnchorPane>
-
-                        <AnchorPane fx:id="eDITLISTAP" layoutX="324.0" layoutY="132.0" prefHeight="206.0" prefWidth="350.0" style="-fx-background-color: #FEFEFE; -fx-background-radius: 5;" visible="false">
-         <effect>
-            <DropShadow blurType="TWO_PASS_BOX" color="#6f6868c9" />
-         </effect>
-         <children>
-            <Label fx:id="LABELADDEDIT2" layoutX="10.0" layoutY="10.0" text="EDIT List">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-  
-                                    <AnchorPane layoutX="17.0" layoutY="49.0" prefHeight="44.0" prefWidth="316.0" style="-fx-background-color: #f0f1f5; -fx-background-radius: 5; -fx-border-color: #6c80d0; -fx-border-radius: 5; -fx-border-width: 2;">
-                     <children>
-                        <JFXTextField fx:id="NEWTODOTITLE1" focusColor="#f0f1f5" layoutX="7.0" layoutY="6.0" prefHeight="30.0" prefWidth="260.0" promptText="Title" style="-fx-background-color: #f0f1f5; -fx-background-radius: 4;" unFocusColor="#f0f1f5">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </JFXTextField>
-                        <ImageView fitHeight="17.0" fitWidth="44.0" layoutX="276.0" layoutY="14.0" opacity="0.59" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@icons8_calendar_filled_50px.png" />
-                           </image>
-                        </ImageView>
-                        <JFXButton fx:id="ADDDATE1" layoutX="268.0" layoutY="9.0" onMouseClicked="#nav1" prefHeight="25.0" prefWidth="33.0" text=" " />
-                     </children>
-                  </AnchorPane>
-                  <JFXButton fx:id="SAVELIST1" layoutX="162.0" layoutY="170.0" onMouseClicked="#updateTodoListRequest" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #3b8ef4;" text="Save" textFill="#fffbfb" />
-                  <JFXButton fx:id="CANCELLIST1" layoutX="252.0" layoutY="170.0" onMouseClicked="#nav1" prefHeight="25.0" prefWidth="78.0" style="-fx-background-color: #f0f1f5;" text="Cancel" />
-                  <Circle fx:id="BLUE1" fill="DODGERBLUE" layoutX="55.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
-                  <Circle fx:id="PURPLE1" fill="#b022c9" layoutX="94.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
-                  <Circle fx:id="PINK1" fill="#f220ac" layoutX="133.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
-                  <Circle fx:id="YELLOW1" fill="#ffc41f" layoutX="173.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
-                  <Circle fx:id="GREEN1" fill="#70ae3a" layoutX="213.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
-                  <Circle fx:id="ORANGE1" fill="#f87110" layoutX="252.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
-                  <Circle fx:id="RED1" fill="#ff1c07" layoutX="291.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
-               </children>
-            </AnchorPane>
-            <AnchorPane fx:id="DATEPANE" layoutX="571.0" layoutY="137.0" prefHeight="230.0" prefWidth="167.0" style="-fx-background-color: #fefefe; -fx-background-radius: 5;" visible="false">
-               <effect>
-                  <DropShadow color="#000000c2" />
-               </effect>
-               <children>
-                  <JFXDatePicker fx:id="STARTDATE" defaultColor="#a4a8a7" layoutX="18.0" layoutY="50.0" prefHeight="25.0" prefWidth="135.0" promptText="dd/mm/yy" />
-                  <JFXDatePicker fx:id="ENDDATE" defaultColor="#a4a8a7" layoutX="19.0" layoutY="142.0" prefHeight="25.0" prefWidth="135.0" promptText="dd/mm/yy" />
-                  <Label layoutX="14.0" layoutY="21.0" text="Start Date">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="15.0" layoutY="105.0" text="Endt Date">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </Label>
-                  <JFXButton fx:id="SAVEDATE" layoutX="22.0" layoutY="191.0" onMouseClicked="#nav1" prefHeight="25.0" prefWidth="57.0" style="-fx-background-color: #3b8ef4;" text="Save" textFill="#fffbfb" />
-                  <JFXButton fx:id="CLEARDATE" layoutX="88.0" layoutY="191.0" onMouseClicked="#nav1" prefHeight="25.0" prefWidth="57.0" style="-fx-background-color: #f0f1f5;" text="Clear" />
                </children>
             </AnchorPane>
             <AnchorPane fx:id="ADDFRIENDPANE" layoutX="324.0" layoutY="131.0" prefHeight="230.0" prefWidth="332.0" style="-fx-background-color: #FEFEFE; -fx-background-radius: 5;" visible="false">
@@ -659,6 +581,84 @@
                      </children>
                   </AnchorPane>
                   <JFXButton fx:id="DONEADDCOLLABORATOR" layoutX="270.0" layoutY="389.0" onMouseClicked="#nav1" prefHeight="31.0" prefWidth="66.0" style="-fx-background-color: #3b8ef4;" text="Done" textFill="#fffbfb" />
+               </children>
+            </AnchorPane>
+
+      <AnchorPane fx:id="eDITLISTAP" layoutX="324.0" layoutY="132.0" prefHeight="206.0" prefWidth="350.0" style="-fx-background-color: #FEFEFE; -fx-background-radius: 5;" visible="false">
+         <effect>
+            <DropShadow blurType="TWO_PASS_BOX" color="#6f6868c9" />
+         </effect>
+         <children>
+            <Label fx:id="LABELADDEDIT2" layoutX="10.0" layoutY="10.0" text="EDIT List">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+  
+                  <AnchorPane layoutX="17.0" layoutY="49.0" prefHeight="44.0" prefWidth="316.0" style="-fx-background-color: #f0f1f5; -fx-background-radius: 5; -fx-border-color: #6c80d0; -fx-border-radius: 5; -fx-border-width: 2;">
+                     <children>
+                        <JFXTextField fx:id="NEWTODOTITLE1" focusColor="#f0f1f5" layoutX="7.0" layoutY="6.0" prefHeight="30.0" prefWidth="260.0" promptText="Title" style="-fx-background-color: #f0f1f5; -fx-background-radius: 4;" unFocusColor="#f0f1f5">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </JFXTextField>
+                        <ImageView fitHeight="17.0" fitWidth="44.0" layoutX="276.0" layoutY="14.0" opacity="0.59" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons8_calendar_filled_50px.png" />
+                           </image>
+                        </ImageView>
+                        <JFXButton fx:id="ADDDATE1" layoutX="268.0" layoutY="9.0" onMouseClicked="#nav1" prefHeight="25.0" prefWidth="33.0" text=" " />
+                     </children>
+                  </AnchorPane>
+                  <JFXButton fx:id="SAVELIST1" layoutX="162.0" layoutY="170.0" onMouseClicked="#createTodoListRequest" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #3b8ef4;" text="Save" textFill="#fffbfb" />
+                  <JFXButton fx:id="CANCELLIST1" layoutX="252.0" layoutY="170.0" onMouseClicked="#nav1" prefHeight="25.0" prefWidth="78.0" style="-fx-background-color: #f0f1f5;" text="Cancel" />
+                  <Circle fx:id="BLUE1" fill="DODGERBLUE" layoutX="55.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+                  <Circle fx:id="PURPLE1" fill="#b022c9" layoutX="94.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+                  <Circle fx:id="PINK1" fill="#f220ac" layoutX="133.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+                  <Circle fx:id="YELLOW1" fill="#ffc41f" layoutX="173.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+                  <Circle fx:id="GREEN1" fill="#70ae3a" layoutX="213.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+                  <Circle fx:id="ORANGE1" fill="#f87110" layoutX="252.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+                  <Circle fx:id="RED1" fill="#ff1c07" layoutX="291.0" layoutY="121.0" onMouseClicked="#setTodoColor" radius="12.0" stroke="#00000003" strokeType="INSIDE" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="DATEPANE" layoutX="571.0" layoutY="137.0" prefHeight="230.0" prefWidth="167.0" style="-fx-background-color: #fefefe; -fx-background-radius: 5;" visible="false">
+               <effect>
+                  <DropShadow color="#000000c2" />
+               </effect>
+               <children>
+                  <JFXDatePicker fx:id="STARTDATE" defaultColor="#a4a8a7" layoutX="18.0" layoutY="50.0" prefHeight="25.0" prefWidth="135.0" promptText="dd/mm/yy" />
+                  <JFXDatePicker fx:id="ENDDATE" defaultColor="#a4a8a7" layoutX="19.0" layoutY="142.0" prefHeight="25.0" prefWidth="135.0" promptText="dd/mm/yy" />
+                  <Label layoutX="14.0" layoutY="21.0" text="Start Date">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="15.0" layoutY="105.0" text="Endt Date">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <JFXButton fx:id="SAVEDATE" layoutX="22.0" layoutY="191.0" onMouseClicked="#nav1" prefHeight="25.0" prefWidth="57.0" style="-fx-background-color: #3b8ef4;" text="Save" textFill="#fffbfb" />
+                  <JFXButton fx:id="CLEARDATE" layoutX="88.0" layoutY="191.0" onMouseClicked="#nav1" prefHeight="25.0" prefWidth="57.0" style="-fx-background-color: #f0f1f5;" text="Clear" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="cONNECTIONLOST" layoutX="334.0" layoutY="142.0" prefHeight="166.0" prefWidth="350.0" style="-fx-background-color: #FEFEFE; -fx-background-radius: 5;" visible="false">
+               <effect>
+                  <DropShadow blurType="TWO_PASS_BOX" color="#6f6868c9" />
+               </effect>
+               <children>
+                  <Label fx:id="LABELADDEDIT21" layoutX="41.0" layoutY="33.0" text="Connection lost">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <JFXButton fx:id="rETRYCONNECTION" layoutX="252.0" layoutY="131.0" onMouseClicked="#retryConnection" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #3b8ef4;" text="Ok" textFill="#fffbfb" />
+                  <ImageView fitHeight="60.0" fitWidth="74.0" layoutX="231.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons8_error_100px.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="41.0" layoutY="86.0" text="Check your connection and try again" />
                </children>
             </AnchorPane>
          </children>

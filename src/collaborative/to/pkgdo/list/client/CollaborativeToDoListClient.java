@@ -68,25 +68,12 @@ public class CollaborativeToDoListClient extends Application {
         //sc.connect();
         //AuthenticationController authenticationController = new AuthenticationController();
         //authenticationController.logIn("ReeeEzzat", "123");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                isConnectedToServer = SocketController.getInstance().connect();
-                while(!isConnectedToServer){
-                    try {
-                        
-                        Thread.sleep(1000);
-                        System.out.println("Server is closeddd"); 
-                        isConnectedToServer = SocketController.getInstance().connect();
-                        
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            }
-        }).start();
-            
-        //ToDoListController tlc = new ToDoListController();
+
+//       try{ 
+//           SocketController.getInstance().connect();
+//          }catch(Exception e)
+//       {System.out.println("catching exeption");}
+//        //ToDoListController tlc = new ToDoListController();
         //tlc.createToDoList(new ToDoEntity("New list", new Date(), new Date(), 11, 1, "0xcc3333ff")); 
         launch(args);
     }
