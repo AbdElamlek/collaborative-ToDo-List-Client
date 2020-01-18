@@ -36,7 +36,7 @@ public class ItemCreationHandler implements ActionHandler{
             if(!jsonObject.isNull("entity")){
                 String todoJsonObject  = jsonObject.getJSONObject("entity").toString();
                 ItemEntity item = gson.fromJson(todoJsonObject, ItemEntity.class);
-                currentToDo.getItemsList().add(item);
+                //currentToDo.getItemsList().add(item);
                 
                 if(itemGUIGenerator != null){
                     itemGUIGenerator.accept(item);

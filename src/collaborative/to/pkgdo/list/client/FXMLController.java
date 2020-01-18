@@ -26,6 +26,7 @@ import Handlers.AcceptCollaboratorRequestHandler;
 import Entities.TaskEntity;
 import Entities.ToDoEntity;
 import Entities.UserEntity;
+import Handlers.CollaboratorRequestHandler;
 import Handlers.FriendStatusHandler;
 import Handlers.ItemDeletionHandler;
 import Handlers.ItemUpdateHandler;
@@ -249,7 +250,16 @@ public class FXMLController implements Initializable {
         NEWCOLLABORATOR.setDisable(true);
         ADDCOLLABORATORPANE.setDisable(true);
     }
+     
+    @FXML
+    public void nav3(MouseEvent event) {
 
+        if (event.getSource() == aDDCOLAB ) {
+            
+             ADDCOLLABORATORPANE.setVisible(true);
+        }
+    }
+    
     @FXML
     public void nav(MouseEvent event) {
 
@@ -437,7 +447,10 @@ public class FXMLController implements Initializable {
 //}
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        /*eman*/
         NotificationHandler.setNotificationGUIGenerator(this::createNotificationResponse);
+        CollaboratorRequestHandler.setCollaborationRequestGUIGenerator(this::createCollaboratorRequestResponse);
+        /*eman*/
         /*REHAM*/
         ToDoCreationHandler.setTodoGUIGenerator(this::createTodoListResponse);
         ToDoUpdateHandler.setTodoGUIModifier(this::updateTodoListResponse);
@@ -461,10 +474,10 @@ public class FXMLController implements Initializable {
               itemEntity.setTitle(ADDTASK.getText());
               itemEntity.setDecription("descriotion");
               itemEntity.setTodoId(currentToDo.getId());
-              Item i = new Item(itemEntity);
+              //Item i = new Item(itemEntity);
              //TASKLISTS.getPanes().add(i);
              try{
-             //CurrentUser.getCurrentUser().getTodoList().get(CurrentUser.getCurrentUser().getTodoList().indexOf(currentToDo)).getItemsList().add(itemEntity);
+              //CurrentUser.getCurrentUser().getTodoList().get(CurrentUser.getCurrentUser().getTodoList().indexOf(currentToDo)).getItemsList().add(itemEntity);
              }catch(Exception e){
                  e.printStackTrace();
              }
@@ -616,6 +629,12 @@ public class FXMLController implements Initializable {
             NOTIFICATIONS.getChildren().add(new Notification(ne));
         });
     }
+    
+    public void createCollaboratorRequestResponse(CollaborationRequestEntity cre) {
+        Platform.runLater(() -> {
+            TASKLISTS1.getChildren().add(new CollaborationRequest(cre));
+        });
+    }
 
 
     class Friendtoadd extends AnchorPane {
@@ -633,7 +652,16 @@ public class FXMLController implements Initializable {
             label = new Label();
             imageView0 = new ImageView();
             aDDCOLL = new JFXButton();
-
+            aDDCOLL.setOnMouseClicked((MouseEvent event) -> {
+                int collaboratorId=friend.getId();
+                int senderId=CurrentUser.getCurrentUser().getId();
+                int todoId=currentlyViewedTodoList.getTodo().getId();
+                CollaboratorController c=new CollaboratorController();
+                c.addCollaboratorRequest(collaboratorId,senderId, todoId);
+                aDDCOLL.setDisable(true);
+                
+            });
+            aDDCOLL.setPrefWidth(4.0);
             setMaxHeight(USE_PREF_SIZE);
             setMaxWidth(USE_PREF_SIZE);
             setMinHeight(USE_PREF_SIZE);
@@ -1020,7 +1048,7 @@ public class FXMLController implements Initializable {
         
          delete.setOnAction((event) -> {
              if(currentToDo.getOwnerId() == currentUser.getId()){
-                currentToDo.getItemsList().remove(itemEntity);
+                deleteItem(itemEntity);
                 itemController.deleteItem(itemEntity);
                 }
             });
@@ -1096,6 +1124,7 @@ public class FXMLController implements Initializable {
         anchorPane.getChildren().add(label);
         anchorPane.getChildren().add(line);
         anchorPane.getChildren().add(line0);
+        
         anchorPane0.getChildren().add(vBox);
         
         
@@ -1103,6 +1132,7 @@ public class FXMLController implements Initializable {
         
             
         });
+        label.setContextMenu(menu);
         //TaskEntity taskEntity = new TaskEntity();
         //taskEntity.setDecription("desc");
         //addTask(taskEntity);
@@ -1223,7 +1253,7 @@ public class FXMLController implements Initializable {
 public void createItemResponse(ItemEntity item){
             Platform.runLater(() ->  {
                 addItem(item);
-    //            currentToDo.getItemsList().add(item);
+                currentToDo.getItemsList().add(item);
             });
     }
 
@@ -1243,23 +1273,22 @@ public  void addTask(TaskEntity taskEntity){
        Item item = new Item(itemEntity);
        TASKLISTS.getPanes().add(item);
        
+       
    }
-   private void deleteItem(ItemEntity itemEntity){
-        TASKLISTS.getPanes().remove(this);
-        currentToDo.getItemsList().remove(itemEntity);
-   }
+   private void deleteItem(ItemEntity itemEntity) {
+            TASKLISTS.getPanes().remove(this);
+        }
    
-   private void deleteItemResponse(ItemEntity itemEntity){
-   
-       for(int i=0; i< TASKLISTS.getPanes().size();i++){
-          Item i1 = (Item) TASKLISTS.getPanes().get(i);
-          if(itemEntity.getId() == i1.itemId){
-              TASKLISTS.getPanes().remove(i1);
-              currentToDo.getItemsList().remove(itemEntity);
-              break;
-          }
-       }
-   }
+   private void deleteItemResponse(ItemEntity itemEntity) {
+
+            for (int i = 0; i < TASKLISTS.getPanes().size(); i++) {
+                Item i1 = (Item) TASKLISTS.getPanes().get(i);
+                if (itemEntity.getId() == i1.itemId) {
+                    TASKLISTS.getPanes().remove(i1);
+                    break;
+                }
+            }
+        }
    
    private void updateItemResponse(ItemEntity itemEntity){
        for(int i=0; i< TASKLISTS.getPanes().size();i++){
@@ -1498,7 +1527,7 @@ public  void addTask(TaskEntity taskEntity){
 
             label.setLayoutX(54.0);
             label.setLayoutY(17.0);
-            label.setText("My Todo");
+            label.setText(collaborationRequest.getMessage());
             label.setPrefWidth(152);
             label.prefHeight(21);
 
@@ -1616,6 +1645,13 @@ public  void addTask(TaskEntity taskEntity){
                 TaskAssignmentRequest taskAssignmentRequest = new TaskAssignmentRequest(arte);
                 Taskreq.getChildren().add(taskAssignmentRequest);
             }
+        
+        if(currentUser.getNotificationList() !=null){
+            for(NotificationEntity ne:currentUser.getNotificationList()){
+                Notification notification=new Notification(ne);
+                NOTIFICATIONS.getChildren().add(notification);
+            }
+        }
     } 
     public void acceptTodoCollaborationResponse(UserEntity collaborator, int todoId){
         System.out.println("in acceptTodoCollaborationResponse");

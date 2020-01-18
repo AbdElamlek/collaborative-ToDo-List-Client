@@ -6,6 +6,7 @@ import Entities.ToDoEntity;
 import Controllers.CollaboratorController;
 import Controllers.SocketController;
 import Entities.UserEntity;
+import Handlers.SignUpHandler;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -87,6 +88,7 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void SignUp(MouseEvent event) {
+        authenticationController = new AuthenticationController();
         String email = "eman@gmail.com";
         String password = PasswordText1.getText();
         String cpassword = ConfirmText1.getText();
@@ -264,7 +266,7 @@ public class FXMLDocumentController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         LoginHandler.setMainPageNavigator(this::navigateToMainPage);
         LoginHandler.setNotvalidlogin(this::showNotValid);
-        
+        //SignUpHandler.setLoginPageNavigator(this::);
 //        LoginHandler.setNotvalidlogin(this::);
         LOGINPANE.setVisible(true);
         SIGNUPPANE.setVisible(false);
