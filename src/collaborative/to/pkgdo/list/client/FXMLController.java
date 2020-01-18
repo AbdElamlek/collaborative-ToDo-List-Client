@@ -472,10 +472,10 @@ public class FXMLController implements Initializable {
               itemEntity.setTitle(ADDTASK.getText());
               itemEntity.setDecription("descriotion");
               itemEntity.setTodoId(currentToDo.getId());
-              Item i = new Item(itemEntity);
+              //Item i = new Item(itemEntity);
              //TASKLISTS.getPanes().add(i);
              try{
-             //CurrentUser.getCurrentUser().getTodoList().get(CurrentUser.getCurrentUser().getTodoList().indexOf(currentToDo)).getItemsList().add(itemEntity);
+              //CurrentUser.getCurrentUser().getTodoList().get(CurrentUser.getCurrentUser().getTodoList().indexOf(currentToDo)).getItemsList().add(itemEntity);
              }catch(Exception e){
                  e.printStackTrace();
              }
@@ -1046,7 +1046,7 @@ public class FXMLController implements Initializable {
         
          delete.setOnAction((event) -> {
              if(currentToDo.getOwnerId() == currentUser.getId()){
-                currentToDo.getItemsList().remove(itemEntity);
+                deleteItem(itemEntity);
                 itemController.deleteItem(itemEntity);
                 }
             });
@@ -1122,6 +1122,7 @@ public class FXMLController implements Initializable {
         anchorPane.getChildren().add(label);
         anchorPane.getChildren().add(line);
         anchorPane.getChildren().add(line0);
+        
         anchorPane0.getChildren().add(vBox);
         
         
@@ -1129,6 +1130,7 @@ public class FXMLController implements Initializable {
         
             
         });
+        label.setContextMenu(menu);
         //TaskEntity taskEntity = new TaskEntity();
         //taskEntity.setDecription("desc");
         //addTask(taskEntity);
@@ -1249,7 +1251,7 @@ public class FXMLController implements Initializable {
 public void createItemResponse(ItemEntity item){
             Platform.runLater(() ->  {
                 addItem(item);
-    //            currentToDo.getItemsList().add(item);
+                currentToDo.getItemsList().add(item);
             });
     }
 
@@ -1269,23 +1271,22 @@ public  void addTask(TaskEntity taskEntity){
        Item item = new Item(itemEntity);
        TASKLISTS.getPanes().add(item);
        
+       
    }
-   private void deleteItem(ItemEntity itemEntity){
-        TASKLISTS.getPanes().remove(this);
-        currentToDo.getItemsList().remove(itemEntity);
-   }
+   private void deleteItem(ItemEntity itemEntity) {
+            TASKLISTS.getPanes().remove(this);
+        }
    
-   private void deleteItemResponse(ItemEntity itemEntity){
-   
-       for(int i=0; i< TASKLISTS.getPanes().size();i++){
-          Item i1 = (Item) TASKLISTS.getPanes().get(i);
-          if(itemEntity.getId() == i1.itemId){
-              TASKLISTS.getPanes().remove(i1);
-              currentToDo.getItemsList().remove(itemEntity);
-              break;
-          }
-       }
-   }
+   private void deleteItemResponse(ItemEntity itemEntity) {
+
+            for (int i = 0; i < TASKLISTS.getPanes().size(); i++) {
+                Item i1 = (Item) TASKLISTS.getPanes().get(i);
+                if (itemEntity.getId() == i1.itemId) {
+                    TASKLISTS.getPanes().remove(i1);
+                    break;
+                }
+            }
+        }
    
    private void updateItemResponse(ItemEntity itemEntity){
        for(int i=0; i< TASKLISTS.getPanes().size();i++){
