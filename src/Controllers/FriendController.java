@@ -5,7 +5,6 @@
  */
 package Controllers;
 
-import ControllerBase.FriendIntrface;
 import Entities.EntityWrapper;
 import Entities.RequestEntity;
 import Entities.UserEntity;
@@ -15,29 +14,26 @@ import java.sql.Date;
  *
  * @author ahmedpro
  */
-public class FriendController implements FriendIntrface {
+public class FriendController {
 
-    private AdapterController adapterController;
-    private SocketController socketController;
-
-    public FriendController() {
-        adapterController = new AdapterController();
-        socketController = SocketController.getInstance();
+    private FriendController() {
     }
 
-    @Override
-    public void searchFriend(String userName) {
+    public static void searchFriend(String userName) {
+        AdapterController adapterController = new AdapterController();
+        SocketController socketController = SocketController.getInstance();
         UserEntity userEntity = new UserEntity();
         userEntity.setUserName(userName);
-        EntityWrapper entityWrapper = 
-                new EntityWrapper("searchFriend", "UserEntity", userEntity);
+        EntityWrapper entityWrapper
+                = new EntityWrapper("searchFriend", "UserEntity", userEntity);
         String entityWrapperJson = adapterController.entity2Json(entityWrapper);
         socketController.sendJsonObject(entityWrapperJson);
     }
 
-    @Override
-    public void addFreind(int sentUserId, int receivedUserId) {
+    public static void addFreind(int sentUserId, int receivedUserId) {
         try {
+            AdapterController adapterController = new AdapterController();
+            SocketController socketController = SocketController.getInstance();
             RequestEntity requestEntity = new RequestEntity();
             requestEntity.setSentUserId(sentUserId);
             requestEntity.setReceivedUserId(receivedUserId);
@@ -50,9 +46,10 @@ public class FriendController implements FriendIntrface {
         }
     }
 
-    @Override
-    public void deleteFreind(int sentUserId, int receivedUserId) {
+    public static void deleteFreind(int sentUserId, int receivedUserId) {
         try {
+            AdapterController adapterController = new AdapterController();
+            SocketController socketController = SocketController.getInstance();
             RequestEntity requestEntity = new RequestEntity();
             requestEntity.setSentUserId(sentUserId);
             requestEntity.setReceivedUserId(receivedUserId);
@@ -64,9 +61,10 @@ public class FriendController implements FriendIntrface {
         }
     }
 
-    @Override
-    public void acceptFriendReauest(int sentUserId, int receivedUserId) {
+    public static void acceptFriendReauest(int sentUserId, int receivedUserId) {
         try {
+            AdapterController adapterController = new AdapterController();
+            SocketController socketController = SocketController.getInstance();
             RequestEntity requestEntity = new RequestEntity();
             requestEntity.setSentUserId(sentUserId);
             requestEntity.setReceivedUserId(receivedUserId);
@@ -78,9 +76,10 @@ public class FriendController implements FriendIntrface {
         }
     }
 
-    @Override
-    public void declineFriendReauest(int sentUserId, int receivedUserId) {
+    public static void declineFriendReauest(int sentUserId, int receivedUserId) {
         try {
+            AdapterController adapterController = new AdapterController();
+            SocketController socketController = SocketController.getInstance();
             RequestEntity requestEntity = new RequestEntity();
             requestEntity.setSentUserId(sentUserId);
             requestEntity.setReceivedUserId(receivedUserId);

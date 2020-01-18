@@ -8,6 +8,7 @@ package Handlers;
 import ControllerBase.ActionHandler;
 import Entities.UserEntity;
 import com.google.gson.Gson;
+import java.util.function.Consumer;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,6 +17,12 @@ import org.json.JSONObject;
  * @author ahmedpro
  */
 public class SearchFriendHandler implements ActionHandler {
+    
+    private static Consumer<UserEntity> consumer;
+    
+    public static void setSearchingResultGUI(Consumer<UserEntity> mConsumer) {
+        consumer = mConsumer;
+    }
 
     @Override
     public void handleAction(String responseJsonObject) {
@@ -24,19 +31,8 @@ public class SearchFriendHandler implements ActionHandler {
             JSONObject jsonObject = new JSONObject(responseJsonObject);
             String userEntityJson = jsonObject.getJSONObject("entity").toString();
             UserEntity userEntity = gson.fromJson(userEntityJson, UserEntity.class);
-            switch (userEntity.getId()) {
-                case -1:
-                    System.out.println("the user name is not exist");
-                    break;
-                case -2:
-                    System.out.println("the user is already exist in your list");
-                    break;
-                case -3:
-                    System.out.println("its your user name");
-                    break;
-                default:
-                    System.out.println("the user name is => " + userEntity.getId());
-                    break;
+            if (consumer != null) {
+                consumer.accept(userEntity);
             }
         } catch (JSONException ex) {
             System.out.println(ex);

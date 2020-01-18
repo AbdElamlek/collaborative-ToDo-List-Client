@@ -13,6 +13,7 @@ import Entities.ItemEntity;
 import Controllers.CollaboratorController;
 import Controllers.ToDoListController;
 import Entities.CollaborationRequestEntity;
+import Entities.FriendRequestEntity;
 import Entities.ItemEntity;
 import Entities.ToDoEntity;
 import Entities.UserEntity;
@@ -20,8 +21,10 @@ import Handlers.AcceptCollaboratorRequestHandler;
 import Entities.TaskEntity;
 import Entities.ToDoEntity;
 import Entities.UserEntity;
+import Handlers.AddFriendHandler;
 import Handlers.ItemDeletionHandler;
 import Handlers.ItemUpdateHandler;
+import Handlers.SearchFriendHandler;
 import Handlers.TaskCreationHandler;
 import Handlers.ToDoCreationHandler;
 import Handlers.ToDoDeleteHandler;
@@ -80,6 +83,7 @@ import javafx.scene.paint.Color;
 public class FXMLController implements Initializable {
 
     UserEntity currentUser;
+    UserEntity searchingEntityResult;
     ItemController itemController = new ItemController();
     ArrayList<Integer> itemsIndecies;
     int itemsCounter = 0;
@@ -132,6 +136,7 @@ public class FXMLController implements Initializable {
     public JFXButton nEWLIST;
     public JFXButton ADDDATE;
     public JFXButton DATEPICK;
+    public JFXButton nEWFRIEND;
 
     public AnchorPane TODOPANE;
     public AnchorPane LISTPANE;
@@ -143,6 +148,17 @@ public class FXMLController implements Initializable {
     public AnchorPane DATEPANE;
     public AnchorPane ADDLISTPANE;
     public AnchorPane ADDCOLLABORATORPANE;
+
+    /* ahmedpro */
+    @FXML
+    public AnchorPane addFriendPane;
+    public JFXButton doneAddFriendPane;
+    public JFXTextField textFieldAddFriend;
+    public AnchorPane addFriendResult;
+    public Label friendName;
+    public JFXButton addFriendButton;
+    public Label addFriendFailedLabel;
+    /* ahmedpro */
 
     public JFXButton REQUESTS;
     public JFXButton TODAY;
@@ -194,6 +210,8 @@ public class FXMLController implements Initializable {
 
         NEWCOLLABORATOR.setDisable(true);
         ADDCOLLABORATORPANE.setDisable(true);
+        nEWFRIEND.setDisable(true);
+        addFriendPane.setDisable(true);
     }
 
     @FXML
@@ -236,8 +254,6 @@ public class FXMLController implements Initializable {
     public void nav1(MouseEvent event) {
 
         if (event.getSource() == nEWLIST) {
-            Controllers.FriendController fc = new FriendController();
-            fc.addFreind(3, 4);
             ADDLISTPANE.setVisible(true);
         } else if (event.getSource() == CLEARDATE) {
             STARTDATE.setValue(null);
@@ -268,8 +284,35 @@ public class FXMLController implements Initializable {
         } else if (event.getSource() == ADDDATE) {
 
             DATEPANE.setVisible(true);
+        } else if (event.getSource() == nEWFRIEND) {
+            addFriendPane.setVisible(true);
+            SearchFriendHandler.setSearchingResultGUI(this::updateSearchingResultGUI);
+            AddFriendHandler.setAddFriendGUI(this::updateAddFriendGUI);
+        } else if (event.getSource() == doneAddFriendPane) {
+            addFriendFailedLabel.setVisible(false);
+            addFriendResult.setVisible(false);
+            addFriendPane.setVisible(false);
+        } else if (event.getSource() == addFriendButton) {
+            FriendController.addFreind(currentUser.getId(), searchingEntityResult.getId());
         }
 
+    }
+
+    @FXML
+    public void nav3(ActionEvent event) {
+        if (event.getSource() == textFieldAddFriend) {
+            String userName = textFieldAddFriend.getText();
+            if (userName.equals(currentUser.getUserName())) {
+                
+                addFriendFailedLabel.setVisible(true);
+                addFriendFailedLabel.setText("it's your user name");
+            } else if (hasUserName(userName)) {
+                addFriendFailedLabel.setVisible(true);
+                addFriendFailedLabel.setText("you have a friend with that user name");
+            } else {
+                FriendController.searchFriend(userName);
+            }
+        }
     }
 
     @FXML
@@ -685,7 +728,6 @@ public class FXMLController implements Initializable {
         private boolean isOwnedByCurrentUser = false;
         protected Label label;
         VBox TODOCOLLABORATORS; // create "collaborator" and attach them to this, Collaborator(UserEntity)
-        VBox FRIENDSTOADDASCOLLABORATORS;
         VBox TODOITEMSLIST;
 
         List<Integer> collaboratorsIds = new ArrayList<Integer>();
@@ -730,7 +772,7 @@ public class FXMLController implements Initializable {
             label.setContextMenu(menu);
 
             TODOCOLLABORATORS = new VBox();
-            FRIENDSTOADDASCOLLABORATORS = new VBox();
+            VBox FRIENDSTOADDASCOLLABORATORS = new VBox();
             TODOITEMSLIST = new VBox();
 
             if (todo.getCollaboratorList() != null) {
@@ -1159,7 +1201,116 @@ public class FXMLController implements Initializable {
         }
     }
 
-    /*REHAM*/
+    /**
+     * Check if the friend list has that user name
+     *
+     * @param userName the user name
+     * @return true if there is user name with that user name else return false
+     */
+    public boolean hasUserName(String userName) {
+        for (int i = 0; i < currentUser.getFriendList().size(); i++) {
+            if (currentUser.getFriendList().get(i).getUserName().equals(userName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void updateSearchingResultGUI(UserEntity userEntity) {
+        Platform.runLater(() -> {
+            if (userEntity.getId() == -1) {
+                addFriendResult.setVisible(false);
+                addFriendFailedLabel.setVisible(true);
+                addFriendFailedLabel.setText("incorrect user name!");
+            } else {
+                searchingEntityResult = userEntity;
+                addFriendFailedLabel.setVisible(false);
+                addFriendResult.setVisible(true);
+                friendName.setText(userEntity.getUserName());
+            }
+        });
+    }
+
+    public void updateAddFriendGUI(FriendRequestEntity fre) {
+        Platform.runLater(() -> {
+            switch (fre.getId()) {
+                case -1:
+                    addFriendFailedLabel.setVisible(true);
+                    addFriendFailedLabel.setText("your request is already sent!");
+                    addFriendResult.setVisible(false);
+                    break;
+                case -2:
+                    addFriendFailedLabel.setVisible(true);
+                    addFriendFailedLabel.setText("you already have a friend request from that user!");
+                    addFriendResult.setVisible(false);
+                    System.out.println();
+                    break;
+                default:
+                    // add request here
+                    break;
+            }
+        });
+    }
+    
+   /*class FriendRequestItem extends AnchorPane {
+    protected final Label friendUserName;
+    protected final JFXButton acceptButton;
+    protected final JFXButton declineButton;
+    private FriendRequestEntity fre;
+
+    public FriendRequestItem(VBox vbox, FriendRequestEntity fre) {
+        
+        friendUserName = new Label();
+        acceptButton = new JFXButton("Accept");
+        declineButton = new JFXButton("Decline");
+
+        setMaxHeight(USE_PREF_SIZE);
+        setMaxWidth(USE_PREF_SIZE);
+        setMinHeight(USE_PREF_SIZE);
+        setMinWidth(USE_PREF_SIZE);
+        setPrefHeight(39.0);
+        setPrefWidth(384.0);
+
+        friendUserName.setLayoutY(-3.0);
+        friendUserName.setPrefHeight(47.0);
+        friendUserName.setPrefWidth(384.0);
+        friendUserName.setText(fre.getFriendUserName());
+
+        acceptButton.setLayoutX(210.0);
+        acceptButton.setLayoutY(5.0);
+        acceptButton.addEventHandler(ActionEvent.ACTION, (action) -> {
+            TASKLISTS11.getChildren().remove(this);
+            String friendUserName = fre.getFriendUserName();
+            fre.setFriendUserName(currentUser.getUserName());
+            FriendController.acceptFriendReauest(fre.getReceivedUserId(), fre.getSentUserId());
+            UserEntity userEntity = new UserEntity();
+            userEntity.setUserName(friendUserName);
+            
+        });
+
+        declineButton.setLayoutX(295.0);
+        declineButton.setLayoutY(5.0);
+        declineButton.addEventHandler(ActionEvent.ACTION, (action) -> {
+            TASKLISTS11.getChildren().remove(this);
+            FriendController.declineFriendReauest(fre.getSentUserId(), fre.getReceivedUserId());
+        });
+
+        getChildren().add(friendUserName);
+        getChildren().add(acceptButton);
+        getChildren().add(declineButton);
+
+    }
+    
+    public void setFriendUserName(String s) {
+        friendUserName.setText(s);
+    }
+}*/
+
+
+    /* ahmedpro */
+
+ /*REHAM*/
 
  /*abd-elmalek*/
  /*abd-elmalek*/

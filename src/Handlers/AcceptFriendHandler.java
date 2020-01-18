@@ -15,7 +15,7 @@ public class AcceptFriendHandler implements ActionHandler {
 
     @Override
     public void handleAction(String responseJsonObject) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
     
 }

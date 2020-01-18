@@ -63,6 +63,7 @@ public class SocketController implements SocketInterface {
                         try {
                             String receivedResponse = dataInputStream.readLine();
                             System.out.println("received something");
+                            System.out.println(receivedResponse);
                             handleResponse(receivedResponse);
                         } catch (IOException ex) {
                             isRunning = false;
