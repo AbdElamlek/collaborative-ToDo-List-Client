@@ -18,8 +18,11 @@ import Handlers.ItemDeletionHandler;
 import Handlers.ItemUpdateHandler;
 import Handlers.AcceptCollaboratorRequestHandler;
 import Handlers.FriendStatusHandler;
+import Handlers.TaskCreationHandler;
+import Handlers.TaskDeleteHandler;
 import Handlers.ToDoDeleteHandler;
 import Handlers.ToDoUpdateHandler;
+import Handlers.TaskUpdateStatusHandler;
 import collaborative.to.pkgdo.list.client.FXMLDocumentController;
 import java.io.DataInputStream;
 import java.io.DataOutput;
@@ -205,8 +208,24 @@ public class SocketController implements SocketInterface {
                     break;
                 case "online friend":
                     actionHandler = new FriendStatusHandler();
+                case "create task":
+                    actionHandler = new TaskCreationHandler();
+                    break;
+                case "changeTaskStatus":
+                    actionHandler = new TaskUpdateStatusHandler();
+                    break;
+                case "delete task":
+                    actionHandler = new TaskDeleteHandler();
                     break;
                     /*
+                    "accept task assignment request"
+                    "accept friend request"
+                    item
+                    task
+                    comment
+                    withdraw(here for other collaborators and the owner where thay know from server)
+                    
+                    */                    /*
                     "accept task assignment request"
                     "accept friend request"
                     item
