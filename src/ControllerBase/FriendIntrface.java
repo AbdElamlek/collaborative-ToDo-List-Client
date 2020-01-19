@@ -13,9 +13,10 @@ import javax.json.JsonObject;
  */
 public interface FriendIntrface {
     
-  void addFreind(JsonObject friend);
-  void removeFreind(JsonObject friend);
-  void acceptFriendReauest(JsonObject request);
-  void declineFriendReauest(JsonObject request);
+  void searchFriend(String userName);
+  void addFreind(int sentUserId, int receivedUserId);
+  void deleteFreind(int sentUserId, int receivedUserId);
+  void acceptFriendReauest(int sentUserId, int receivedUserId);
+  void declineFriendReauest(int sentUserId, int receivedUserId);
     
 }
