@@ -398,7 +398,9 @@ public class FXMLController implements Initializable {
         
       @FXML
      public void exit(MouseEvent event) {
-       
+        AuthenticationController authenticationController = new AuthenticationController();
+        authenticationController.logout(currentUser);
+        
           SocketController.getInstance().disconnect();
             Platform.exit();
     }  
@@ -659,7 +661,7 @@ public class FXMLController implements Initializable {
                 CollaboratorController c=new CollaboratorController();
                 c.addCollaboratorRequest(collaboratorId,senderId, todoId);
                 aDDCOLL.setDisable(true);
-                
+                currentlyViewedTodoList.updateFriendsToAddAsCollaborators(this);
             });
             aDDCOLL.setPrefWidth(4.0);
             setMaxHeight(USE_PREF_SIZE);
@@ -906,9 +908,11 @@ public class FXMLController implements Initializable {
     public Listicon(ToDoEntity todo, boolean isOwnedByCurrentUser) {
         
         delete.setOnAction((event) -> {
-            System.out.println("delete");
+            ToDoListController todoListController = new ToDoListController();
+            todoListController.deleteToDoList(todo);
+            LIST.getChildren().remove(this);
           });
-      
+        delete.setDisable(!isOwnedByCurrentUser);
         menu.getItems().addAll(delete);
 
         this.todo = todo;
@@ -1022,6 +1026,9 @@ public class FXMLController implements Initializable {
             }
         
         /*Abd El Malek*/    
+    }
+    public void updateFriendsToAddAsCollaborators(Friendtoadd friend){
+        FRIENDSTOADDASCOLLABORATORS.getChildren().remove(friend);
     }
     }
 
@@ -1514,7 +1521,7 @@ public  void addTask(TaskEntity taskEntity){
                     System.out.println("from handle accept");
                     CollaboratorController collaboratorController = new CollaboratorController();
                     collaboratorController.acceptCollaboratorRequest(this.collaborationRequest);
-                
+                    TASKLISTS1.getChildren().remove(this);
                 
             });
 
@@ -1524,7 +1531,15 @@ public  void addTask(TaskEntity taskEntity){
             jFXButton0.setPrefHeight(25);
             jFXButton0.setText("Reject");
             jFXButton0.setStyle("-fx-background-color:  #f0f1f5;");
-
+            
+            jFXButton0.setOnAction((event)->{
+                
+                    CollaboratorController collaboratorController = new CollaboratorController();
+                    collaboratorController.rejectCollaboratorRequest(this.collaborationRequest);
+                    TASKLISTS1.getChildren().remove(this);
+                
+            });
+            
             label.setLayoutX(54.0);
             label.setLayoutY(17.0);
             label.setText(collaborationRequest.getMessage());
@@ -1700,8 +1715,13 @@ public  void addTask(TaskEntity taskEntity){
         LIST.getChildren().set(todoIndex, Litem);*/
     }
 
-    public void deleteTodoListResponse(Integer todoIndex) {
-        LIST.getChildren().remove(todoIndex);
+    public void deleteTodoListResponse(Integer todoId) {
+        Platform.runLater(() -> {
+            for(Node node : LIST.getChildren())
+                if(((Listicon)node).getTodo().getId() == todoId)
+                    LIST.getChildren().remove((Listicon)node);
+        
+        });
     }
 
     public void acceptCollaborationRequest(CollaborationRequestEntity request) {
@@ -1769,8 +1789,8 @@ public  void addTask(TaskEntity taskEntity){
         int i = 0;
         while(((Friendicon)FRIENDSLIST.getChildren().get(i)).getFriend().getId() != friend.getId())
             i++;
-        ((Friendicon)FRIENDSLIST.getChildren().get(i)).getFriend().setUserStatus(1);
-        ((Friendicon)FRIENDSLIST.getChildren().get(i)).updateFriendStatus(1);    
+        ((Friendicon)FRIENDSLIST.getChildren().get(i)).getFriend().setUserStatus(friend.getUserStatus());
+        ((Friendicon)FRIENDSLIST.getChildren().get(i)).updateFriendStatus(friend.getUserStatus());    
     }
     /*REHAM*/
 
