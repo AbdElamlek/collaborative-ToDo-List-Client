@@ -13,10 +13,15 @@ import Handlers.ItemCreationHandler;
 import Handlers.SignUpHandler;
 import ControllerBase.ActionHandler;
 import ControllerBase.SocketInterface;
+import Handlers.AcceptFriendHandler;
+import Handlers.AddFriendHandler;
+import Handlers.DeclineFriendHandler;
+import Handlers.SearchFriendHandler;
 import Handlers.CollaboratorRequestHandler;
 import Handlers.ItemDeletionHandler;
 import Handlers.ItemUpdateHandler;
 import Handlers.AcceptCollaboratorRequestHandler;
+import Handlers.CommentCreationHandler;
 import Handlers.FriendStatusHandler;
 import Handlers.TaskCreationHandler;
 import Handlers.TaskDeleteHandler;
@@ -68,6 +73,7 @@ public class SocketController implements SocketInterface {
                         try {
                             String receivedResponse = dataInputStream.readLine();
                             System.out.println("received something");
+                            System.out.println(receivedResponse);
                             if(receivedResponse!=null){
                             handleResponse(receivedResponse);
                             }
@@ -153,7 +159,8 @@ public class SocketController implements SocketInterface {
         
             //OR FUNCTION NAME CAN BE: sendRequest(String jsonObjectStr)
             //System.out.println("from sendJsonObject: " + jsonObjectStr);
-            printStream.println(jsonObjectStr);
+            if(printStream != null)
+                printStream.println(jsonObjectStr);
             System.out.println("SENT");
 
             //Send to the server the json to register !
@@ -189,6 +196,17 @@ public class SocketController implements SocketInterface {
                 case "delete todo list":
                     actionHandler = new ToDoDeleteHandler();
                     break;
+                case "searchFriend":
+                    actionHandler = new SearchFriendHandler();
+                    break;
+                case "addFriend":
+                    actionHandler = new AddFriendHandler();
+                    break;
+                case "acceptFriend":
+                    actionHandler = new AcceptFriendHandler();
+                    break;
+                case "declineFriend":
+                    actionHandler = new DeclineFriendHandler();
                 case "recieve collaborator notification":
                     actionHandler = new NotificationHandler();
                     break;
@@ -223,6 +241,9 @@ public class SocketController implements SocketInterface {
                 case "withdraw from task":
                     actionHandler = new WithdrawFromTaskHandler();
                     break;
+                case "add comment":
+                    actionHandler = new CommentCreationHandler();
+                    break;    
                     /*
                     "accept task assignment request"
                     "accept friend request"

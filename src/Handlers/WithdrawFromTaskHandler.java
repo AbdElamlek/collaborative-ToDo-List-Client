@@ -14,6 +14,8 @@ import Entities.UserEntity;
 import Utils.CurrentUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.util.ArrayList;
+import java.util.function.Consumer;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,7 +24,10 @@ import org.json.JSONObject;
  * @author Reham
  */
 public class WithdrawFromTaskHandler implements ActionHandler{
-    
+    private static Consumer<UserEntity> assignedToTaskGUIModifier;
+    public  static void setAssignedToTaskGUIModifier(Consumer<UserEntity> modifier){
+        assignedToTaskGUIModifier = modifier;
+    }
     @Override
     public void handleAction(String responseJsonObject) {
         Gson gson = new GsonBuilder().serializeNulls().setDateFormat("MMM dd, yyyy h:mm:ss a").create();
@@ -38,13 +43,19 @@ public class WithdrawFromTaskHandler implements ActionHandler{
                 int userId = accept_RejectTaskDTO.getUserId();
                 TaskEntity task = accept_RejectTaskDTO.getTask();
                 
-                for(ToDoEntity todo : CurrentUser.getCurrentUser().getTodoList())
-                    if(todo.getId() == todoId)
-                        for(ItemEntity item : todo.getItemsList())
-                            if(item.getId() == task.getItemId())
-                                for(TaskEntity _task : item.getTasksList())
-                                    if(_task.getId() == task.getId())
-                                        item.getTasksList().remove(_task);
+                CurrentUser.getCurrentUser().getTodoList().stream().filter((todo) -> (todo.getId() == todoId)).forEachOrdered((todo) -> {
+                    todo.getItemsList().stream().filter((item) -> (item.getId() == task.getItemId())).forEachOrdered((item) -> {
+                        item.getTasksList().stream().filter((_task) -> (_task.getId() == task.getId())).forEachOrdered((_task) -> {
+                            _task.getAssignedUsersList().stream().filter((user) -> (user.getId() == userId)).forEachOrdered((user) -> {
+                                _task.getAssignedUsersList().remove(user);
+                                if(assignedToTaskGUIModifier != null)
+                                    assignedToTaskGUIModifier.accept(user);
+                            });
+                        });
+                    });
+                });
+                                                
+                                     
                                 
    
             }

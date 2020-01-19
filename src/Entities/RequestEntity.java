@@ -5,7 +5,7 @@
  */
 package Entities;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  *
@@ -17,15 +17,17 @@ public class RequestEntity implements BaseEntity {
     private Date time;
     private int receivedUserId;
     private int sentUserId;
+    private String message;
 
     public RequestEntity() {
     }
 
-    public RequestEntity(int id, Date time, int receivedUserId, int sentUserId) {
+    public RequestEntity(int id, Date time, int receivedUserId, int sentUserId, String message) {
         this.id = id;
         this.time = time;
         this.receivedUserId = receivedUserId;
         this.sentUserId = sentUserId;
+        this.message = message;
     }
 
     public void setId(int id) {
@@ -35,8 +37,6 @@ public class RequestEntity implements BaseEntity {
     public void setTime(Date time) {
         this.time = time;
     }
-
-    
 
     public void setReceivedUserId(int receivedUserId) {
         this.receivedUserId = receivedUserId;
@@ -54,14 +54,20 @@ public class RequestEntity implements BaseEntity {
         return time;
     }
 
-    
-
     public int getReceivedUserId() {
         return receivedUserId;
     }
 
     public int getSentUserId() {
         return sentUserId;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
     
 }
