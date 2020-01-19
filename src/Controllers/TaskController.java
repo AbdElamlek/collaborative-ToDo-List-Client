@@ -12,7 +12,7 @@ import Entities.TaskEntity;
 import Entities.UserEntity;
 import DTOs.Accept_RejectTaskDTO;
 import Entities.Accept_RecjectTaskEntity;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  *
@@ -27,8 +27,9 @@ public class TaskController implements TaskInterFace{
             accept_RecjectTaskEntity.setSentUserId(assignerId);
             accept_RecjectTaskEntity.setReceivedUserId(assigneeId);
             accept_RecjectTaskEntity.setTaskId(taskId);
-            accept_RecjectTaskEntity.setTime(new Date());
-            EntityWrapper entityWrapper = new EntityWrapper("assigonToTaskRequest", "entity", accept_RecjectTaskEntity);
+            accept_RecjectTaskEntity.setTime(new Date(System.currentTimeMillis()));
+            accept_RecjectTaskEntity.setMessage("");
+            EntityWrapper entityWrapper = new EntityWrapper("assigonToTaskRequest", "Accept_RejectTaskEntity", accept_RecjectTaskEntity);
             String taskJsonResponse = adapterController.entity2Json(entityWrapper);
             SocketController.getInstance().sendJsonObject(taskJsonResponse);
             return true;

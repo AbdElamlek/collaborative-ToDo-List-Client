@@ -11,25 +11,14 @@ import java.sql.Date;
  *
  * @author pc
  */
-public class CollaborationRequestEntity extends RequestEntity{
+public class CollaborationRequestEntity extends RequestEntity {
+
     private int todoId;
-    String message;
 
-    public CollaborationRequestEntity(int todoId, String message,int id, Date time, int receivedUserId, int sentUserId) {
-        super(id, time, receivedUserId, sentUserId);
+    public CollaborationRequestEntity(int todoId, int id, Date time, int receivedUserId, int sentUserId, String message) {
+        super(id, time, receivedUserId, sentUserId, message);
         this.todoId = todoId;
-        this.message=message;
     }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-    
-    
 
     public int getTodoId() {
         return todoId;
@@ -38,5 +27,5 @@ public class CollaborationRequestEntity extends RequestEntity{
     public void setTodoId(int todoId) {
         this.todoId = todoId;
     }
-    
+
 }
