@@ -151,11 +151,10 @@ public class FXMLController implements Initializable {
     public VBox FRIENDSLIST;
     @FXML
     public VBox LIST;
-
     public VBox aSSIGNEDTOTASK;
-
-    public VBox COLLABORATORS1; 
-
+     @FXML
+   
+    
     public VBox COLLABORATORS;
     public VBox NOTIFICATIONS;
     public VBox aDDRIENDCOLABLIST;
@@ -1050,7 +1049,7 @@ public class FXMLController implements Initializable {
             
         /*Reham*/
         TITLE.setText(todo.getTitle());
-        COLLABORATORS1.getChildren().setAll(TODOCOLLABORATORS);
+        COLLABORATORS.getChildren().setAll(TODOCOLLABORATORS);
         aDDRIENDCOLABLIST.getChildren().setAll(FRIENDSTOADDASCOLLABORATORS);
 
         aDDCOLAB.setVisible(isOwnedByCurrentUser);
