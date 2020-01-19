@@ -13,11 +13,21 @@ import java.sql.Date;
  */
 public class CollaborationRequestEntity extends RequestEntity{
     private int todoId;
+    //String message;
 
     public CollaborationRequestEntity(int todoId, int id, Date time, int receivedUserId, int sentUserId) {
         super(id, time, receivedUserId, sentUserId, "");
         this.todoId = todoId;
+       // this.message=message;
     }
+
+    /*public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }*/
     
     
 

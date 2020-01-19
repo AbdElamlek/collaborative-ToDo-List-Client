@@ -39,7 +39,7 @@ public class ToDoDeleteHandler implements ActionHandler{
             
             //Update GUI
             if(todoGUIModifier != null)
-                todoGUIModifier.accept(indexOfTodo + CurrentUser.getCurrentUser().getTodoList().size());
+                todoGUIModifier.accept(todo.getId());
             
         }catch(JSONException ex){
             ex.printStackTrace();

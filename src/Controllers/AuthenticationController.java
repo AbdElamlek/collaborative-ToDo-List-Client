@@ -41,4 +41,9 @@ public class AuthenticationController implements AuthenticationInterface{
        socketController.sendJsonObject(userJson);
     }    
     /*Eman Kamal*/
+    
+    public void logout(UserEntity user){
+        String userJson=adapterController.entity2Json(new EntityWrapper("logout","UserEntity",user));
+        socketController.sendJsonObject(userJson);
+    }
 }
