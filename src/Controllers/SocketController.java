@@ -89,7 +89,7 @@ public class SocketController implements SocketInterface {
             };
         } catch (IOException ex) {
 
-            ex.printStackTrace();
+            System.out.print(ex);
              isRunning = false;
              System.out.println(isRunning+"in socet");
 
@@ -206,8 +206,10 @@ public class SocketController implements SocketInterface {
                 case "accept collaborator request":
                     actionHandler = new AcceptCollaboratorRequestHandler();
                     break;
+                case "offline friend":
                 case "online friend":
                     actionHandler = new FriendStatusHandler();
+                    break;
                 case "create task":
                     actionHandler = new TaskCreationHandler();
                     break;

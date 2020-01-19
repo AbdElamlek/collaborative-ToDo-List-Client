@@ -95,6 +95,8 @@ public class ToDoEntity implements BaseEntity {
     }
 
     public ArrayList<UserEntity> getCollaboratorList() {
+       if(collaboratorList==null)
+           collaboratorList=new ArrayList<>();
         return collaboratorList;
     }
 
@@ -103,6 +105,9 @@ public class ToDoEntity implements BaseEntity {
     }
 
     public ArrayList<ItemEntity> getItemsList() {
+        
+         if(itemsList==null)
+         itemsList=new ArrayList<>();   
         return itemsList;
     }
 
@@ -128,6 +133,8 @@ public class ToDoEntity implements BaseEntity {
     }
 
     public ArrayList<UserEntity> getRequestedCollaboratorList() {
+       if(requestedCollaboratorList==null)
+         requestedCollaboratorList=new ArrayList<>();   
         return requestedCollaboratorList;
     }
 
