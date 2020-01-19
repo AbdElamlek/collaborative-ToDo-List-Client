@@ -300,7 +300,7 @@ public class FXMLController implements Initializable {
     public void nav1(MouseEvent event) {
 
         if (event.getSource() == nEWLIST) {
-
+            //REQUESTS.setMouseTransparent(true);
             ADDLISTPANE.setVisible(true);
           }
         else if(event.getSource() == eDITLIST){
@@ -1791,6 +1791,22 @@ public  void addTask(TaskEntity taskEntity){
             i++;
         ((Friendicon)FRIENDSLIST.getChildren().get(i)).getFriend().setUserStatus(friend.getUserStatus());
         ((Friendicon)FRIENDSLIST.getChildren().get(i)).updateFriendStatus(friend.getUserStatus());    
+    }
+    
+    public void withdrawFromTaskResponse(TaskEntity task, int userId){
+        for(int i=0; i< TASKLISTS.getPanes().size();i++){
+          Item i1 = (Item) TASKLISTS.getPanes().get(i);
+          if(task.getItemId() == i1.itemId){
+              for(int j =1; j< i1.vBox.getChildren().size(); j++){
+                  Task _task = (Task) i1.vBox.getChildren().get(j);
+                  if(_task.taskId == task.getId()){
+                      TASKLISTS.getPanes().remove(_task);
+                  }
+              }
+              break;
+          }
+        }
+        
     }
     /*REHAM*/
 

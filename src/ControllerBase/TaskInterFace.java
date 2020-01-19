@@ -19,7 +19,7 @@ public interface TaskInterFace {
     boolean updateTaskStatus(TaskEntity task, int status);
     boolean acceptTask(int taskId, int userId);
     boolean rejectTask(RequestEntity taskRequest, UserEntity userEntity);
-    boolean withdrawFromTask(TaskEntity task, int userId);
+    boolean withdrawFromTask(TaskEntity task, int userId, int todoId);
     boolean createNewTask(int status , String description, int itemId);
     boolean deleteTask(TaskEntity taskEntity);
 }
