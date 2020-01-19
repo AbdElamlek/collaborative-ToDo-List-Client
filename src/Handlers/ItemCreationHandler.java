@@ -9,6 +9,7 @@ import ControllerBase.ActionHandler;
 import Entities.ItemEntity;
 import Entities.TaskEntity;
 import Utils.CurrentUser;
+import static collaborative.to.pkgdo.list.client.FXMLController.currentToDo;
 import com.google.gson.Gson;
 import java.util.function.Consumer;
 import org.json.JSONException;
@@ -35,7 +36,7 @@ public class ItemCreationHandler implements ActionHandler{
             if(!jsonObject.isNull("entity")){
                 String todoJsonObject  = jsonObject.getJSONObject("entity").toString();
                 ItemEntity item = gson.fromJson(todoJsonObject, ItemEntity.class);
-//                CurrentUser.getCurrentUser().getItemList().add(item);
+                //currentToDo.getItemsList().add(item);
                 
                 if(itemGUIGenerator != null){
                     itemGUIGenerator.accept(item);

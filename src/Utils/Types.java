@@ -3,25 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Entities;
+package Utils;
 
 /**
  *
- * @author pc
+ * @author OMNIA
  */
 public class Types {
-
-    public static final int REQUEST_ADD_FRIEND = 0;
-    public static final int REQUEST_ADD_COLLABORATOR = 1;
-    public static final int REQUEST_ASSIGN_TASK = 2;
-
+    
     public static final int NOTIFICATION_ADD_FRIEND = 0;
     public static final int NOTIFICATION_ADD_COLLABORATOR = 1;
     public static final int NOTIFICATION_ASSIGN_TASK = 2;
 
-    public static final int TASK_STATUS_TODO = 0;
-    public static final int TASK_STATUS_INPROGRESS = 1;
-    public static final int TASK_STATUS_DONE = 0;
+    public static final int TASK_STATUS_INPROGRESS = 0;
+    public static final int TASK_STATUS_DONE = 1;
 
     public static final int TODO_STATUS_NEW = 0;
     public static final int TODO_STATUS_INPROGRESS = 1;

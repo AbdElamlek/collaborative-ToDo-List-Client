@@ -17,8 +17,12 @@ import Handlers.CollaboratorRequestHandler;
 import Handlers.ItemDeletionHandler;
 import Handlers.ItemUpdateHandler;
 import Handlers.AcceptCollaboratorRequestHandler;
+import Handlers.FriendStatusHandler;
+import Handlers.TaskCreationHandler;
+import Handlers.TaskDeleteHandler;
 import Handlers.ToDoDeleteHandler;
 import Handlers.ToDoUpdateHandler;
+import Handlers.TaskUpdateStatusHandler;
 import collaborative.to.pkgdo.list.client.FXMLDocumentController;
 import java.io.DataInputStream;
 import java.io.DataOutput;
@@ -40,7 +44,7 @@ public class SocketController implements SocketInterface {
 
     private Socket socket;
     private DataInputStream dataInputStream;
-    private DataOutputStream dataOutputStream;
+    //private DataOutputStream dataOutputStream;
     private PrintStream printStream;
     public static Boolean isRunning=false;
     private Thread thread;
@@ -50,6 +54,7 @@ public class SocketController implements SocketInterface {
 
     private SocketController() {
         try {
+            System.out.println("try to connect");
             socket = new Socket("127.0.0.1", 7777);
             dataInputStream = new DataInputStream(socket.getInputStream());
             printStream = new PrintStream(socket.getOutputStream());
@@ -83,11 +88,11 @@ public class SocketController implements SocketInterface {
                 }
             };
         } catch (IOException ex) {
+
             ex.printStackTrace();
              isRunning = false;
              System.out.println(isRunning+"in socet");
-          
-             
+
         }
     }
 
@@ -107,6 +112,7 @@ public class SocketController implements SocketInterface {
     
     
     @Override
+
     
     public boolean connect() {
        if(thread==null){
@@ -122,6 +128,7 @@ public class SocketController implements SocketInterface {
 
     @Override
     public void disconnect() {
+
         
         try {
             dataInputStream.close();
@@ -199,7 +206,26 @@ public class SocketController implements SocketInterface {
                 case "accept collaborator request":
                     actionHandler = new AcceptCollaboratorRequestHandler();
                     break;
+                case "online friend":
+                    actionHandler = new FriendStatusHandler();
+                case "create task":
+                    actionHandler = new TaskCreationHandler();
+                    break;
+                case "changeTaskStatus":
+                    actionHandler = new TaskUpdateStatusHandler();
+                    break;
+                case "delete task":
+                    actionHandler = new TaskDeleteHandler();
+                    break;
                     /*
+                    "accept task assignment request"
+                    "accept friend request"
+                    item
+                    task
+                    comment
+                    withdraw(here for other collaborators and the owner where thay know from server)
+                    
+                    */                    /*
                     "accept task assignment request"
                     "accept friend request"
                     item

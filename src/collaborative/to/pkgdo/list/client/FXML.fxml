@@ -364,7 +364,7 @@
                   <DropShadow blurType="ONE_PASS_BOX" color="#00000053" height="4.875" radius="1.96875" width="5.0" />
                </effect>
                <children>
-                  <Label layoutX="36.0" layoutY="33.0" prefHeight="36.0" prefWidth="108.0" text="Status">
+                  <Label layoutX="36.0" layoutY="33.0" prefHeight="36.0" prefWidth="135.0" text="Statistics">
                      <font>
                         <Font name="Calibri Bold" size="31.0" />
                      </font>
@@ -388,9 +388,31 @@
                               <Image url="@IMG_20200116_223854.jpg" />
                            </image>
                         </ImageView>
-                        <AnchorPane layoutX="14.0" layoutY="61.0" prefHeight="538.0" prefWidth="235.0" style="-fx-background-color: TRANSPARENT;">
+                        <AnchorPane fx:id="Itemstatuspane" layoutX="14.0" layoutY="61.0" prefHeight="538.0" prefWidth="235.0" style="-fx-background-color: TRANSPARENT;" visible="false">
                            <children>
-                              <PieChart fx:id="piechart" layoutX="10.0" layoutY="14.0" prefHeight="215.0" prefWidth="215.0" title="Item" />
+                              <PieChart fx:id="piechart" clockwise="false" labelLineLength="0.0" layoutY="14.0" legendVisible="false" prefHeight="215.0" prefWidth="235.0" title="Item" />
+                              <Label layoutX="75.0" layoutY="240.0" text="Tasks finished " />
+                              <Label layoutX="76.0" layoutY="275.0" text="Tasks pending" />
+                              <Label fx:id="finished" layoutX="160.0" layoutY="239.0" prefHeight="20.0" prefWidth="25.0" text="3" textFill="#2459eb">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="pending" layoutX="160.0" layoutY="274.0" prefHeight="20.0" prefWidth="33.0" text="8" textFill="#eea80f">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fitHeight="27.0" fitWidth="21.0" layoutX="45.0" layoutY="238.0" opacity="0.52" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons8_task_completed_24px.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="27.0" fitWidth="21.0" layoutX="45.0" layoutY="273.0" opacity="0.52" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons8_task_planning_24px.png" />
+                                 </image>
+                              </ImageView>
                            </children>
                         </AnchorPane>
                      </children>
@@ -527,10 +549,10 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <JFXButton fx:id="doneAddFriendPane" layoutX="252.0" layoutY="180.0" prefHeight="25.0" prefWidth="56.0" style="-fx-background-color: #3b8ef4;" text="Done" textFill="#fffbfb" onMouseClicked="#nav1"/>
+                  <JFXButton fx:id="dONEADDFRIEND" layoutX="252.0" layoutY="180.0" prefHeight="25.0" prefWidth="56.0" style="-fx-background-color: #3b8ef4;" text="Done" textFill="#fffbfb" />
                   <AnchorPane layoutX="25.0" layoutY="56.0" prefHeight="44.0" prefWidth="283.0" style="-fx-background-color: #f0f1f5; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-width: 2;">
                      <children>
-                        <JFXTextField fx:id="textFieldAddFriend" focusColor="#f0f1f5" onAction="#nav3" layoutX="38.0" layoutY="8.0" prefHeight="30.0" prefWidth="207.0" promptText=" Enter Friend's username" style="-fx-background-color: #f0f1f5; -fx-background-radius: 4;" unFocusColor="#f0f1f5">
+                        <JFXTextField fx:id="NEWTODOTITLE11" focusColor="#f0f1f5" layoutX="38.0" layoutY="8.0" prefHeight="30.0" prefWidth="207.0" promptText=" Enter Friend's username" style="-fx-background-color: #f0f1f5; -fx-background-radius: 4;" unFocusColor="#f0f1f5">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -545,22 +567,22 @@
                         <InnerShadow blurType="ONE_PASS_BOX" color="#0000006e" />
                      </effect>
                   </AnchorPane>
-                  <AnchorPane fx:id="addFriendResult" layoutX="25.0" layoutY="118.0" prefHeight="44.0" prefWidth="283.0" style="-fx-border-width: 2;" visible="false">
+                  <AnchorPane layoutX="25.0" layoutY="118.0" prefHeight="44.0" prefWidth="283.0" style="-fx-border-width: 2;" visible="false">
                      <children>
                         <ImageView fitHeight="24.0" fitWidth="50.0" layoutX="14.0" layoutY="10.0" opacity="0.63" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@icons8_add_user_male_24px.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="friendName" layoutX="47.0" layoutY="15.0" prefHeight="20.0" prefWidth="167.0" text="Omnia">
+                        <Label fx:id="fRIENDNAME" layoutX="47.0" layoutY="15.0" prefHeight="20.0" prefWidth="167.0" text="Omnia">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <JFXButton fx:id="addFriendButton" layoutY="1.0" onMouseClicked="#nav1" prefHeight="44.0" prefWidth="283.0" text=" " />
+                        <JFXButton fx:id="ADDFRIEND" layoutY="1.0" prefHeight="44.0" prefWidth="283.0" text=" " />
                      </children>
                   </AnchorPane>
-                  <Label fx:id="addFriendFailedLabel" layoutX="31.0" layoutY="132.0" prefHeight="27.0" prefWidth="206.0" text="Friend not found !" visible="false" >
+                  <Label layoutX="31.0" layoutY="132.0" prefHeight="27.0" prefWidth="206.0" text="Friend not found !">
                      <font>
                         <Font size="14.0" />
                      </font>

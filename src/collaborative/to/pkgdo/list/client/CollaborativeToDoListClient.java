@@ -10,6 +10,8 @@ import Controllers.SocketController;
 import Controllers.ToDoListController;
 import Entities.ToDoEntity;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -26,7 +28,9 @@ import javafx.stage.StageStyle;
 public class CollaborativeToDoListClient extends Application {
     private double xOffset = 0; 
     private double yOffset = 0;
+    public static Stage mPrimaryStage;
     
+    private static boolean isConnectedToServer;
     @Override
     public void start(Stage stage) throws Exception {
        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument_1.fxml"));
@@ -51,6 +55,11 @@ public class CollaborativeToDoListClient extends Application {
         scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);
         stage.show();
+        mPrimaryStage = stage;
+    }
+    
+    public static boolean isConnectedToServer(){
+        return isConnectedToServer;
     }
 
     /**
@@ -61,6 +70,7 @@ public class CollaborativeToDoListClient extends Application {
         //sc.connect();
         //AuthenticationController authenticationController = new AuthenticationController();
         //authenticationController.logIn("ReeeEzzat", "123");
+
 //       try{ 
 //           SocketController.getInstance().connect();
 //          }catch(Exception e)

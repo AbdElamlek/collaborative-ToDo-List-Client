@@ -59,6 +59,13 @@ public class FXMLDocumentController implements Initializable {
 //    
       public JFXTextField UsernameText;
       public JFXPasswordField PasswordText;
+      
+      private boolean isConnectedToServer = false;
+      
+      /*public void updateIsConnectedToServer(boolean isConnectedToServer){
+          this.isConnectedToServer = isConnectedToServer;
+      }*/
+      
     @FXML
     private void exit(MouseEvent event) {
         Platform.exit();
@@ -108,6 +115,7 @@ public class FXMLDocumentController implements Initializable {
     }
     @FXML
      private void login (MouseEvent event) {
+
        //   isonline=SocketController.isRunning;
          if(SocketController.getInstance().connect()){
                 authenticationController = new AuthenticationController();
@@ -260,7 +268,6 @@ public class FXMLDocumentController implements Initializable {
 //        LoginHandler.setNotvalidlogin(this::);
         LOGINPANE.setVisible(true);
         SIGNUPPANE.setVisible(false);
-        
     }
 
     @FXML

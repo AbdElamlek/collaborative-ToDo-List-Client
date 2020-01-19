@@ -11,7 +11,7 @@ import Entities.CollaboratorDTO;
 import Entities.EntityWrapper;
 import Entities.RequestEntity;
 import java.sql.Date;
-import Entities.Types;
+import Utils.Types;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
