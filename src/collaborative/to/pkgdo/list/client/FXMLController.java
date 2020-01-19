@@ -29,6 +29,7 @@ import Entities.TaskEntity;
 import Entities.ToDoEntity;
 import Entities.UserEntity;
 import Handlers.CommentCreationHandler;
+import Handlers.CollaboratorRequestHandler;
 import Handlers.FriendStatusHandler;
 import Handlers.ItemDeletionHandler;
 import Handlers.ItemUpdateHandler;
@@ -87,10 +88,13 @@ import java.util.ConcurrentModificationException;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.effect.Glow;
 import javafx.scene.layout.BorderPane;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
@@ -109,7 +113,7 @@ public class FXMLController implements Initializable {
     CommentController commentController = new CommentController();
     ArrayList<Integer> itemsIndecies;
     int itemsCounter = 0;
-    
+   public static StatisticsHandler statistics;
     public static ToDoEntity currentToDo = null ;
     public static ItemEntity currentItem =null;
     public static TaskEntity currentTask;
@@ -136,9 +140,9 @@ public class FXMLController implements Initializable {
     //Notification notif=new Notification();
     //Friendtoadd fc=new Friendtoadd();
     //Friendtoadd fc2=new Friendtoadd();
-    TodoStatstics bar1 = new TodoStatstics();
-    TodoStatstics bar2 = new TodoStatstics();
-    TodoStatstics bar3 = new TodoStatstics();
+//    TodoStatstics bar1 = new TodoStatstics();
+  //  TodoStatstics bar2 = new TodoStatstics();
+    //TodoStatstics bar3 = new TodoStatstics();
 
     @FXML
 
@@ -147,6 +151,8 @@ public class FXMLController implements Initializable {
     public VBox FRIENDSLIST;
     @FXML
     public VBox LIST;
+
+    public VBox aSSIGNEDTOTASK;
 
     public VBox COLLABORATORS1; 
 
@@ -170,7 +176,8 @@ public class FXMLController implements Initializable {
     @FXML
     JFXTextField ADDTASK1;
     public HBox sSTATISTICS;
-    public VBox lISTSTATUS;
+    public  HBox sTATISTICS;
+    public static VBox lISTSTATUS;
     @FXML
     public Accordion TASKLISTS;
     public ScrollPane FRIENDSSCROLL;
@@ -200,7 +207,7 @@ public class FXMLController implements Initializable {
     public AnchorPane ADDLISTPANE;
     public AnchorPane ADDCOLLABORATORPANE;
     public AnchorPane eDITLISTAP;
-
+    public static AnchorPane Itemstatuspane;
     public AnchorPane cONNECTIONLOST;
     
     public JFXButton REQUESTS;
@@ -213,14 +220,14 @@ public class FXMLController implements Initializable {
     public JFXButton SHOWNOTIFICATIONS;
     public JFXButton CLEARDATE;
     public JFXButton SAVEDATE;
-
+    public JFXButton aDDCOLAB;
     public JFXButton DONEADDCOLLABORATOR;
     public JFXButton CANCELLIST;
     public JFXButton CANCELLIST1;
     public JFXButton eDITLIST;
     
     public JFXButton rETRYCONNECTION;
-    public JFXButton aDDCOLAB;
+    //public JFXButton aDDCOLAB;
     public JFXDatePicker STARTDATE;
     public JFXDatePicker ENDDATE;
 
@@ -229,41 +236,56 @@ public class FXMLController implements Initializable {
 
     public Label USERNAME;
     public Label TITLE;
-
+    public static Label finished;
+    public static Label pending;
     public Circle TODOCOLOR;
+
+    public ImageView ADDCOLLAB;
+    public static PieChart piechart;
+
     public Circle TODOEDITCOLOR;
     public ImageView ADDCOLLAB1;
     public ImageView MENU;
 
-     
-    public void disableUIForNotification(){
+//
+//    public void disableUIForNotification(){
+//
+//        MINIMIZE.setDisable(true);
+//        EXIT.setDisable(true);
+//        FRIENDSLIST.setDisable(true);
+//        LISTSCROLL.setDisable(true);
+//        COLLABSCROLL.setDisable(true);
+//        FRIENDS.setDisable(true);
+//        LISTS.setDisable(true);
+//        nEWLIST.setDisable(true);
+//        ADDDATE.setDisable(true);
+//        DATEPICK.setDisable(true);
+//        TODOPANE.setDisable(true);
+//        LISTPANE.setDisable(true);
+//        FRIENDPANE.setDisable(true);
+//        TODAYPANE.setDisable(true);
+//        STATUSPANE.setDisable(true);
+//        REQUESTPANE.setDisable(true);
+//        DATEPANE.setDisable(true);
+//        ADDLISTPANE.setDisable(true);
+//        REQUESTS.setDisable(true);
+//        TODAY.setDisable(true);
+//        STATUS.setDisable(true);
+//
+//        NEWCOLLABORATOR.setDisable(true);
+//        ADDCOLLABORATORPANE.setDisable(true);
+//    }
+//     
+    @FXML
+    public void nav3(MouseEvent event) {
 
-        MINIMIZE.setDisable(true);
-        EXIT.setDisable(true);
-        FRIENDSLIST.setDisable(true);
-        LISTSCROLL.setDisable(true);
-        COLLABSCROLL.setDisable(true);
-        FRIENDS.setDisable(true);
-        LISTS.setDisable(true);
-        nEWLIST.setDisable(true);
-        ADDDATE.setDisable(true);
-        DATEPICK.setDisable(true);
-        TODOPANE.setDisable(true);
-        LISTPANE.setDisable(true);
-        FRIENDPANE.setDisable(true);
-        TODAYPANE.setDisable(true);
-        STATUSPANE.setDisable(true);
-        REQUESTPANE.setDisable(true);
-        DATEPANE.setDisable(true);
-        ADDLISTPANE.setDisable(true);
-        REQUESTS.setDisable(true);
-        TODAY.setDisable(true);
-        STATUS.setDisable(true);
 
-        NEWCOLLABORATOR.setDisable(true);
-        ADDCOLLABORATORPANE.setDisable(true);
+        if (event.getSource() == aDDCOLAB ) {
+            
+             ADDCOLLABORATORPANE.setVisible(true);
+        }
     }
-
+    
     @FXML
     public void nav(MouseEvent event) {
 
@@ -292,7 +314,13 @@ public class FXMLController implements Initializable {
             REQUESTPANE.setVisible(false);
             TODAYPANE.setVisible(true);
         } else if (event.getSource() == STATUS) {
-
+            
+             statistics=new StatisticsHandler(currentUser);
+            for(TodoStatstics graph:statistics.setListsStatistics())
+            { 
+              sTATISTICS.getChildren().add(graph);
+            
+            }
             TODOPANE.setVisible(false);
             STATUSPANE.setVisible(true);
             REQUESTPANE.setVisible(false);
@@ -336,7 +364,7 @@ public class FXMLController implements Initializable {
             }
 
         } 
-        else if (event.getSource() == NEWCOLLABORATOR) {
+        else if (event.getSource() == aDDCOLAB) {
             ADDCOLLABORATORPANE.setVisible(true);
         }
         else if (event.getSource() == DONEADDCOLLABORATOR) {
@@ -356,9 +384,12 @@ public class FXMLController implements Initializable {
          }
 
     } 
-        
+
         @FXML
      public void logOut(MouseEvent event) {
+         AuthenticationController authenticationController = new AuthenticationController();
+         authenticationController.logout(currentUser);
+
          
          SocketController.getInstance().disconnect();
             Platform.runLater(()->{
@@ -400,7 +431,9 @@ public class FXMLController implements Initializable {
         
       @FXML
      public void exit(MouseEvent event) {
-       
+        AuthenticationController authenticationController = new AuthenticationController();
+        authenticationController.logout(currentUser);
+        
           SocketController.getInstance().disconnect();
             Platform.exit();
     }  
@@ -449,22 +482,24 @@ public class FXMLController implements Initializable {
 //}
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        /*eman*/
         NotificationHandler.setNotificationGUIGenerator(this::createNotificationResponse);
+        CollaboratorRequestHandler.setCollaborationRequestGUIGenerator(this::createCollaboratorRequestResponse);
+        /*eman*/
         /*REHAM*/
         ToDoCreationHandler.setTodoGUIGenerator(this::createTodoListResponse);
         ToDoUpdateHandler.setTodoGUIModifier(this::updateTodoListResponse);
         ToDoDeleteHandler.setTodoGUIModifier(this::deleteTodoListResponse);
         FriendStatusHandler.setFriendStatusGUIModifier(this::updateFriendStatus);
-        sSTATISTICS.getChildren().add(bar1);
-        sSTATISTICS.getChildren().add(bar2);
-        sSTATISTICS.getChildren().add(bar3);
+//        sSTATISTICS.getChildren().add(bar1);
+  //      sSTATISTICS.getChildren().add(bar2);
+    //    sSTATISTICS.getChildren().add(bar3);
         AcceptCollaboratorRequestHandler.setCollaboratorsGUIModifier(this::acceptTodoCollaborationResponse);
-
+         
         currentUser = CurrentUser.getCurrentUser();
         
         /*REHAM*/
-
-
+     
       /*abd-elmalek */
       ADDTASK.setOnKeyPressed((KeyEvent event) -> {
           if(event.getCode()== KeyCode.ENTER){
@@ -504,7 +539,6 @@ public class FXMLController implements Initializable {
 
    //   NOTIFICATIONS.getChildren().add(notif);
       
-
 
         /*omnia*/
         SocketController.setConnectionFailed(this::conFaild);
@@ -645,6 +679,12 @@ public class FXMLController implements Initializable {
             NOTIFICATIONS.getChildren().add(new Notification(ne));
         });
     }
+    
+    public void createCollaboratorRequestResponse(CollaborationRequestEntity cre) {
+        Platform.runLater(() -> {
+            TASKLISTS1.getChildren().add(new CollaborationRequest(cre));
+        });
+    }
 
 
     class Friendtoadd extends AnchorPane {
@@ -662,7 +702,16 @@ public class FXMLController implements Initializable {
             label = new Label();
             imageView0 = new ImageView();
             aDDCOLL = new JFXButton();
-
+            aDDCOLL.setOnMouseClicked((MouseEvent event) -> {
+                int collaboratorId=friend.getId();
+                int senderId=CurrentUser.getCurrentUser().getId();
+                int todoId=currentlyViewedTodoList.getTodo().getId();
+                CollaboratorController c=new CollaboratorController();
+                c.addCollaboratorRequest(collaboratorId,senderId, todoId);
+                aDDCOLL.setDisable(true);
+                currentlyViewedTodoList.updateFriendsToAddAsCollaborators(this);
+            });
+            aDDCOLL.setPrefWidth(4.0);
             setMaxHeight(USE_PREF_SIZE);
             setMaxWidth(USE_PREF_SIZE);
             setMinHeight(USE_PREF_SIZE);
@@ -886,6 +935,7 @@ public class FXMLController implements Initializable {
     }
 
 
+
    class Listicon extends AnchorPane {
 
 
@@ -907,9 +957,11 @@ public class FXMLController implements Initializable {
     public Listicon(ToDoEntity todo, boolean isOwnedByCurrentUser) {
         
         delete.setOnAction((event) -> {
-            System.out.println("delete");
+            ToDoListController todoListController = new ToDoListController();
+            todoListController.deleteToDoList(todo);
+            LIST.getChildren().remove(this);
           });
-      
+        delete.setDisable(!isOwnedByCurrentUser);
         menu.getItems().addAll(delete);
 
         this.todo = todo;
@@ -1023,6 +1075,9 @@ public class FXMLController implements Initializable {
             }
         
         /*Abd El Malek*/    
+    }
+    public void updateFriendsToAddAsCollaborators(Friendtoadd friend){
+        FRIENDSTOADDASCOLLABORATORS.getChildren().remove(friend);
     }
     }
 
@@ -1553,7 +1608,7 @@ public  void addTask(TaskEntity taskEntity){
                     System.out.println("from handle accept");
                     CollaboratorController collaboratorController = new CollaboratorController();
                     collaboratorController.acceptCollaboratorRequest(this.collaborationRequest);
-                
+                    TASKLISTS1.getChildren().remove(this);
                 
             });
 
@@ -1563,10 +1618,18 @@ public  void addTask(TaskEntity taskEntity){
             jFXButton0.setPrefHeight(25);
             jFXButton0.setText("Reject");
             jFXButton0.setStyle("-fx-background-color:  #f0f1f5;");
-
+            
+            jFXButton0.setOnAction((event)->{
+                
+                    CollaboratorController collaboratorController = new CollaboratorController();
+                    collaboratorController.rejectCollaboratorRequest(this.collaborationRequest);
+                    TASKLISTS1.getChildren().remove(this);
+                
+            });
+            
             label.setLayoutX(54.0);
             label.setLayoutY(17.0);
-            label.setText("My Todo");
+            label.setText(collaborationRequest.getMessage());
             label.setPrefWidth(152);
             label.prefHeight(21);
 
@@ -1684,6 +1747,13 @@ public  void addTask(TaskEntity taskEntity){
                 TaskAssignmentRequest taskAssignmentRequest = new TaskAssignmentRequest(arte);
                 Taskreq.getChildren().add(taskAssignmentRequest);
             }
+        
+        if(currentUser.getNotificationList() !=null){
+            for(NotificationEntity ne:currentUser.getNotificationList()){
+                Notification notification=new Notification(ne);
+                NOTIFICATIONS.getChildren().add(notification);
+            }
+        }
     } 
     public void acceptTodoCollaborationResponse(UserEntity collaborator, int todoId){
         System.out.println("in acceptTodoCollaborationResponse");
@@ -1732,8 +1802,13 @@ public  void addTask(TaskEntity taskEntity){
         LIST.getChildren().set(todoIndex, Litem);*/
     }
 
-    public void deleteTodoListResponse(Integer todoIndex) {
-        LIST.getChildren().remove(todoIndex);
+    public void deleteTodoListResponse(Integer todoId) {
+        Platform.runLater(() -> {
+            for(Node node : LIST.getChildren())
+                if(((Listicon)node).getTodo().getId() == todoId)
+                    LIST.getChildren().remove((Listicon)node);
+        
+        });
     }
 
     public void acceptCollaborationRequest(CollaborationRequestEntity request) {
@@ -1801,8 +1876,8 @@ public  void addTask(TaskEntity taskEntity){
         int i = 0;
         while(((Friendicon)FRIENDSLIST.getChildren().get(i)).getFriend().getId() != friend.getId())
             i++;
-        ((Friendicon)FRIENDSLIST.getChildren().get(i)).getFriend().setUserStatus(1);
-        ((Friendicon)FRIENDSLIST.getChildren().get(i)).updateFriendStatus(1);    
+        ((Friendicon)FRIENDSLIST.getChildren().get(i)).getFriend().setUserStatus(friend.getUserStatus());
+        ((Friendicon)FRIENDSLIST.getChildren().get(i)).updateFriendStatus(friend.getUserStatus());    
     }
     /*REHAM*/
 
@@ -1858,132 +1933,6 @@ public  void addTask(TaskEntity taskEntity){
 }
     
     
-        class TodoStatstics extends AnchorPane {
-
-        protected final Label label;
-        protected final BorderPane borderPane;
-        protected final AnchorPane anchorPane;
-        protected final AnchorPane anchorPane0;
-        protected final Glow glow;
-        protected final Label label0;
-
-        public TodoStatstics() {
-
-            label = new Label();
-            borderPane = new BorderPane();
-            anchorPane = new AnchorPane();
-            anchorPane0 = new AnchorPane();
-            glow = new Glow();
-            label0 = new Label();
-
-            setMaxHeight(USE_PREF_SIZE);
-            setMaxWidth(USE_PREF_SIZE);
-            setMinHeight(USE_PREF_SIZE);
-            setMinWidth(USE_PREF_SIZE);
-            setPrefHeight(252.0);
-            setPrefWidth(80.0);
-            setStyle("-fx-background-color: #fefefe; -fx-background-radius: 2;");
-
-            label.setAlignment(javafx.geometry.Pos.CENTER);
-            label.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
-            label.setLayoutX(12.0);
-            label.setLayoutY(232.0);
-            label.setPrefHeight(17.0);
-            label.setPrefWidth(57.0);
-            label.setText("list 1");
-            label.setTextAlignment(javafx.scene.text.TextAlignment.JUSTIFY);
-            label.setFont(new Font("System Bold", 13.0));
-
-            borderPane.setLayoutX(20.0);
-            borderPane.setLayoutY(26.0);
-            borderPane.setPrefHeight(200.0);
-            borderPane.setPrefWidth(34.0);
-
-            BorderPane.setAlignment(anchorPane, javafx.geometry.Pos.CENTER);
-
-            anchorPane0.setLayoutX(7.0);
-            anchorPane0.setPrefHeight(167.0);
-            anchorPane0.setPrefWidth(26.0);
-            anchorPane0.setStyle("-fx-background-color: #3b8ef4; -fx-background-radius: 5;");
-
-            //glow.setLevel(0.85);
-            // anchorPane0.setEffect(glow);
-            label0.setLayoutX(3.0);
-            label0.setLayoutY(-32.0);
-            label0.setPrefHeight(19.0);
-            label0.setPrefWidth(39.0);
-            label0.setText("100%");
-            label0.setTextFill(javafx.scene.paint.Color.valueOf("#6991dd"));
-            label0.setFont(new Font("System Bold", 13.0));
-            borderPane.setBottom(anchorPane);
-
-            getChildren().add(label);
-            anchorPane.getChildren().add(anchorPane0);
-            anchorPane.getChildren().add(label0);
-            getChildren().add(borderPane);
-            setBarname("7amada");
-            int x = 20;
-            String s = x + "%";
-            setBarpercent(s);
-
-        }
-
-        void setBarname(String s) {
-            label.setText(s);
-        }
-
-        void setBarpercent(String s) {
-            label0.setText(s);
-        }
-
-        void setBarheight(int i) {
-            anchorPane.setPrefHeight(i);
-        }
-
-    }
-
-
-  class Liststate extends AnchorPane {
-
-    protected final AnchorPane anchorPane;
-    protected final JFXButton jFXButton;
-    protected final ImageView imageView;
-
-    public Liststate() {
-
-        anchorPane = new AnchorPane();
-        jFXButton = new JFXButton();
-        imageView = new ImageView();
-
-        setMaxHeight(USE_PREF_SIZE);
-        setMaxWidth(USE_PREF_SIZE);
-        setMinHeight(USE_PREF_SIZE);
-        setMinWidth(USE_PREF_SIZE);
-        setPrefHeight(42.0);
-        setPrefWidth(473.0);
-
-        anchorPane.setLayoutY(-61.0);
-        anchorPane.setPrefHeight(32.0);
-        anchorPane.setPrefWidth(445.0);
-        anchorPane.setStyle("-fx-background-color: #edc4a8; -fx-background-radius: 7;");
-
-        jFXButton.setLayoutX(14.0);
-        jFXButton.setLayoutY(5.0);
-        jFXButton.setStyle("-fx-background-radius: 7; -fx-background-color: #e8f2fd;");
-
-        imageView.setFitHeight(22.0);
-        imageView.setFitWidth(25.0);
-        imageView.setPickOnBounds(true);
-        imageView.setPreserveRatio(true);
-        imageView.setImage(new Image(getClass().getResource("icons8_bulleted_list_40px.png").toExternalForm()));
-        jFXButton.setGraphic(imageView);
-        jFXButton.setFont(new Font("System Bold", 14.0));
-
-        getChildren().add(anchorPane);
-        getChildren().add(jFXButton);
-
-     }
-   }
-  
+       
     
 }

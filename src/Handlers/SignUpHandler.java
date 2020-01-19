@@ -42,6 +42,7 @@ public class SignUpHandler implements ActionHandler {
 
             } else {
                 // NOT Registered SUCCESSFULLY 
+                
             }
         } catch (JSONException ex) {
             ex.printStackTrace();
