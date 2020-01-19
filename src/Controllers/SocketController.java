@@ -16,7 +16,6 @@ import ControllerBase.SocketInterface;
 import Handlers.AcceptFriendHandler;
 import Handlers.AddFriendHandler;
 import Handlers.DeclineFriendHandler;
-import Handlers.DeleteFriendHandler;
 import Handlers.SearchFriendHandler;
 import Handlers.CollaboratorRequestHandler;
 import Handlers.ItemDeletionHandler;
@@ -199,9 +198,6 @@ public class SocketController implements SocketInterface {
                     break;
                 case "addFriend":
                     actionHandler = new AddFriendHandler();
-                    break;
-                case "deleteFriend":
-                    actionHandler = new DeleteFriendHandler();
                     break;
                 case "acceptFriend":
                     actionHandler = new AcceptFriendHandler();

@@ -6,7 +6,7 @@
 package Handlers;
 
 import ControllerBase.ActionHandler;
-import Entities.FriendRequestEntity;
+import Entities.RequestEntity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.util.function.Consumer;
@@ -19,9 +19,9 @@ import org.json.JSONObject;
  */
 public class AddFriendHandler implements ActionHandler {
     
-    private static Consumer<FriendRequestEntity> consumer;
+    private static Consumer<RequestEntity> consumer;
     
-    public static void setAddFriendGUI(Consumer<FriendRequestEntity> mConsumer) {
+    public static void setAddFriendGUI(Consumer<RequestEntity> mConsumer) {
         consumer = mConsumer;
     }
 
@@ -31,10 +31,10 @@ public class AddFriendHandler implements ActionHandler {
         try {
             Gson gson = new GsonBuilder().serializeNulls().setDateFormat("MMM dd, yyyy h:mm:ss a").create();
             JSONObject jsonObject = new JSONObject(responseJsonObject);
-            String friendRequestEntityJson = jsonObject.getJSONObject("entity").toString();
-            FriendRequestEntity friendRequestEntity = gson.fromJson(friendRequestEntityJson, FriendRequestEntity.class);
+            String requestEntityJson = jsonObject.getJSONObject("entity").toString();
+            RequestEntity requestEntity = gson.fromJson(requestEntityJson, RequestEntity.class);
             if (consumer != null) {
-                consumer.accept(friendRequestEntity);
+                consumer.accept(requestEntity);
             }
         } catch (JSONException ex) {
             System.out.println(ex);

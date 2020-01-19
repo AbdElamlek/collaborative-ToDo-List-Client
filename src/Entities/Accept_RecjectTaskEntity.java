@@ -20,7 +20,7 @@ public class Accept_RecjectTaskEntity extends RequestEntity{
     }
 
     public Accept_RecjectTaskEntity(int id, Date time, int receivedUserId, int sentUserId, int taskId) {
-        super(id, time, receivedUserId, sentUserId);
+        super(id, time, receivedUserId, sentUserId, "");
         this.taskId = taskId;
     }
     
