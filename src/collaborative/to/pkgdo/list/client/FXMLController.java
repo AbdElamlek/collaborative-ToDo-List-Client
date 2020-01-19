@@ -12,11 +12,13 @@ import Handlers.ItemCreationHandler;
 import Controllers.ToDoListController;
 import Entities.ItemEntity;
 import Controllers.CollaboratorController;
+import Controllers.CommentController;
 import Controllers.TaskController;
 import Controllers.SocketController;
 import Controllers.ToDoListController;
 import Entities.Accept_RecjectTaskEntity;
 import Entities.CollaborationRequestEntity;
+import Entities.CommentEntity;
 import Entities.ItemEntity;
 import Entities.NotificationEntity;
 import Entities.RequestEntity;
@@ -26,6 +28,7 @@ import Handlers.AcceptCollaboratorRequestHandler;
 import Entities.TaskEntity;
 import Entities.ToDoEntity;
 import Entities.UserEntity;
+import Handlers.CommentCreationHandler;
 import Handlers.FriendStatusHandler;
 import Handlers.ItemDeletionHandler;
 import Handlers.ItemUpdateHandler;
@@ -103,6 +106,7 @@ public class FXMLController implements Initializable {
     Listicon currentlyViewedTodoList;
     ItemController itemController = new ItemController();
     TaskController taskController = new TaskController();
+    CommentController commentController = new CommentController();
     ArrayList<Integer> itemsIndecies;
     int itemsCounter = 0;
     
@@ -155,6 +159,16 @@ public class FXMLController implements Initializable {
     
     
     
+    @FXML
+    AnchorPane iTEMCOMMENTs1;
+    @FXML
+    AnchorPane tASKINFO;
+    @FXML
+    Label iTEMNAME;
+    @FXML
+    VBox cOMMENTS;
+    @FXML
+    JFXTextField ADDTASK1;
     public HBox sSTATISTICS;
     public VBox lISTSTATUS;
     @FXML
@@ -537,6 +551,14 @@ public class FXMLController implements Initializable {
           /*omnia*/
        
         initiateCurrentUser();
+        
+        ADDTASK1.setOnKeyPressed((KeyEvent event) -> {
+                if(event.getCode()== KeyCode.ENTER){
+                    
+                    commentController.addComment(ADDTASK1.getText(), new java.sql.Date(System.currentTimeMillis()), currentTask.getId(), currentItem.getId(), currentToDo.getId(), currentUser.getId(), currentUser.getUserName());
+                    ADDTASK1.clear();
+                }
+            });
 
     }
 
@@ -553,7 +575,7 @@ public class FXMLController implements Initializable {
 
         protected final Label label;
 
-        public Comment() {
+        public Comment(CommentEntity commentEntity) {
 
             label = new Label();
 
@@ -569,10 +591,19 @@ public class FXMLController implements Initializable {
             label.setLayoutY(2.0);
             label.setPrefHeight(25.0);
             label.setPrefWidth(243.0);
-            label.setText("Comment....");
+            label.setText(commentEntity.getUserName()+": "+commentEntity.getMessageContent());
             label.setFont(new Font("Calibri Light", 12.0));
 
             getChildren().add(label);
+            
+            /*
+            ADDTASK11.setOnKeyPressed((KeyEvent event) -> {
+                if(event.getCode()== KeyCode.ENTER){
+                    
+                    commentController.addComment(ADDTASK11.getText(), new java.sql.Date(System.currentTimeMillis()), currentTask.getId(), currentItem.getId(), currentToDo.getId(), currentUser.getId(), currentUser.getUserName());
+                }
+            });
+            */
 
         }
     }
@@ -1150,6 +1181,7 @@ public class FXMLController implements Initializable {
         ItemDeletionHandler.setTodoGUIGenerator(this::deleteItemResponse);
         TaskUpdateStatusHandler.setTodoGUIGenerator(this::updateTaskResponse);
         TaskDeleteHandler.setTodoGUIGenerator(this::deleteTaskResponse);
+        CommentCreationHandler.setCommentGUIGenerator(this::commentCreationResponse);
     }
          public void updateTaskResponse(TaskEntity task){
             Platform.runLater(() ->  {
@@ -1159,6 +1191,22 @@ public class FXMLController implements Initializable {
             //  currentTask.setStatus(task.getStatus());
             });
     }
+    public void commentCreationResponse(CommentEntity commentEntity ){
+        
+        Platform.runLater(() ->  {
+                addComment(commentEntity);
+               List<TaskEntity> taskEntitys = currentToDo.getItemsList().get(currentToDo.getItemsList().indexOf(currentItem)).getTasksList();
+                taskEntitys.get(taskEntitys.indexOf(currentTask)).getCommentsList().add(commentEntity);
+               System.out.println("comment response invoked");
+               
+            });
+    }
+    
+    public void addComment(CommentEntity commentEntity){
+        Comment comment = new Comment(commentEntity);
+        cOMMENTS.getChildren().add(comment);
+    }
+         
     public void updateTAsk(TaskEntity taskEntity){
          for(int i=0; i< TASKLISTS.getPanes().size();i++){
           Item i1 = (Item) TASKLISTS.getPanes().get(i);
@@ -1338,6 +1386,27 @@ public  void addTask(TaskEntity taskEntity){
         }
         
       
+            label.setOnMousePressed((MouseEvent event) -> {
+             iTEMCOMMENTs1.setVisible(true);
+             tASKINFO.setVisible(true);
+             iTEMNAME.setVisible(true);
+             iTEMNAME.setText(taskjEntity.getDecription());
+                System.out.println("pressed");
+                currentTask = taskjEntity;
+                cOMMENTS.getChildren().clear();
+                
+                List<CommentEntity> commentLis = Collections.synchronizedList(currentTask.getCommentsList());
+                if(commentLis!=null){
+                    
+                    for(CommentEntity commentEntity : commentLis){
+                        Comment comment = new Comment(commentEntity);
+                        cOMMENTS.getChildren().add(comment);
+                    }
+                }
+                
+                 
+            });
+            
         jFXCheckBox.selectedProperty().addListener(new  ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {

@@ -17,6 +17,7 @@ import Handlers.CollaboratorRequestHandler;
 import Handlers.ItemDeletionHandler;
 import Handlers.ItemUpdateHandler;
 import Handlers.AcceptCollaboratorRequestHandler;
+import Handlers.CommentCreationHandler;
 import Handlers.FriendStatusHandler;
 import Handlers.TaskCreationHandler;
 import Handlers.TaskDeleteHandler;
@@ -217,6 +218,9 @@ public class SocketController implements SocketInterface {
                 case "delete task":
                     actionHandler = new TaskDeleteHandler();
                     break;
+                case "add comment":
+                    actionHandler = new CommentCreationHandler();
+                    break;    
                     /*
                     "accept task assignment request"
                     "accept friend request"
