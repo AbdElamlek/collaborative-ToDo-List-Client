@@ -242,7 +242,7 @@
                                     <Image url="@icons8_plus_24px_1.png" />
                                  </image>
                               </ImageView>
-                              <JFXButton fx:id="aDDCOLAB" layoutX="185.0" layoutY="10.0" onMouseClicked="#nav1" prefHeight="21.0" prefWidth="25.0" ripplerFill="BLACK" text=" " />
+                              <JFXButton fx:id="aDDCOLAB" layoutX="185.0" layoutY="10.0" onMouseClicked="#nav3" prefHeight="21.0" prefWidth="25.0" ripplerFill="BLACK" text=" " />
                            </children>
                         </AnchorPane>
                         <AnchorPane fx:id="tASKINFO" layoutX="18.0" layoutY="105.0" visible="false">
@@ -359,7 +359,7 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="STATUSPANE" layoutX="260.0" prefHeight="652.0" prefWidth="769.0" style="-fx-background-color: #FEFEFE;">
+            <AnchorPane fx:id="STATUSPANE" layoutX="260.0" prefHeight="652.0" prefWidth="769.0" style="-fx-background-color: #FEFEFE;" visible="false">
                <effect>
                   <DropShadow blurType="ONE_PASS_BOX" color="#00000053" height="4.875" radius="1.96875" width="5.0" />
                </effect>

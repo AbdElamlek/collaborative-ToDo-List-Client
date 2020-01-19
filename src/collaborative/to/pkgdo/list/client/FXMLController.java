@@ -26,6 +26,7 @@ import Handlers.AcceptCollaboratorRequestHandler;
 import Entities.TaskEntity;
 import Entities.ToDoEntity;
 import Entities.UserEntity;
+import Handlers.CollaboratorRequestHandler;
 import Handlers.FriendStatusHandler;
 import Handlers.ItemDeletionHandler;
 import Handlers.ItemUpdateHandler;
@@ -231,9 +232,45 @@ public class FXMLController implements Initializable {
     public ImageView ADDCOLLAB1;
     public ImageView MENU;
 
-     
- 
+//
+//    public void disableUIForNotification(){
+//
+//        MINIMIZE.setDisable(true);
+//        EXIT.setDisable(true);
+//        FRIENDSLIST.setDisable(true);
+//        LISTSCROLL.setDisable(true);
+//        COLLABSCROLL.setDisable(true);
+//        FRIENDS.setDisable(true);
+//        LISTS.setDisable(true);
+//        nEWLIST.setDisable(true);
+//        ADDDATE.setDisable(true);
+//        DATEPICK.setDisable(true);
+//        TODOPANE.setDisable(true);
+//        LISTPANE.setDisable(true);
+//        FRIENDPANE.setDisable(true);
+//        TODAYPANE.setDisable(true);
+//        STATUSPANE.setDisable(true);
+//        REQUESTPANE.setDisable(true);
+//        DATEPANE.setDisable(true);
+//        ADDLISTPANE.setDisable(true);
+//        REQUESTS.setDisable(true);
+//        TODAY.setDisable(true);
+//        STATUS.setDisable(true);
+//
+//        NEWCOLLABORATOR.setDisable(true);
+//        ADDCOLLABORATORPANE.setDisable(true);
+//    }
+//     
+    @FXML
+    public void nav3(MouseEvent event) {
 
+
+        if (event.getSource() == aDDCOLAB ) {
+            
+             ADDCOLLABORATORPANE.setVisible(true);
+        }
+    }
+    
     @FXML
     public void nav(MouseEvent event) {
 
@@ -332,9 +369,12 @@ public class FXMLController implements Initializable {
          }
 
     } 
-        
-     @FXML
-    public void logOut(MouseEvent event) {
+
+        @FXML
+     public void logOut(MouseEvent event) {
+         AuthenticationController authenticationController = new AuthenticationController();
+         authenticationController.logout(currentUser);
+
          
          SocketController.getInstance().disconnect();
             Platform.runLater(()->{
@@ -376,7 +416,9 @@ public class FXMLController implements Initializable {
         
       @FXML
      public void exit(MouseEvent event) {
-       
+        AuthenticationController authenticationController = new AuthenticationController();
+        authenticationController.logout(currentUser);
+        
           SocketController.getInstance().disconnect();
             Platform.exit();
     }  
@@ -425,7 +467,10 @@ public class FXMLController implements Initializable {
 //}
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        /*eman*/
         NotificationHandler.setNotificationGUIGenerator(this::createNotificationResponse);
+        CollaboratorRequestHandler.setCollaborationRequestGUIGenerator(this::createCollaboratorRequestResponse);
+        /*eman*/
         /*REHAM*/
         ToDoCreationHandler.setTodoGUIGenerator(this::createTodoListResponse);
         ToDoUpdateHandler.setTodoGUIModifier(this::updateTodoListResponse);
@@ -602,6 +647,12 @@ public class FXMLController implements Initializable {
             NOTIFICATIONS.getChildren().add(new Notification(ne));
         });
     }
+    
+    public void createCollaboratorRequestResponse(CollaborationRequestEntity cre) {
+        Platform.runLater(() -> {
+            TASKLISTS1.getChildren().add(new CollaborationRequest(cre));
+        });
+    }
 
 
     class Friendtoadd extends AnchorPane {
@@ -619,7 +670,16 @@ public class FXMLController implements Initializable {
             label = new Label();
             imageView0 = new ImageView();
             aDDCOLL = new JFXButton();
-
+            aDDCOLL.setOnMouseClicked((MouseEvent event) -> {
+                int collaboratorId=friend.getId();
+                int senderId=CurrentUser.getCurrentUser().getId();
+                int todoId=currentlyViewedTodoList.getTodo().getId();
+                CollaboratorController c=new CollaboratorController();
+                c.addCollaboratorRequest(collaboratorId,senderId, todoId);
+                aDDCOLL.setDisable(true);
+                currentlyViewedTodoList.updateFriendsToAddAsCollaborators(this);
+            });
+            aDDCOLL.setPrefWidth(4.0);
             setMaxHeight(USE_PREF_SIZE);
             setMaxWidth(USE_PREF_SIZE);
             setMinHeight(USE_PREF_SIZE);
@@ -865,9 +925,11 @@ public class FXMLController implements Initializable {
     public Listicon(ToDoEntity todo, boolean isOwnedByCurrentUser) {
         
         delete.setOnAction((event) -> {
-            System.out.println("delete");
+            ToDoListController todoListController = new ToDoListController();
+            todoListController.deleteToDoList(todo);
+            LIST.getChildren().remove(this);
           });
-      
+        delete.setDisable(!isOwnedByCurrentUser);
         menu.getItems().addAll(delete);
 
         this.todo = todo;
@@ -981,6 +1043,9 @@ public class FXMLController implements Initializable {
             }
         
         /*Abd El Malek*/    
+    }
+    public void updateFriendsToAddAsCollaborators(Friendtoadd friend){
+        FRIENDSTOADDASCOLLABORATORS.getChildren().remove(friend);
     }
     }
 
@@ -1473,7 +1538,7 @@ public  void addTask(TaskEntity taskEntity){
                     System.out.println("from handle accept");
                     CollaboratorController collaboratorController = new CollaboratorController();
                     collaboratorController.acceptCollaboratorRequest(this.collaborationRequest);
-                
+                    TASKLISTS1.getChildren().remove(this);
                 
             });
 
@@ -1483,10 +1548,18 @@ public  void addTask(TaskEntity taskEntity){
             jFXButton0.setPrefHeight(25);
             jFXButton0.setText("Reject");
             jFXButton0.setStyle("-fx-background-color:  #f0f1f5;");
-
+            
+            jFXButton0.setOnAction((event)->{
+                
+                    CollaboratorController collaboratorController = new CollaboratorController();
+                    collaboratorController.rejectCollaboratorRequest(this.collaborationRequest);
+                    TASKLISTS1.getChildren().remove(this);
+                
+            });
+            
             label.setLayoutX(54.0);
             label.setLayoutY(17.0);
-            label.setText("My Todo");
+            label.setText(collaborationRequest.getMessage());
             label.setPrefWidth(152);
             label.prefHeight(21);
 
@@ -1604,6 +1677,13 @@ public  void addTask(TaskEntity taskEntity){
                 TaskAssignmentRequest taskAssignmentRequest = new TaskAssignmentRequest(arte);
                 Taskreq.getChildren().add(taskAssignmentRequest);
             }
+        
+        if(currentUser.getNotificationList() !=null){
+            for(NotificationEntity ne:currentUser.getNotificationList()){
+                Notification notification=new Notification(ne);
+                NOTIFICATIONS.getChildren().add(notification);
+            }
+        }
     } 
     public void acceptTodoCollaborationResponse(UserEntity collaborator, int todoId){
         System.out.println("in acceptTodoCollaborationResponse");
@@ -1652,8 +1732,13 @@ public  void addTask(TaskEntity taskEntity){
         LIST.getChildren().set(todoIndex, Litem);*/
     }
 
-    public void deleteTodoListResponse(Integer todoIndex) {
-        LIST.getChildren().remove(todoIndex);
+    public void deleteTodoListResponse(Integer todoId) {
+        Platform.runLater(() -> {
+            for(Node node : LIST.getChildren())
+                if(((Listicon)node).getTodo().getId() == todoId)
+                    LIST.getChildren().remove((Listicon)node);
+        
+        });
     }
 
     public void acceptCollaborationRequest(CollaborationRequestEntity request) {
@@ -1721,8 +1806,8 @@ public  void addTask(TaskEntity taskEntity){
         int i = 0;
         while(((Friendicon)FRIENDSLIST.getChildren().get(i)).getFriend().getId() != friend.getId())
             i++;
-        ((Friendicon)FRIENDSLIST.getChildren().get(i)).getFriend().setUserStatus(1);
-        ((Friendicon)FRIENDSLIST.getChildren().get(i)).updateFriendStatus(1);    
+        ((Friendicon)FRIENDSLIST.getChildren().get(i)).getFriend().setUserStatus(friend.getUserStatus());
+        ((Friendicon)FRIENDSLIST.getChildren().get(i)).updateFriendStatus(friend.getUserStatus());    
     }
     /*REHAM*/
 
