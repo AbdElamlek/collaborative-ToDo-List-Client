@@ -90,20 +90,14 @@ public class StatisticsHandler {
    } 
   private int getFinishedTasks(ToDoEntity list)
    { 
-       setItems(list);
        
-       int counter=0,percentage=0;
-       for(ItemEntity item:items)
-       {  setTasks(item);
-         for(TaskEntity task:tasks)
-         {
-            if(task.getStatus()==TASK_STATUS_DONE)
-            counter++;
-         }
-         if(tasks.size()>0)
-         percentage=(counter/tasks.size())*100;
-         
-      }  
+       int counter=0,percentage=0,total=0;
+       for(ItemEntity item:list.getItemsList())
+       { counter+= getFinishedTasksItem(item);
+         total+=item.getTasksList().size();
+      }
+       if(total>0)
+       percentage=(counter*100)/total;
        return percentage;
    }
 
@@ -128,12 +122,12 @@ public class StatisticsHandler {
    
 
    
-   public List<TodoStatstics> setListsStatistics()
+   public List<TodoStatstics> setListsStatistics(List<ToDoEntity> todos)
    { 
        List<TodoStatstics> graphs=new ArrayList<>();
-       for(ToDoEntity list:lists )
+       for(ToDoEntity todo:todos )
        {
-        TodoStatstics stat=new TodoStatstics(list,getFinishedTasks(list));
+        TodoStatstics stat=new TodoStatstics(todo,getFinishedTasks(todo));
         graphs.add(stat);
        }
      
