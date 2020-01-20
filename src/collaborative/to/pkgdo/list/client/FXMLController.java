@@ -1756,8 +1756,9 @@ public class FXMLController implements Initializable {
             label.setLayoutX(54.0);
             label.setLayoutY(17.0);
             label.setText(collaborationRequest.getMessage());
-            label.setPrefWidth(152);
+            label.setPrefWidth(100);
             label.prefHeight(21);
+            label.setFont(new Font(12.0));
 
             getChildren().add(imageView);
             getChildren().add(jFXButton);
@@ -1823,9 +1824,10 @@ public class FXMLController implements Initializable {
 
             label.setLayoutX(54.0);
             label.setLayoutY(17.0);
-            label.setText("My Task");
-            label.setPrefWidth(152);
+            label.setText("My Task tttttttttttttt");
+            label.setPrefWidth(100);
             label.prefHeight(21);
+            label.setFont(new Font(12.0));
 
             getChildren().add(imageView);
             getChildren().add(jFXButton);
