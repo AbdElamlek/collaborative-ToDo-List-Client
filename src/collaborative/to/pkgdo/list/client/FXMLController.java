@@ -347,11 +347,38 @@ public class FXMLController implements Initializable {
         }
     }
    /*omnia*/
+    public void manageUI(boolean disable){
+        
+        SHOWNOTIFICATIONS.setMouseTransparent(disable);
+        lOGOUT.setMouseTransparent(disable);
+        
+        REQUESTS.setMouseTransparent(disable);
+        TODAY.setMouseTransparent(disable);
+        STATUS.setMouseTransparent(disable);
+        
+        LISTS.setMouseTransparent(disable);
+        FRIENDS.setMouseTransparent(disable);
+        
+        LIST.setMouseTransparent(disable);
+        
+        ADDTASK.setMouseTransparent(disable);
+        
+        // ALL ABOVE CAN BE PROFILEPANE.setNouseTransparent(disable);
+        
+        TODOPANE.setMouseTransparent(disable);
+        TODAYPANE.setMouseTransparent(disable);
+        STATUSPANE.setMouseTransparent(disable);
+        REQUESTPANE.setMouseTransparent(disable);
+        NOTIFIPANE.setMouseTransparent(disable);
+        
+    }
+    
     @FXML
     public void nav1(MouseEvent event) {
 
         if (event.getSource() == nEWLIST) {
             //REQUESTS.setMouseTransparent(true);
+            manageUI(true);
             ADDLISTPANE.setVisible(true);
           }
         else if(event.getSource() == eDITLIST){
@@ -410,6 +437,7 @@ public class FXMLController implements Initializable {
              NEWTODOTITLE.setText("");
              ADDLISTPANE.setVisible(false);
              eDITLISTAP.setVisible(false);
+             manageUI(false);
          } else if(event.getSource() == ADDDATE || event.getSource() == ADDDATE1){
              
              DATEPANE.setVisible(true);
@@ -1111,8 +1139,8 @@ public class FXMLController implements Initializable {
         if(todo.getColor() != null)
             TITLE.setTextFill(Color.web(todo.getColor()));
         
-        sTARTDATE.setText(todo.getAssignDate().getDay() + "/" + todo.getAssignDate().getMonth() + "/" + todo.getAssignDate().getYear());
-        eNDDATE.setText(todo.getDeadLineDate().getDay() + "/" + todo.getDeadLineDate().getMonth() + "/" + todo.getDeadLineDate().getYear());
+        sTARTDATE.setText(todo.getAssignDate().getDate() + "/" + todo.getAssignDate().getMonth()+1 + "/" + (todo.getAssignDate().getYear()+1900));
+        eNDDATE.setText(todo.getDeadLineDate().getDate() + "/" + todo.getDeadLineDate().getMonth()+1 + "/" + (todo.getDeadLineDate().getYear()+1900));
         
         COLLABORATORS.getChildren().setAll(TODOCOLLABORATORS);
         aDDRIENDCOLABLIST.getChildren().setAll(FRIENDSTOADDASCOLLABORATORS);
@@ -1960,6 +1988,7 @@ public  void addTask(TaskEntity taskEntity){
             ENDDATE.setValue(null);
             TODOCOLOR = null;
             ADDLISTPANE.setVisible(false);
+            manageUI(false);
         }
     }
     
