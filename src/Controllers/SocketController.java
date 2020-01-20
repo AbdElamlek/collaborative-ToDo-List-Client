@@ -82,6 +82,7 @@ public class SocketController implements SocketInterface {
                                  
                                  System.out.println("server is down!");
                                   isRunning = false; 
+                                  if(connectionFailed !=null)
                                   connectionFailed.accept(null);
                                   
                                  
@@ -133,7 +134,7 @@ public class SocketController implements SocketInterface {
     Platform.runLater(new Runnable() {
         @Override
         public void run() {
-       if(!thread.isAlive())      
+       if(!thread.isAlive())
             thread.start();
         }
     });
