@@ -384,6 +384,7 @@ public class FXMLController implements Initializable {
             ADDLISTPANE.setVisible(true);
           }
         else if(event.getSource() == eDITLIST){
+            manageUI(true);
             NEWTODOTITLE1.setText(currentlyViewedTodoList.getTodo().getTitle());
                         
             STARTDATE.setValue(LocalDateTime.ofInstant(Instant.ofEpochMilli(currentlyViewedTodoList.getTodo().getAssignDate().getTime()), ZoneId.systemDefault()).toLocalDate());
@@ -2032,7 +2033,7 @@ public  void addTask(TaskEntity taskEntity){
     }
 
     public void createTodoListRequest(MouseEvent event) {
-
+        manageUI(false);
         String todoTitle = NEWTODOTITLE.getText();
         System.out.println(todoTitle);
 
