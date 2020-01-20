@@ -349,14 +349,42 @@ public class FXMLController implements Initializable {
         }
     }
    /*omnia*/
+    public void manageUI(boolean disable){
+        
+        SHOWNOTIFICATIONS.setMouseTransparent(disable);
+        lOGOUT.setMouseTransparent(disable);
+        
+        REQUESTS.setMouseTransparent(disable);
+        TODAY.setMouseTransparent(disable);
+        STATUS.setMouseTransparent(disable);
+        
+        LISTS.setMouseTransparent(disable);
+        FRIENDS.setMouseTransparent(disable);
+        
+        LIST.setMouseTransparent(disable);
+        
+        ADDTASK.setMouseTransparent(disable);
+        
+        // ALL ABOVE CAN BE PROFILEPANE.setNouseTransparent(disable);
+        
+        TODOPANE.setMouseTransparent(disable);
+        TODAYPANE.setMouseTransparent(disable);
+        STATUSPANE.setMouseTransparent(disable);
+        REQUESTPANE.setMouseTransparent(disable);
+        NOTIFIPANE.setMouseTransparent(disable);
+        
+    }
+    
     @FXML
     public void nav1(MouseEvent event) {
 
         if (event.getSource() == nEWLIST) {
             //REQUESTS.setMouseTransparent(true);
+            manageUI(true);
             ADDLISTPANE.setVisible(true);
           }
         else if(event.getSource() == eDITLIST){
+            manageUI(true);
             NEWTODOTITLE1.setText(currentlyViewedTodoList.getTodo().getTitle());
                         
             STARTDATE.setValue(LocalDateTime.ofInstant(Instant.ofEpochMilli(currentlyViewedTodoList.getTodo().getAssignDate().getTime()), ZoneId.systemDefault()).toLocalDate());
@@ -412,6 +440,7 @@ public class FXMLController implements Initializable {
              NEWTODOTITLE.setText("");
              ADDLISTPANE.setVisible(false);
              eDITLISTAP.setVisible(false);
+             manageUI(false);
          } else if(event.getSource() == ADDDATE || event.getSource() == ADDDATE1){
              
              DATEPANE.setVisible(true);
@@ -1155,8 +1184,9 @@ public class FXMLController implements Initializable {
         if(todo.getColor() != null)
             TITLE.setTextFill(Color.web(todo.getColor()));
         
-        sTARTDATE.setText(todo.getAssignDate().getDay() + "/" + todo.getAssignDate().getMonth() + "/" + todo.getAssignDate().getYear());
-        eNDDATE.setText(todo.getDeadLineDate().getDay() + "/" + todo.getDeadLineDate().getMonth() + "/" + todo.getDeadLineDate().getYear());
+        sTARTDATE.setText(todo.getAssignDate().getDate() + "/" + todo.getAssignDate().getMonth()+1 + "/" + (todo.getAssignDate().getYear()+1900));
+        eNDDATE.setText(todo.getDeadLineDate().getDate() + "/" + todo.getDeadLineDate().getMonth()+1 + "/" + (todo.getDeadLineDate().getYear()+1900));
+        
         COLLABORATORS.getChildren().setAll(TODOCOLLABORATORS);
         aDDRIENDCOLABLIST.getChildren().setAll(FRIENDSTOADDASCOLLABORATORS);
 
@@ -1329,6 +1359,15 @@ public class FXMLController implements Initializable {
              }
             
             }
+        });
+        label.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                iTEMCOMMENTs1.setVisible(false);
+                tASKINFO.setVisible(false);
+                iTEMNAME.setVisible(false);
+                aSSIGNEDTOTASK.setVisible(false);
+                        }
         });
         
        
@@ -1717,8 +1756,9 @@ public class FXMLController implements Initializable {
             label.setLayoutX(54.0);
             label.setLayoutY(17.0);
             label.setText(collaborationRequest.getMessage());
-            label.setPrefWidth(152);
+            label.setPrefWidth(100);
             label.prefHeight(21);
+            label.setFont(new Font(12.0));
 
             getChildren().add(imageView);
             getChildren().add(jFXButton);
@@ -1784,9 +1824,10 @@ public class FXMLController implements Initializable {
 
             label.setLayoutX(54.0);
             label.setLayoutY(17.0);
-            label.setText("My Task");
-            label.setPrefWidth(152);
+            label.setText("My Task tttttttttttttt");
+            label.setPrefWidth(100);
             label.prefHeight(21);
+            label.setFont(new Font(12.0));
 
             getChildren().add(imageView);
             getChildren().add(jFXButton);
@@ -1994,7 +2035,7 @@ public  void addTask(TaskEntity taskEntity){
     }
 
     public void createTodoListRequest(MouseEvent event) {
-
+        manageUI(false);
         String todoTitle = NEWTODOTITLE.getText();
         System.out.println(todoTitle);
 
@@ -2019,6 +2060,7 @@ public  void addTask(TaskEntity taskEntity){
             ENDDATE.setValue(null);
             TODOCOLOR = null;
             ADDLISTPANE.setVisible(false);
+            manageUI(false);
         }
     }
     

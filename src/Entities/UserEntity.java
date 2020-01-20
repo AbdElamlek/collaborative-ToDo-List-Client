@@ -139,6 +139,7 @@ public class UserEntity implements BaseEntity {
     }
 
     public ArrayList<ToDoEntity> getTodoList() {
+
         if(todoList==null){
             this.todoList = new ArrayList<>();
         }

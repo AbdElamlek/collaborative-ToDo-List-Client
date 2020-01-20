@@ -7,6 +7,7 @@ package Handlers;
 
 import ControllerBase.ActionHandler;
 import Entities.UserEntity;
+import Utils.CurrentUser;
 import com.google.gson.Gson;
 import java.util.function.Consumer;
 import org.json.JSONException;
@@ -34,6 +35,7 @@ public class SignUpHandler implements ActionHandler {
             UserEntity user = gson.fromJson(userJsonObject, UserEntity.class);
             if (user != null) {
                 // Registered SUCCESSFULLY 
+                CurrentUser.setCurrentUser(user);
                 System.out.println("client" + user.getId());
                 System.out.println("client : recieved user data" + jsonObject);
                 if (loginPageNavigator != null) {
@@ -42,7 +44,7 @@ public class SignUpHandler implements ActionHandler {
 
             } else {
                 // NOT Registered SUCCESSFULLY 
-                
+                System.out.println("*******************not signed up");
             }
         } catch (JSONException ex) {
             ex.printStackTrace();

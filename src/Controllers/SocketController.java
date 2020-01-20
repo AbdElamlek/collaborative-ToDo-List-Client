@@ -147,13 +147,14 @@ public class SocketController implements SocketInterface {
 
         
         try {
-            dataInputStream.close();
-            printStream.close();
-            socket.close();
-            socketController=null;
-            isRunning=false;
+            if(isRunning){
+                dataInputStream.close();
+                printStream.close();
+                socket.close();
+                socketController=null;
+                isRunning=false;
             
-            
+            }
         } catch (IOException ex) {
             Logger.getLogger(SocketController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -168,7 +169,7 @@ public class SocketController implements SocketInterface {
         
             //OR FUNCTION NAME CAN BE: sendRequest(String jsonObjectStr)
             //System.out.println("from sendJsonObject: " + jsonObjectStr);
-            if(printStream != null)
+            if(isRunning)
                 printStream.println(jsonObjectStr);
             System.out.println("SENT");
 
@@ -190,6 +191,7 @@ public class SocketController implements SocketInterface {
                     actionHandler = new LoginHandler();
                     break;
                 case "signup":
+                    System.out.println("***************in signup");
                     actionHandler = new SignUpHandler();
                     break;
                 case "notification":
