@@ -1489,13 +1489,32 @@ public class FXMLController implements Initializable {
         public int taskId;
         protected final ContextMenu menu = new ContextMenu();
         protected MenuItem delete = new MenuItem("Delete");
+        protected MenuItem withdraw = new MenuItem("Withdraw");
+        TaskEntity taskEntity;
+        
         
         public Task(TaskEntity taskjEntity) {
             delete.setOnAction((event) -> {
                 taskController.deleteTask(taskjEntity);
             });
+            taskEntity = taskjEntity;
             taskId = taskjEntity.getId();
-            menu.getItems().addAll(delete);
+            menu.getItems().add(delete);
+            withdraw.setOnAction((event) -> {
+                taskController.withdrawFromTask(taskjEntity, CurrentUser.getCurrentUser().getId(), currentToDo.getId());
+            });
+            boolean isAssignedToCurrentUser = false;
+            
+            for(UserEntity user : taskjEntity.getAssignedUsersList()){
+                System.out.println("************"+user.getId());
+                if(user.getId() == CurrentUser.getCurrentUser().getId())
+                    isAssignedToCurrentUser = true;
+            }
+            
+            //withdraw.setDisable(!isAssignedToCurrentUser);
+            System.out.println(isAssignedToCurrentUser);
+            if(isAssignedToCurrentUser)
+                menu.getItems().add(withdraw);
 
             jFXCheckBox = new JFXCheckBox();
             line = new Line();
@@ -1909,8 +1928,8 @@ public class FXMLController implements Initializable {
             Platform.runLater(() ->  {
                 addTask(task);
                // currentToDo.getItemsList().get(currentToDo.getItemsList().indexOf(currentItem)).getTasksList().add(task);
-                
-                currentItem.getTasksList().add(task);
+               
+               currentItem.getTasksList().add(task);
                
             });
     }
