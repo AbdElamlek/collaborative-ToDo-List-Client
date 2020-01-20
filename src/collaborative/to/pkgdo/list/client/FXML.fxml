@@ -22,7 +22,7 @@
    <children>
       <AnchorPane id="AnchorPane" layoutX="10.0" layoutY="10.0" prefHeight="652.0" prefWidth="1028.0" style="-fx-background-color: #fefefe;" stylesheets="@tabpane.css" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
        <children>
-            <AnchorPane prefHeight="699.0" prefWidth="259.0" style="-fx-border-radius: 5; -fx-background-color: #fefefe;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="769.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane fx:id="PROFILEPANE" prefHeight="699.0" prefWidth="259.0" style="-fx-border-radius: 5; -fx-background-color: #fefefe;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="769.0" AnchorPane.topAnchor="0.0">
                <effect>
                   <DropShadow blurType="ONE_PASS_BOX" color="#00000053" height="4.75" radius="1.9375" width="5.0" />
                </effect>
@@ -292,7 +292,7 @@
                      </children>
                   </AnchorPane>
 
-                  <JFXButton fx:id="eDITLIST" layoutX="393.0" layoutY="53.0" prefHeight="25.0" prefWidth="25.0" text=" " />
+                  <JFXButton fx:id="eDITLIST" layoutX="393.0" layoutY="53.0" onMouseClicked="#nav1" prefHeight="25.0" prefWidth="25.0" text=" " />
                </children>
             </AnchorPane>
             <AnchorPane fx:id="TODAYPANE" layoutX="256.0" prefHeight="652.0" prefWidth="769.0" style="-fx-background-color: #FEFEFE;" visible="false">
