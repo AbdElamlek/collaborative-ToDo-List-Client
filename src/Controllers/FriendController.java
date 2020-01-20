@@ -5,34 +5,40 @@
  */
 package Controllers;
 
-import ControllerBase.FriendIntrface;
 import Entities.EntityWrapper;
 import Entities.RequestEntity;
-import javax.json.JsonObject;
+import Entities.UserEntity;
+import java.sql.Date;
 
 /**
  *
  * @author ahmedpro
  */
-public class FriendController implements FriendIntrface {
+public class FriendController {
 
-    private int sentUserId;
-    private AdapterController adapterController;
-    private SocketController socketController;
-
-    public FriendController(int userId) {
-        this.sentUserId = userId;
-        adapterController = new AdapterController();
-        socketController = SocketController.getInstance();
+    private FriendController() {
     }
 
-    @Override
-    public void addFreind(JsonObject friend) {
+    public static void searchFriend(String userName) {
+        AdapterController adapterController = new AdapterController();
+        SocketController socketController = SocketController.getInstance();
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUserName(userName);
+        EntityWrapper entityWrapper
+                = new EntityWrapper("searchFriend", "UserEntity", userEntity);
+        String entityWrapperJson = adapterController.entity2Json(entityWrapper);
+        socketController.sendJsonObject(entityWrapperJson);
+    }
+
+    public static void addFreind(int sentUserId, int receivedUserId, String friendUserName) {
         try {
-            int receivedUserId = friend.getInt("id");
+            AdapterController adapterController = new AdapterController();
+            SocketController socketController = SocketController.getInstance();
             RequestEntity requestEntity = new RequestEntity();
             requestEntity.setSentUserId(sentUserId);
             requestEntity.setReceivedUserId(receivedUserId);
+            requestEntity.setTime(new Date(System.currentTimeMillis()));
+            requestEntity.setMessage(friendUserName);
             EntityWrapper entityWrapper = new EntityWrapper("addFriend", "RequestEntity", requestEntity);
             String taskJsonResponse = adapterController.entity2Json(entityWrapper);
             socketController.sendJsonObject(taskJsonResponse);
@@ -41,14 +47,15 @@ public class FriendController implements FriendIntrface {
         }
     }
 
-    @Override
-    public void removeFreind(JsonObject friend) {
+    public static void deleteFreind(int sentUserId, int receivedUserId, String friendUserName) {
         try {
-            int receivedUserId = friend.getInt("id");
+            AdapterController adapterController = new AdapterController();
+            SocketController socketController = SocketController.getInstance();
             RequestEntity requestEntity = new RequestEntity();
             requestEntity.setSentUserId(sentUserId);
             requestEntity.setReceivedUserId(receivedUserId);
-            EntityWrapper entityWrapper = new EntityWrapper("removeFriend", "RequestEntity", requestEntity);
+            requestEntity.setMessage(friendUserName);
+            EntityWrapper entityWrapper = new EntityWrapper("deleteFriend", "RequestEntity", requestEntity);
             String taskJsonResponse = adapterController.entity2Json(entityWrapper);
             socketController.sendJsonObject(taskJsonResponse);
         } catch (Exception ex) {
@@ -56,14 +63,15 @@ public class FriendController implements FriendIntrface {
         }
     }
 
-    @Override
-    public void acceptFriendReauest(JsonObject request) {
+    public static void acceptFriendReauest(int sentUserId, int receivedUserId, String friendUserName) {
         try {
-            int receivedUserId = request.getInt("id");
+            AdapterController adapterController = new AdapterController();
+            SocketController socketController = SocketController.getInstance();
             RequestEntity requestEntity = new RequestEntity();
             requestEntity.setSentUserId(sentUserId);
             requestEntity.setReceivedUserId(receivedUserId);
-            EntityWrapper entityWrapper = new EntityWrapper("acceptFriendReauest", "RequestEntity", requestEntity);
+            requestEntity.setMessage(friendUserName);
+            EntityWrapper entityWrapper = new EntityWrapper("acceptFriend", "RequestEntity", requestEntity);
             String taskJsonResponse = adapterController.entity2Json(entityWrapper);
             socketController.sendJsonObject(taskJsonResponse);
         } catch (Exception ex) {
@@ -71,14 +79,15 @@ public class FriendController implements FriendIntrface {
         }
     }
 
-    @Override
-    public void declineFriendReauest(JsonObject request) {
+    public static void declineFriendReauest(int sentUserId, int receivedUserId, String friendUserName) {
         try {
-            int receivedUserId = request.getInt("id");
+            AdapterController adapterController = new AdapterController();
+            SocketController socketController = SocketController.getInstance();
             RequestEntity requestEntity = new RequestEntity();
             requestEntity.setSentUserId(sentUserId);
             requestEntity.setReceivedUserId(receivedUserId);
-            EntityWrapper entityWrapper = new EntityWrapper("declineFriendReauest", "RequestEntity", requestEntity);
+            requestEntity.setMessage(friendUserName);
+            EntityWrapper entityWrapper = new EntityWrapper("declineFriend", "RequestEntity", requestEntity);
             String taskJsonResponse = adapterController.entity2Json(entityWrapper);
             socketController.sendJsonObject(taskJsonResponse);
         } catch (Exception ex) {

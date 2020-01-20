@@ -17,6 +17,16 @@ public class Accept_RejectTaskDTO implements BaseEntity {
     TaskEntity task;
     int todoId;
 
+    public Accept_RejectTaskDTO() {
+    }
+
+    public Accept_RejectTaskDTO(int userId, TaskEntity task, int todoId) {
+        this.userId = userId;
+        this.task = task;
+        this.todoId = todoId;
+    }
+
+    
     public int getUserId() {
         return userId;
     }

@@ -34,7 +34,8 @@ public class CollaboratorController implements CollaboratorInterface {
     @Override
     public void addCollaboratorRequest(int collaboratorID, int senderID, int todoId) {
         String reqJson = ac.entity2Json(new EntityWrapper("add collaborator request", "CollaborationRequestEntity",
-                new CollaborationRequestEntity(todoId,"",0, new Date(System.currentTimeMillis()), collaboratorID, senderID)));
+
+        new CollaborationRequestEntity(todoId,0, new Date(System.currentTimeMillis()), collaboratorID, senderID,"")));
         System.out.println("client sender:\n"+reqJson);
         sc.sendJsonObject(reqJson);
     }
