@@ -67,14 +67,21 @@ public class TaskEntity implements BaseEntity {
     }
 
     public ArrayList<CommentEntity> getCommentsList() {
+       if(commentsList==null){
+            this.commentsList = new ArrayList<>();
+        }
         return commentsList;
     }
 
     public ArrayList<String> getAssignedUsersList() {
+       if(assignedUsersList==null){
+            this.assignedUsersList = new ArrayList<>();
+        }
         return assignedUsersList;
     }
 
     public void setAssignedUsersList(ArrayList<String> assignedUsersList) {
+        
         this.assignedUsersList = assignedUsersList;
     }
     

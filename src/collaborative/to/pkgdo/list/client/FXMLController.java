@@ -490,6 +490,11 @@ public class FXMLController implements Initializable {
         ToDoUpdateHandler.setTodoGUIModifier(this::updateTodoListResponse);
         ToDoDeleteHandler.setTodoGUIModifier(this::deleteTodoListResponse);
         FriendStatusHandler.setFriendStatusGUIModifier(this::updateFriendStatus);
+         TaskCreationHandler.setTodoGUIGenerator(this::createTaskResponse);
+        ItemCreationHandler.setTodoGUIGenerator(this:: createItemResponse);
+        CommentCreationHandler.setCommentGUIGenerator(this::commentCreationResponse);
+
+       
 //        sSTATISTICS.getChildren().add(bar1);
   //      sSTATISTICS.getChildren().add(bar2);
     //    sSTATISTICS.getChildren().add(bar3);
@@ -1064,7 +1069,7 @@ public class FXMLController implements Initializable {
         /*Abd El Malek*/
         currentToDo = todo;
         TASKLISTS.getPanes().clear();
-        
+        System.out.println("to do sisze is "+todo.getItemsList().size());
         if(todo.getItemsList()!=null){
                 for(ItemEntity itemEntity : todo.getItemsList()){
                         Item item = new Item(itemEntity);
@@ -1078,6 +1083,10 @@ public class FXMLController implements Initializable {
     public void updateFriendsToAddAsCollaborators(Friendtoadd friend){
         FRIENDSTOADDASCOLLABORATORS.getChildren().remove(friend);
     }
+
+        public void addItem(ItemEntity itemEntity) {
+            todo.getItemsList().add(itemEntity);
+        }
     }
 
 
@@ -1229,13 +1238,10 @@ public class FXMLController implements Initializable {
         });
         */
         
-        TaskCreationHandler.setTodoGUIGenerator(this::createTaskResponse);
-        ItemCreationHandler.setTodoGUIGenerator(this:: createItemResponse);
         ItemUpdateHandler.setTodoGUIGenerator(this::updateItemResponse);
         ItemDeletionHandler.setTodoGUIGenerator(this::deleteItemResponse);
         TaskUpdateStatusHandler.setTodoGUIGenerator(this::updateTaskResponse);
         TaskDeleteHandler.setTodoGUIGenerator(this::deleteTaskResponse);
-        CommentCreationHandler.setCommentGUIGenerator(this::commentCreationResponse);
     }
          public void updateTaskResponse(TaskEntity task){
             Platform.runLater(() ->  {
@@ -1245,21 +1251,7 @@ public class FXMLController implements Initializable {
             //  currentTask.setStatus(task.getStatus());
             });
     }
-    public void commentCreationResponse(CommentEntity commentEntity ){
-        
-        Platform.runLater(() ->  {
-                addComment(commentEntity);
-               List<TaskEntity> taskEntitys = currentToDo.getItemsList().get(currentToDo.getItemsList().indexOf(currentItem)).getTasksList();
-                taskEntitys.get(taskEntitys.indexOf(currentTask)).getCommentsList().add(commentEntity);
-               System.out.println("comment response invoked");
-               
-            });
-    }
     
-    public void addComment(CommentEntity commentEntity){
-        Comment comment = new Comment(commentEntity);
-        cOMMENTS.getChildren().add(comment);
-    }
          
     public void updateTAsk(TaskEntity taskEntity){
          for(int i=0; i< TASKLISTS.getPanes().size();i++){
@@ -1312,41 +1304,7 @@ public class FXMLController implements Initializable {
           }
        }         
     }
- public void createTaskResponse(TaskEntity task){
-            Platform.runLater(() ->  {
-                addTask(task);
-                currentToDo.getItemsList().get(currentToDo.getItemsList().indexOf(currentItem)).getTasksList().add(task);
-                
-               // currentItem.getTasksList().add(task);
-               
-            });
-    }
-
-public void createItemResponse(ItemEntity item){
-            Platform.runLater(() ->  {
-                addItem(item);
-                currentToDo.getItemsList().add(item);
-            });
-    }
-
-public  void addTask(TaskEntity taskEntity){
-    Task task = new Task(taskEntity);   
-
-    for(int i=0; i< TASKLISTS.getPanes().size();i++){
-          Item i1 = (Item) TASKLISTS.getPanes().get(i);
-          if(taskEntity.getItemId() == i1.itemId){
-              i1.vBox.getChildren().add(task);
-              break;
-          }
-       }
-     
-    }
-   public  void addItem(ItemEntity itemEntity){
-       Item item = new Item(itemEntity);
-       TASKLISTS.getPanes().add(item);
-       
-       
-   }
+ 
    private void deleteItem(ItemEntity itemEntity) {
             TASKLISTS.getPanes().remove(this);
         }
@@ -1773,6 +1731,69 @@ public  void addTask(TaskEntity taskEntity){
             Listicon Litem = new Listicon(todo, isOwner);
             LIST.getChildren().add(Litem);
         });
+    }
+    
+    
+    public void createTaskResponse(TaskEntity task){
+            Platform.runLater(() ->  {
+                addTask(task);
+               // currentToDo.getItemsList().get(currentToDo.getItemsList().indexOf(currentItem)).getTasksList().add(task);
+                
+                currentItem.getTasksList().add(task);
+               
+            });
+    }
+
+public void createItemResponse(ItemEntity item){
+            Platform.runLater(() ->  {
+                addItem(item);
+               // currentToDo.getItemsList().add(item);
+            });
+    }
+
+public  void addTask(TaskEntity taskEntity){
+    Task task = new Task(taskEntity);   
+
+    for(int i=0; i< TASKLISTS.getPanes().size();i++){
+          Item i1 = (Item) TASKLISTS.getPanes().get(i);
+          if(taskEntity.getItemId() == i1.itemId){
+              i1.vBox.getChildren().add(task);
+              break;
+          }
+       }
+     
+    }
+   public  void addItem(ItemEntity itemEntity){
+       for (int i = 0; i < LIST.getChildren().size(); i++) {
+            System.out.println(((Listicon) LIST.getChildren().get(i)).getTodo().getId());
+            if (((Listicon) LIST.getChildren().get(i)).getTodo().getId() == itemEntity.getTodoId()) {
+                System.out.println("I found the todo");
+                ((Listicon) LIST.getChildren().get(i)).todo.getItemsList().add(itemEntity);
+               
+                break;
+            }
+        }
+       
+       Item item = new Item(itemEntity);
+       TASKLISTS.getPanes().add(item);
+       
+       
+   }
+   
+   public void commentCreationResponse(CommentEntity commentEntity ){
+        
+        Platform.runLater(() ->  {
+                addComment(commentEntity);
+               List<TaskEntity> taskEntitys = currentToDo.getItemsList().get(currentToDo.getItemsList().indexOf(currentItem)).getTasksList();
+                taskEntitys.get(taskEntitys.indexOf(currentTask)).getCommentsList().add(commentEntity);
+               System.out.println("comment response invoked");
+               
+            });
+    }
+    
+    public void addComment(CommentEntity commentEntity){
+        Comment comment = new Comment(commentEntity);
+        cOMMENTS.getChildren().add(comment);
     }
 
     public void setTodoColor(MouseEvent event) {

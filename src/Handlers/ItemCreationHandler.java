@@ -8,6 +8,7 @@ package Handlers;
 import ControllerBase.ActionHandler;
 import Entities.ItemEntity;
 import Entities.TaskEntity;
+import Entities.ToDoEntity;
 import Utils.CurrentUser;
 import static collaborative.to.pkgdo.list.client.FXMLController.currentToDo;
 import com.google.gson.Gson;
@@ -37,7 +38,8 @@ public class ItemCreationHandler implements ActionHandler{
                 String todoJsonObject  = jsonObject.getJSONObject("entity").toString();
                 ItemEntity item = gson.fromJson(todoJsonObject, ItemEntity.class);
                 //currentToDo.getItemsList().add(item);
-                
+      //          ToDoEntity mToDo = CurrentUser.getCurrentUser().getTodoList().get(CurrentUser.getCurrentUser().getTodoList().indexOf(currentToDo));
+        //        mToDo.getItemsList().add(item);
                 if(itemGUIGenerator != null){
                     itemGUIGenerator.accept(item);
                 }

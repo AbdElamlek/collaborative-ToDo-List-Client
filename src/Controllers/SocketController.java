@@ -34,6 +34,7 @@ import java.net.Socket;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -123,7 +124,14 @@ public class SocketController implements SocketInterface {
         return false;
        }
        
-       thread.start();
+    Platform.runLater(new Runnable() {
+        @Override
+        public void run() {
+       if(!thread.isAlive())      
+            thread.start();
+        }
+    });
+       
        return true;
     }
 
