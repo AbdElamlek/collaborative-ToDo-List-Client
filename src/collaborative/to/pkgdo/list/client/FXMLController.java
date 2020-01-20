@@ -2052,6 +2052,7 @@ public  void addTask(TaskEntity taskEntity){
     }
 
     public void updateAcceptFriendGUI(UserEntity userEntity) {
+        currentUser.getFriendList().add(userEntity);
         Friendicon friendIcon = new Friendicon(userEntity);
         FRIENDSLIST.getChildren().add(friendIcon);
         System.out.println(userEntity.getId());

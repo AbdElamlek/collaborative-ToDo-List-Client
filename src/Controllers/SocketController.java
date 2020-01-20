@@ -60,7 +60,7 @@ public class SocketController implements SocketInterface {
     private SocketController() {
         try {
             System.out.println("try to connect");
-            socket = new Socket("127.0.0.1", 7777);
+            socket = new Socket("10.145.4.171", 7777);
             dataInputStream = new DataInputStream(socket.getInputStream());
             printStream = new PrintStream(socket.getOutputStream());
             isRunning = true;
