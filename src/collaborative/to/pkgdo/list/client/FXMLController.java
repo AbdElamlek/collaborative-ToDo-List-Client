@@ -336,7 +336,8 @@ public class FXMLController implements Initializable {
         } else if (event.getSource() == STATUS) {
             
              statistics=new StatisticsHandler(currentUser);
-            for(TodoStatstics graph:statistics.setListsStatistics())
+             STATISTICS.getChildren().clear();
+            for(TodoStatstics graph:statistics.setListsStatistics( CurrentUser.getCurrentUser().getTodoList()))
             { 
               STATISTICS.getChildren().add(graph);
             
@@ -522,15 +523,15 @@ public class FXMLController implements Initializable {
          Itemstatuspane.setVisible(true); 
          piechart.setStartAngle(180);  
          if(finishedp>0)
-         {percentf=(finishedp / (finishedp + pendingp) * 100);}
+         {percentf=((finishedp / (finishedp + pendingp) )* 100);}
           if(pendingp>0)
-         {percentp=(pendingp / (finishedp + pendingp) * 100);}
+         {percentp=((pendingp / (finishedp + pendingp) )* 100);}
         
          
           ObservableList<PieChart.Data> pieChartData =
            FXCollections.observableArrayList(
-                         new PieChart.Data("Done ", percentf),
-                         new PieChart.Data("Pending", percentp));
+                         new PieChart.Data("Done ",finishedp),
+                         new PieChart.Data("Pending", pendingp));
 
           piechart.setData(pieChartData);
        

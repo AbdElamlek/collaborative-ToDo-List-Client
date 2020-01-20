@@ -25,6 +25,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -61,12 +62,12 @@ import javafx.scene.text.Font;
         setMinHeight(USE_PREF_SIZE);
         setMinWidth(USE_PREF_SIZE);
         setPrefHeight(42.0);
-        setPrefWidth(473.0);
+        setPrefWidth(469.0);
 //
         jFXButton.setLayoutX(14.0);
         jFXButton.setLayoutY(5.0);
         jFXButton.setStyle("-fx-background-radius: 7; -fx-background-color: #e8f2fd;");
-
+        jFXButton.setPrefWidth(460);
         imageView.setFitHeight(22.0);
         imageView.setFitWidth(25.0);
         imageView.setPickOnBounds(true);
@@ -75,6 +76,8 @@ import javafx.scene.text.Font;
         jFXButton.setGraphic(imageView);
         jFXButton.setFont(new Font("System Bold", 14.0));
         jFXButton.setText(title);
+        jFXButton.setAlignment(Pos.BASELINE_LEFT);
+        jFXButton.setPrefWidth(464);
         getChildren().add(anchorPane);
         getChildren().add(jFXButton);
         jFXButton.setOnMousePressed((MouseEvent event) -> {
