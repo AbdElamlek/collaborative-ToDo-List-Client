@@ -34,7 +34,7 @@ public class RequestEntity implements BaseEntity {
         this.id = id;
     }
 
-    public void setTime(Date time) {
+    public void setTime(java.sql.Date time) {
         this.time = time;
     }
 
@@ -50,7 +50,7 @@ public class RequestEntity implements BaseEntity {
         return id;
     }
 
-    public Date getTime() {
+    public java.sql.Date getTime() {
         return time;
     }
 

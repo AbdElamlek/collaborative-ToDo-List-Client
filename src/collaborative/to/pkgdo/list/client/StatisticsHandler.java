@@ -50,9 +50,9 @@ public class StatisticsHandler {
    } 
     
    
-   private void setItems(ToDoEntity list)
+   private void setItems(ToDoEntity todo)
    {
-     items=list.getItemsList() ;
+     items=todo.getItemsList() ;
    } 
     
    
@@ -100,6 +100,7 @@ public class StatisticsHandler {
             if(task.getStatus()==TASK_STATUS_DONE)
             counter++;
          }
+         if(tasks.size()>0)
          percentage=(counter/tasks.size())*100;
          
       }  
@@ -107,14 +108,19 @@ public class StatisticsHandler {
    }
 
  
-   public List<Itemstate> setItemStates(ToDoEntity list)
+   public List<MItemState> setItemStates(ToDoEntity todo)
    { 
-       List<Itemstate> itemstates=new ArrayList<>();
-       setItems(list);
-       for(ItemEntity item:items)
+       System.out.println("todo's item list size "+todo.getItemsList().size());
+       List<MItemState> itemstates=new ArrayList<>();
+       //setItems(todo);
+       for(ItemEntity item:todo.getItemsList())
        {
-         Itemstate stat=new Itemstate(item.getTitle(),getFinishedTasksItem(item),getPendingTasksItem(item));
-        itemstates.add(stat);
+         System.out.println("item title "+item.getTitle()+"finishedtasks : "+getFinishedTasksItem(item)+
+                 "ending tasks"+getPendingTasksItem(item)); 
+           
+         MItemState stat=new MItemState(item.getTitle(),getFinishedTasksItem(item),getPendingTasksItem(item));
+         
+         itemstates.add(stat);
        }
      
        return itemstates;

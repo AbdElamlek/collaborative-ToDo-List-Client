@@ -158,9 +158,8 @@ public class FXMLController implements Initializable {
     @FXML
     public VBox LIST;
     public VBox aSSIGNEDTOTASK;
-     @FXML
+    @FXML
    
-    
     public VBox COLLABORATORS;
     public VBox NOTIFICATIONS;
     public VBox aDDRIENDCOLABLIST;
@@ -170,6 +169,8 @@ public class FXMLController implements Initializable {
     
     
     
+    public  HBox STATISTICS;
+    public  VBox lISTSTATUS;
     @FXML
     AnchorPane iTEMCOMMENTs1;
     @FXML
@@ -180,9 +181,9 @@ public class FXMLController implements Initializable {
     VBox cOMMENTS;
     @FXML
     JFXTextField ADDTASK1;
-    public HBox sSTATISTICS;
+    //public HBox sSTATISTICS;
     public  HBox sTATISTICS;
-    public static VBox lISTSTATUS;
+    //public static VBox lISTSTATUS;
     @FXML
     public Accordion TASKLISTS;
     public ScrollPane FRIENDSSCROLL;
@@ -212,7 +213,7 @@ public class FXMLController implements Initializable {
     public AnchorPane ADDLISTPANE;
     public AnchorPane ADDCOLLABORATORPANE;
     public AnchorPane eDITLISTAP;
-    public static AnchorPane Itemstatuspane;
+    public AnchorPane Itemstatuspane;
     public AnchorPane cONNECTIONLOST;
     
     public JFXButton REQUESTS;
@@ -241,12 +242,12 @@ public class FXMLController implements Initializable {
 
     public Label USERNAME;
     public Label TITLE;
-    public static Label finished;
-    public static Label pending;
+    public Label finished;
+    public Label pending;
     public Circle TODOCOLOR;
 
     public ImageView ADDCOLLAB;
-    public static PieChart piechart;
+    public PieChart piechart;
 
     public Circle TODOEDITCOLOR;
     public ImageView ADDCOLLAB1;
@@ -337,7 +338,7 @@ public class FXMLController implements Initializable {
              statistics=new StatisticsHandler(currentUser);
             for(TodoStatstics graph:statistics.setListsStatistics())
             { 
-              sTATISTICS.getChildren().add(graph);
+              STATISTICS.getChildren().add(graph);
             
             }
             TODOPANE.setVisible(false);
@@ -544,6 +545,36 @@ public class FXMLController implements Initializable {
         TODAYPANE.setVisible(false);
     }
 
+     public void updatePieChart(int finishedp,int pendingp)
+     {   int percentp=0,percentf=0;
+         Itemstatuspane.setVisible(true); 
+         piechart.setStartAngle(180);  
+         if(finishedp>0)
+         {percentf=(finishedp / (finishedp + pendingp) * 100);}
+          if(pendingp>0)
+         {percentp=(pendingp / (finishedp + pendingp) * 100);}
+        
+         
+          ObservableList<PieChart.Data> pieChartData =
+           FXCollections.observableArrayList(
+                         new PieChart.Data("Done ", percentf),
+                         new PieChart.Data("Pending", percentp));
+
+          piechart.setData(pieChartData);
+       
+          finished.setText(new Integer(finishedp).toString());
+          pending.setText(new Integer(pendingp).toString());
+     }  
+     
+     
+      public void clearVbox(Object o){
+      lISTSTATUS.getChildren().clear();
+    } 
+    public void update(MItemState state){
+        
+        lISTSTATUS.getChildren().add(state);
+    }
+    
 //      
 //      public static boolean inHierarchy(Node node, Node potentialHierarchyElement) {
 //    if (potentialHierarchyElement == null) {
@@ -556,7 +587,6 @@ public class FXMLController implements Initializable {
 //        node = node.getParent();
 //    }
 //    return false;
-//}
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         /*eman*/
@@ -564,10 +594,18 @@ public class FXMLController implements Initializable {
         CollaboratorRequestHandler.setCollaborationRequestGUIGenerator(this::createCollaboratorRequestResponse);
         /*eman*/
         /*REHAM*/
+        TodoStatstics.setItemstateGUIClear(this::clearVbox);
+        TodoStatstics.setItemstateGUIGenerator(this::update);
+        MItemState.setpiechartGUIGenerator(this::updatePieChart);
         ToDoCreationHandler.setTodoGUIGenerator(this::createTodoListResponse);
         ToDoUpdateHandler.setTodoGUIModifier(this::updateTodoListResponse);
         ToDoDeleteHandler.setTodoGUIModifier(this::deleteTodoListResponse);
         FriendStatusHandler.setFriendStatusGUIModifier(this::updateFriendStatus);
+         TaskCreationHandler.setTodoGUIGenerator(this::createTaskResponse);
+        ItemCreationHandler.setTodoGUIGenerator(this:: createItemResponse);
+        CommentCreationHandler.setCommentGUIGenerator(this::commentCreationResponse);
+
+       
 //        sSTATISTICS.getChildren().add(bar1);
   //      sSTATISTICS.getChildren().add(bar2);
     //    sSTATISTICS.getChildren().add(bar3);
@@ -1130,12 +1168,17 @@ public class FXMLController implements Initializable {
         return todo;
     }
     public void viewTodo(){
+        
         iTEMCOMMENTs1.setVisible(false);
         tASKINFO.setVisible(false);
         iTEMNAME.setVisible(false);
         aSSIGNEDTOTASK.setVisible(false); 
         /*Reham*/
         TITLE.setText(todo.getTitle());
+                if(COLLABORATORS == null)
+                    System.err.println("first null");
+                if(TODOCOLLABORATORS == null)
+                    System.err.println("second null");
         if(todo.getColor() != null)
             TITLE.setTextFill(Color.web(todo.getColor()));
         
@@ -1157,7 +1200,7 @@ public class FXMLController implements Initializable {
         /*Abd El Malek*/
         currentToDo = todo;
         TASKLISTS.getPanes().clear();
-        
+        System.out.println("to do sisze is "+todo.getItemsList().size());
         if(todo.getItemsList()!=null){
                 for(ItemEntity itemEntity : todo.getItemsList()){
                         Item item = new Item(itemEntity);
@@ -1171,6 +1214,10 @@ public class FXMLController implements Initializable {
     public void updateFriendsToAddAsCollaborators(Friendtoadd friend){
         FRIENDSTOADDASCOLLABORATORS.getChildren().remove(friend);
     }
+
+        public void addItem(ItemEntity itemEntity) {
+            todo.getItemsList().add(itemEntity);
+        }
     }
 
 
@@ -1311,6 +1358,15 @@ public class FXMLController implements Initializable {
             
             }
         });
+        label.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                iTEMCOMMENTs1.setVisible(false);
+                tASKINFO.setVisible(false);
+                iTEMNAME.setVisible(false);
+                aSSIGNEDTOTASK.setVisible(false);
+                        }
+        });
         
        
         
@@ -1325,13 +1381,10 @@ public class FXMLController implements Initializable {
         });
         */
         
-        TaskCreationHandler.setTodoGUIGenerator(this::createTaskResponse);
-        ItemCreationHandler.setTodoGUIGenerator(this:: createItemResponse);
         ItemUpdateHandler.setTodoGUIGenerator(this::updateItemResponse);
         ItemDeletionHandler.setTodoGUIGenerator(this::deleteItemResponse);
         TaskUpdateStatusHandler.setTodoGUIGenerator(this::updateTaskResponse);
         TaskDeleteHandler.setTodoGUIGenerator(this::deleteTaskResponse);
-        CommentCreationHandler.setCommentGUIGenerator(this::commentCreationResponse);
     }
          public void updateTaskResponse(TaskEntity task){
             Platform.runLater(() ->  {
@@ -1341,21 +1394,7 @@ public class FXMLController implements Initializable {
             //  currentTask.setStatus(task.getStatus());
             });
     }
-    public void commentCreationResponse(CommentEntity commentEntity ){
-        
-        Platform.runLater(() ->  {
-                addComment(commentEntity);
-               List<TaskEntity> taskEntitys = currentToDo.getItemsList().get(currentToDo.getItemsList().indexOf(currentItem)).getTasksList();
-                taskEntitys.get(taskEntitys.indexOf(currentTask)).getCommentsList().add(commentEntity);
-               System.out.println("comment response invoked");
-               
-            });
-    }
     
-    public void addComment(CommentEntity commentEntity){
-        Comment comment = new Comment(commentEntity);
-        cOMMENTS.getChildren().add(comment);
-    }
          
     public void updateTAsk(TaskEntity taskEntity){
          for(int i=0; i< TASKLISTS.getPanes().size();i++){
@@ -1408,41 +1447,7 @@ public class FXMLController implements Initializable {
           }
        }         
     }
- public void createTaskResponse(TaskEntity task){
-            Platform.runLater(() ->  {
-                addTask(task);
-                currentToDo.getItemsList().get(currentToDo.getItemsList().indexOf(currentItem)).getTasksList().add(task);
-                
-               // currentItem.getTasksList().add(task);
-               
-            });
-    }
-
-public void createItemResponse(ItemEntity item){
-            Platform.runLater(() ->  {
-                addItem(item);
-                currentToDo.getItemsList().add(item);
-            });
-    }
-
-public  void addTask(TaskEntity taskEntity){
-    Task task = new Task(taskEntity);   
-
-    for(int i=0; i< TASKLISTS.getPanes().size();i++){
-          Item i1 = (Item) TASKLISTS.getPanes().get(i);
-          if(taskEntity.getItemId() == i1.itemId){
-              i1.vBox.getChildren().add(task);
-              break;
-          }
-       }
-     
-    }
-   public  void addItem(ItemEntity itemEntity){
-       Item item = new Item(itemEntity);
-       TASKLISTS.getPanes().add(item);
-       
-       
-   }
+ 
    private void deleteItem(ItemEntity itemEntity) {
             TASKLISTS.getPanes().remove(this);
         }
@@ -1893,6 +1898,69 @@ public  void addTask(TaskEntity taskEntity){
             Listicon Litem = new Listicon(todo, isOwner);
             LIST.getChildren().add(Litem);
         });
+    }
+    
+    
+    public void createTaskResponse(TaskEntity task){
+            Platform.runLater(() ->  {
+                addTask(task);
+               // currentToDo.getItemsList().get(currentToDo.getItemsList().indexOf(currentItem)).getTasksList().add(task);
+                
+                currentItem.getTasksList().add(task);
+               
+            });
+    }
+
+public void createItemResponse(ItemEntity item){
+            Platform.runLater(() ->  {
+                addItem(item);
+               // currentToDo.getItemsList().add(item);
+            });
+    }
+
+public  void addTask(TaskEntity taskEntity){
+    Task task = new Task(taskEntity);   
+
+    for(int i=0; i< TASKLISTS.getPanes().size();i++){
+          Item i1 = (Item) TASKLISTS.getPanes().get(i);
+          if(taskEntity.getItemId() == i1.itemId){
+              i1.vBox.getChildren().add(task);
+              break;
+          }
+       }
+     
+    }
+   public  void addItem(ItemEntity itemEntity){
+       for (int i = 0; i < LIST.getChildren().size(); i++) {
+            System.out.println(((Listicon) LIST.getChildren().get(i)).getTodo().getId());
+            if (((Listicon) LIST.getChildren().get(i)).getTodo().getId() == itemEntity.getTodoId()) {
+                System.out.println("I found the todo");
+                ((Listicon) LIST.getChildren().get(i)).todo.getItemsList().add(itemEntity);
+               
+                break;
+            }
+        }
+       
+       Item item = new Item(itemEntity);
+       TASKLISTS.getPanes().add(item);
+       
+       
+   }
+   
+   public void commentCreationResponse(CommentEntity commentEntity ){
+        
+        Platform.runLater(() ->  {
+                addComment(commentEntity);
+               List<TaskEntity> taskEntitys = currentToDo.getItemsList().get(currentToDo.getItemsList().indexOf(currentItem)).getTasksList();
+                taskEntitys.get(taskEntitys.indexOf(currentTask)).getCommentsList().add(commentEntity);
+               System.out.println("comment response invoked");
+               
+            });
+    }
+    
+    public void addComment(CommentEntity commentEntity){
+        Comment comment = new Comment(commentEntity);
+        cOMMENTS.getChildren().add(comment);
     }
 
     public void setTodoColor(MouseEvent event) {

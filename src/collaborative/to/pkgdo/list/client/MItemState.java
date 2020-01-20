@@ -5,8 +5,24 @@
  */
 package collaborative.to.pkgdo.list.client;
 
+/**
+ *
+ * @author Abd-Elmalek
+ */
+
+    
+    
+    /*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+
 import Entities.ItemEntity;
 import com.jfoenix.controls.JFXButton;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
@@ -22,22 +38,20 @@ import javafx.scene.text.Font;
  *
  * @author OMNIA
  */
-  class Itemstate extends AnchorPane {
+  public class MItemState extends AnchorPane {
 
     protected final AnchorPane anchorPane;
     protected final JFXButton jFXButton;
     protected final ImageView imageView;
+    private static BiConsumer<Integer,Integer> piechartGUIGenerator;
 
-    public Itemstate(String title,int finished, int pending) {
+    public static void setpiechartGUIGenerator(BiConsumer<Integer,Integer> piechartGUIGenerator) {
+        MItemState.piechartGUIGenerator = piechartGUIGenerator;
+    }
+
+    public MItemState(String title,int finished, int pending) {
       
-         FXMLController.piechart.setStartAngle(180); 
-      
-          ObservableList<PieChart.Data> pieChartData =
-            FXCollections.observableArrayList(
-             new PieChart.Data("Done ",(finished/(finished+pending)*100)),
-             new PieChart.Data("Pending",(pending/(finished+pending)*100)));
-         
-        FXMLController.piechart.setData(pieChartData); 
+ 
         anchorPane = new AnchorPane();
         jFXButton = new JFXButton();
         imageView = new ImageView();
@@ -48,12 +62,7 @@ import javafx.scene.text.Font;
         setMinWidth(USE_PREF_SIZE);
         setPrefHeight(42.0);
         setPrefWidth(473.0);
-
-        anchorPane.setLayoutY(-61.0);
-        anchorPane.setPrefHeight(32.0);
-        anchorPane.setPrefWidth(445.0);
-        anchorPane.setStyle("-fx-background-color: #edc4a8; -fx-background-radius: 7;");
-
+//
         jFXButton.setLayoutX(14.0);
         jFXButton.setLayoutY(5.0);
         jFXButton.setStyle("-fx-background-radius: 7; -fx-background-color: #e8f2fd;");
@@ -69,11 +78,11 @@ import javafx.scene.text.Font;
         getChildren().add(anchorPane);
         getChildren().add(jFXButton);
         jFXButton.setOnMousePressed((MouseEvent event) -> {
-         
-            FXMLController.Itemstatuspane.setVisible(true);
-            FXMLController.finished.setText(new Integer(finished).toString());
-            
-            FXMLController.pending.setText(new Integer(pending).toString());
+           if (piechartGUIGenerator != null) {
+                        piechartGUIGenerator.accept(new Integer(finished),new Integer(pending));
+                    }
+          
+           
             
         });
 
@@ -81,4 +90,4 @@ import javafx.scene.text.Font;
     
     }
   
-  }
+}

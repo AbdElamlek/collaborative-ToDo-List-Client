@@ -28,7 +28,9 @@ public class TaskController implements TaskInterFace{
             accept_RecjectTaskEntity.setReceivedUserId(assigneeId);
             accept_RecjectTaskEntity.setTaskId(taskId);
             accept_RecjectTaskEntity.setTime(new Date(System.currentTimeMillis()));
-            EntityWrapper entityWrapper = new EntityWrapper("assigonToTaskRequest", "entity", accept_RecjectTaskEntity);
+            accept_RecjectTaskEntity.setMessage("");
+            EntityWrapper entityWrapper = new EntityWrapper("assigonToTaskRequest", "Accept_RejectTaskEntity", accept_RecjectTaskEntity);
+
             String taskJsonResponse = adapterController.entity2Json(entityWrapper);
             SocketController.getInstance().sendJsonObject(taskJsonResponse);
             return true;
