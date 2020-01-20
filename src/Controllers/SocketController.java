@@ -28,6 +28,7 @@ import Handlers.TaskDeleteHandler;
 import Handlers.ToDoDeleteHandler;
 import Handlers.ToDoUpdateHandler;
 import Handlers.TaskUpdateStatusHandler;
+import Handlers.WithdrawFromTaskHandler;
 import collaborative.to.pkgdo.list.client.FXMLDocumentController;
 import java.io.DataInputStream;
 import java.io.DataOutput;
@@ -38,6 +39,7 @@ import java.net.Socket;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -80,6 +82,7 @@ public class SocketController implements SocketInterface {
                                  
                                  System.out.println("server is down!");
                                   isRunning = false; 
+                                  if(connectionFailed !=null)
                                   connectionFailed.accept(null);
                                   
                                  
@@ -128,7 +131,14 @@ public class SocketController implements SocketInterface {
         return false;
        }
        
-       thread.start();
+    Platform.runLater(new Runnable() {
+        @Override
+        public void run() {
+       if(!thread.isAlive())
+            thread.start();
+        }
+    });
+       
        return true;
     }
 
@@ -137,13 +147,14 @@ public class SocketController implements SocketInterface {
 
         
         try {
-            dataInputStream.close();
-            printStream.close();
-            socket.close();
-            socketController=null;
-            isRunning=false;
+            if(isRunning){
+                dataInputStream.close();
+                printStream.close();
+                socket.close();
+                socketController=null;
+                isRunning=false;
             
-            
+            }
         } catch (IOException ex) {
             Logger.getLogger(SocketController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -158,7 +169,8 @@ public class SocketController implements SocketInterface {
         
             //OR FUNCTION NAME CAN BE: sendRequest(String jsonObjectStr)
             //System.out.println("from sendJsonObject: " + jsonObjectStr);
-            printStream.println(jsonObjectStr);
+            if(isRunning)
+                printStream.println(jsonObjectStr);
             System.out.println("SENT");
 
             //Send to the server the json to register !
@@ -179,6 +191,7 @@ public class SocketController implements SocketInterface {
                     actionHandler = new LoginHandler();
                     break;
                 case "signup":
+                    System.out.println("***************in signup");
                     actionHandler = new SignUpHandler();
                     break;
                 case "notification":
@@ -235,6 +248,9 @@ public class SocketController implements SocketInterface {
                     break;
                 case "delete task":
                     actionHandler = new TaskDeleteHandler();
+                    break;
+                case "withdraw from task":
+                    actionHandler = new WithdrawFromTaskHandler();
                     break;
                 case "add comment":
                     actionHandler = new CommentCreationHandler();

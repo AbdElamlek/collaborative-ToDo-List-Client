@@ -88,7 +88,9 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void SignUp(MouseEvent event) {
-        authenticationController = new AuthenticationController();
+        if(SocketController.getInstance().connect()){
+                authenticationController = new AuthenticationController();
+        
         String email = "eman@gmail.com";
         String password = PasswordText1.getText();
         String cpassword = ConfirmText1.getText();
@@ -112,6 +114,9 @@ public class FXMLDocumentController implements Initializable {
             //SocketController controller = SocketController.getInstance();
             //controller.sendJsonObject("hhihihihihihi");
 
+        }
+        }else{
+            System.out.println("Nooo Connection ");
         }
        
     }
@@ -266,6 +271,7 @@ public class FXMLDocumentController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         LoginHandler.setMainPageNavigator(this::navigateToMainPage);
         LoginHandler.setNotvalidlogin(this::showNotValid);
+        SignUpHandler.setLoginPageNavigator(this::navigateToMainPage);
         //SignUpHandler.setLoginPageNavigator(this::);
 //        LoginHandler.setNotvalidlogin(this::);
         LOGINPANE.setVisible(true);

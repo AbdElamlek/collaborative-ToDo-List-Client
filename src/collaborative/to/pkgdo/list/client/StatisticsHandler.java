@@ -50,9 +50,9 @@ public class StatisticsHandler {
    } 
     
    
-   private void setItems(ToDoEntity list)
+   private void setItems(ToDoEntity todo)
    {
-     items=list.getItemsList() ;
+     items=todo.getItemsList() ;
    } 
     
    
@@ -90,31 +90,31 @@ public class StatisticsHandler {
    } 
   private int getFinishedTasks(ToDoEntity list)
    { 
-       setItems(list);
        
-       int counter=0,percentage=0;
-       for(ItemEntity item:items)
-       {  setTasks(item);
-         for(TaskEntity task:tasks)
-         {
-            if(task.getStatus()==TASK_STATUS_DONE)
-            counter++;
-         }
-         percentage=(counter/tasks.size())*100;
-         
-      }  
+       int counter=0,percentage=0,total=0;
+       for(ItemEntity item:list.getItemsList())
+       { counter+= getFinishedTasksItem(item);
+         total+=item.getTasksList().size();
+      }
+       if(total>0)
+       percentage=(counter*100)/total;
        return percentage;
    }
 
  
-   public List<Itemstate> setItemStates(ToDoEntity list)
+   public List<MItemState> setItemStates(ToDoEntity todo)
    { 
-       List<Itemstate> itemstates=new ArrayList<>();
-       setItems(list);
-       for(ItemEntity item:items)
+       System.out.println("todo's item list size "+todo.getItemsList().size());
+       List<MItemState> itemstates=new ArrayList<>();
+       //setItems(todo);
+       for(ItemEntity item:todo.getItemsList())
        {
-         Itemstate stat=new Itemstate(item.getTitle(),getFinishedTasksItem(item),getPendingTasksItem(item));
-        itemstates.add(stat);
+         System.out.println("item title "+item.getTitle()+"finishedtasks : "+getFinishedTasksItem(item)+
+                 "ending tasks"+getPendingTasksItem(item)); 
+           
+         MItemState stat=new MItemState(item.getTitle(),getFinishedTasksItem(item),getPendingTasksItem(item));
+         
+         itemstates.add(stat);
        }
      
        return itemstates;
@@ -122,12 +122,12 @@ public class StatisticsHandler {
    
 
    
-   public List<TodoStatstics> setListsStatistics()
+   public List<TodoStatstics> setListsStatistics(List<ToDoEntity> todos)
    { 
        List<TodoStatstics> graphs=new ArrayList<>();
-       for(ToDoEntity list:lists )
+       for(ToDoEntity todo:todos )
        {
-        TodoStatstics stat=new TodoStatstics(list,getFinishedTasks(list));
+        TodoStatstics stat=new TodoStatstics(todo,getFinishedTasks(todo));
         graphs.add(stat);
        }
      

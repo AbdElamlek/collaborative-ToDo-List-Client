@@ -66,6 +66,9 @@ public class ItemEntity implements BaseEntity {
     }
 
     public ArrayList<TaskEntity> getTasksList() {
+        if(tasksList==null){
+            this.tasksList = new ArrayList<>();
+        }
         return tasksList;
     }
     

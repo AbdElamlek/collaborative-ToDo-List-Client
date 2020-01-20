@@ -18,7 +18,7 @@ public class TaskEntity implements BaseEntity {
     private int status;
     private int itemId;
     private ArrayList<CommentEntity> commentsList;
-    private ArrayList<String> assignedUsersList;
+    private ArrayList<UserEntity> assignedUsersList;
 
     public TaskEntity() {
     }
@@ -67,14 +67,21 @@ public class TaskEntity implements BaseEntity {
     }
 
     public ArrayList<CommentEntity> getCommentsList() {
+       if(commentsList==null)
+        commentsList=new ArrayList<>();   
         return commentsList;
     }
+    
+    public ArrayList<UserEntity> getAssignedUsersList() {
+               if(assignedUsersList==null)
+           assignedUsersList=new ArrayList<>();
 
-    public ArrayList<String> getAssignedUsersList() {
         return assignedUsersList;
     }
 
-    public void setAssignedUsersList(ArrayList<String> assignedUsersList) {
+    public void setAssignedUsersList(ArrayList<UserEntity> assignedUsersList) {
+        if(assignedUsersList==null)
+        assignedUsersList=new ArrayList<>();   
         this.assignedUsersList = assignedUsersList;
     }
     

@@ -110,6 +110,9 @@ public class UserEntity implements BaseEntity {
     }
 
     public ArrayList<UserEntity> getFriendList() {
+        if(friendList==null){
+            this.friendList = new ArrayList<>();
+        }
         return friendList;
     }
 
@@ -118,10 +121,16 @@ public class UserEntity implements BaseEntity {
     }
 
     public ArrayList<NotificationEntity> getNotificationList() {
+         if(notificationList==null){
+            this.notificationList = new ArrayList<>();
+        }
         return notificationList;
     }
 
     public ArrayList<TaskEntity> getTasksList() {
+        if(tasksList==null){
+            this.tasksList = new ArrayList<>();
+        }
         return tasksList;
     }
 
@@ -130,6 +139,10 @@ public class UserEntity implements BaseEntity {
     }
 
     public ArrayList<ToDoEntity> getTodoList() {
+
+        if(todoList==null){
+            this.todoList = new ArrayList<>();
+        }
         return todoList;
     }
 
@@ -138,6 +151,9 @@ public class UserEntity implements BaseEntity {
     }
 
     public ArrayList<ToDoEntity> getCollaboratorList() {
+        if(collaboratorList==null){
+            this.collaboratorList = new ArrayList<>();
+        }
         return collaboratorList;
     }
 
@@ -146,6 +162,9 @@ public class UserEntity implements BaseEntity {
     }
 
     public ArrayList<RequestEntity> getFriendRequestList() {
+        if(friendRequestList==null){
+            this.friendRequestList = new ArrayList<>();
+        }
         return friendRequestList;
     }
 
@@ -165,6 +184,9 @@ public class UserEntity implements BaseEntity {
     }
 
     public ArrayList<Accept_RecjectTaskEntity> getTaskAssignmentRequestList() {
+        if(taskAssignmentRequestList==null){
+            this.taskAssignmentRequestList = new ArrayList<>();
+        }
         return taskAssignmentRequestList;
     }
 
@@ -173,6 +195,9 @@ public class UserEntity implements BaseEntity {
     }
 
     public ArrayList<ItemEntity> getItemList() {
+       if(itemList==null){
+            this.itemList = new ArrayList<>();
+        }
         return itemList;
     }
 

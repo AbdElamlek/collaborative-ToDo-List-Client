@@ -22,7 +22,7 @@
    <children>
       <AnchorPane id="AnchorPane" layoutX="10.0" layoutY="10.0" prefHeight="652.0" prefWidth="1028.0" style="-fx-background-color: #fefefe;" stylesheets="@tabpane.css" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
        <children>
-            <AnchorPane prefHeight="699.0" prefWidth="259.0" style="-fx-border-radius: 5; -fx-background-color: #fefefe;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="769.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane fx:id="PROFILEPANE" prefHeight="699.0" prefWidth="259.0" style="-fx-border-radius: 5; -fx-background-color: #fefefe;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="769.0" AnchorPane.topAnchor="0.0">
                <effect>
                   <DropShadow blurType="ONE_PASS_BOX" color="#00000053" height="4.75" radius="1.9375" width="5.0" />
                </effect>
@@ -166,7 +166,7 @@
                   <JFXButton fx:id="lOGOUT" layoutX="206.0" layoutY="149.0" onMouseClicked="#logOut" prefHeight="25.0" prefWidth="25.0" text=" " />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="TODOPANE" layoutX="260.0" prefHeight="652.0" prefWidth="769.0" style="-fx-background-color: #FEFEFE;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="TODOPANE" layoutX="260.0" prefHeight="652.0" prefWidth="769.0" style="-fx-background-color: #FEFEFE;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
          <effect>
             <DropShadow blurType="ONE_PASS_BOX" color="#00000053" height="4.875" radius="1.96875" width="5.0" />
          </effect>
@@ -245,7 +245,7 @@
                               <JFXButton fx:id="aDDCOLAB" layoutX="185.0" layoutY="10.0" onMouseClicked="#nav3" prefHeight="21.0" prefWidth="25.0" ripplerFill="BLACK" text=" " />
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="tASKINFO" layoutX="18.0" layoutY="105.0" visible="false">
+                        <AnchorPane fx:id="tASKINFO" layoutX="5.0" layoutY="105.0" prefHeight="507.0" prefWidth="283.0" visible="false">
                            <children>
                               <AnchorPane fx:id="iTEMCOMMENTs" prefHeight="230.0" prefWidth="259.0" style="-fx-background-color: #fefefe;">
                                  <children>
@@ -292,7 +292,7 @@
                      </children>
                   </AnchorPane>
 
-                  <JFXButton fx:id="eDITLIST" layoutX="393.0" layoutY="53.0" prefHeight="25.0" prefWidth="25.0" text=" " />
+                  <JFXButton fx:id="eDITLIST" layoutX="393.0" layoutY="53.0" onMouseClicked="#nav1" prefHeight="25.0" prefWidth="25.0" text=" " />
                </children>
             </AnchorPane>
             <AnchorPane fx:id="TODAYPANE" layoutX="256.0" prefHeight="652.0" prefWidth="769.0" style="-fx-background-color: #FEFEFE;" visible="false">
@@ -371,9 +371,9 @@
                   </Label>
                   <AnchorPane layoutX="14.0" layoutY="83.0" prefHeight="241.0" prefWidth="473.0">
                      <children>
-                        <ScrollPane layoutX="-1.0" prefHeight="251.0" prefWidth="473.0" vbarPolicy="NEVER">
+                        <ScrollPane layoutX="-1.0" prefHeight="280.0" prefWidth="473.0" vbarPolicy="NEVER">
                            <content>
-                              <HBox fx:id="sSTATISTICS" prefHeight="252.0" prefWidth="200.0" />
+                              <HBox fx:id="STATISTICS" prefHeight="271.0" prefWidth="200.0" />
                            </content>
                         </ScrollPane>
                      </children>
@@ -393,12 +393,12 @@
                               <PieChart fx:id="piechart" clockwise="false" labelLineLength="0.0" layoutY="14.0" legendVisible="false" prefHeight="215.0" prefWidth="235.0" title="Item" />
                               <Label layoutX="75.0" layoutY="240.0" text="Tasks finished " />
                               <Label layoutX="76.0" layoutY="275.0" text="Tasks pending" />
-                              <Label fx:id="finished" layoutX="160.0" layoutY="239.0" prefHeight="20.0" prefWidth="25.0" text="3" textFill="#2459eb">
+                              <Label fx:id="finished" layoutX="160.0" layoutY="239.0" prefHeight="20.0" prefWidth="25.0" text="3" textFill="#eea80f">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="pending" layoutX="160.0" layoutY="274.0" prefHeight="20.0" prefWidth="33.0" text="8" textFill="#eea80f">
+                              <Label fx:id="pending" layoutX="160.0" layoutY="274.0" prefHeight="20.0" prefWidth="33.0" textFill="#2459eb">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -417,16 +417,16 @@
                         </AnchorPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutX="14.0" layoutY="403.0" prefHeight="222.0" prefWidth="473.0">
+                  <AnchorPane layoutX="14.0" layoutY="418.0" prefHeight="207.0" prefWidth="473.0">
                      <children>
-                        <ScrollPane layoutX="-2.0" prefHeight="241.0" prefWidth="473.0" vbarPolicy="NEVER">
+                        <ScrollPane layoutX="-2.0" prefHeight="222.0" prefWidth="473.0" vbarPolicy="NEVER">
                            <content>
-                              <VBox fx:id="lISTSTATUS" prefHeight="249.0" prefWidth="469.0" />
+                              <VBox fx:id="lISTSTATUS" prefHeight="209.0" prefWidth="469.0" />
                            </content>
                         </ScrollPane>
                      </children>
                   </AnchorPane>
-                  <Label layoutX="36.0" layoutY="353.0" prefHeight="36.0" prefWidth="64.0" text="Items">
+                  <Label layoutX="36.0" layoutY="373.0" prefHeight="36.0" prefWidth="64.0" text="Items">
                      <font>
                         <Font name="Calibri Bold" size="24.0" />
                      </font>

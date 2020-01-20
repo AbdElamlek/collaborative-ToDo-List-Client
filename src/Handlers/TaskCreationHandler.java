@@ -6,8 +6,12 @@
 package Handlers;
 
 import ControllerBase.ActionHandler;
+import Entities.ItemEntity;
 import Entities.TaskEntity;
+import Entities.ToDoEntity;
 import Utils.CurrentUser;
+import static collaborative.to.pkgdo.list.client.FXMLController.currentItem;
+import static collaborative.to.pkgdo.list.client.FXMLController.currentToDo;
 import com.google.gson.Gson;
 import java.util.function.Consumer;
 import javafx.application.Platform;
@@ -34,7 +38,11 @@ public class TaskCreationHandler implements ActionHandler{
             if(!jsonObject.isNull("entity")){
                 String taskJsonObject  = jsonObject.getJSONObject("entity").toString();
                 TaskEntity task = gson.fromJson(taskJsonObject, TaskEntity.class);
-                 System.out.println("-----------------------create---"+taskJsonObject);          
+                 System.out.println("-----------------------create---"+taskJsonObject);
+                 
+//                 ToDoEntity mToDo = CurrentUser.getCurrentUser().getTodoList().get(CurrentUser.getCurrentUser().getTodoList().indexOf(currentToDo));
+  //               ItemEntity mItem =   mToDo.getItemsList().get(mToDo.getItemsList().indexOf(currentItem));
+    //             mItem.getTasksList().add(task);
                 if(taskGUIGenerator != null){
                     Platform.runLater(()->{
                     taskGUIGenerator.accept(task);

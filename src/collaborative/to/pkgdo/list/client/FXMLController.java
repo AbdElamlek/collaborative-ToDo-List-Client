@@ -158,9 +158,8 @@ public class FXMLController implements Initializable {
     @FXML
     public VBox LIST;
     public VBox aSSIGNEDTOTASK;
-     @FXML
+    @FXML
    
-    
     public VBox COLLABORATORS;
     public VBox NOTIFICATIONS;
     public VBox aDDRIENDCOLABLIST;
@@ -170,6 +169,8 @@ public class FXMLController implements Initializable {
     
     
     
+    public  HBox STATISTICS;
+    public  VBox lISTSTATUS;
     @FXML
     AnchorPane iTEMCOMMENTs1;
     @FXML
@@ -180,9 +181,9 @@ public class FXMLController implements Initializable {
     VBox cOMMENTS;
     @FXML
     JFXTextField ADDTASK1;
-    public HBox sSTATISTICS;
+    //public HBox sSTATISTICS;
     public  HBox sTATISTICS;
-    public static VBox lISTSTATUS;
+    //public static VBox lISTSTATUS;
     @FXML
     public Accordion TASKLISTS;
     public ScrollPane FRIENDSSCROLL;
@@ -212,7 +213,7 @@ public class FXMLController implements Initializable {
     public AnchorPane ADDLISTPANE;
     public AnchorPane ADDCOLLABORATORPANE;
     public AnchorPane eDITLISTAP;
-    public static AnchorPane Itemstatuspane;
+    public AnchorPane Itemstatuspane;
     public AnchorPane cONNECTIONLOST;
     
     public JFXButton REQUESTS;
@@ -241,12 +242,12 @@ public class FXMLController implements Initializable {
 
     public Label USERNAME;
     public Label TITLE;
-    public static Label finished;
-    public static Label pending;
+    public Label finished;
+    public Label pending;
     public Circle TODOCOLOR;
 
     public ImageView ADDCOLLAB;
-    public static PieChart piechart;
+    public PieChart piechart;
 
     public Circle TODOEDITCOLOR;
     public ImageView ADDCOLLAB1;
@@ -262,6 +263,9 @@ public class FXMLController implements Initializable {
     public Label friendName;
     public JFXButton addFriendButton;
     public Label addFriendFailedLabel;
+    public Label sTARTDATE;
+    public Label eNDDATE;
+
 
 //
 //    public void disableUIForNotification(){
@@ -332,9 +336,10 @@ public class FXMLController implements Initializable {
         } else if (event.getSource() == STATUS) {
             
              statistics=new StatisticsHandler(currentUser);
-            for(TodoStatstics graph:statistics.setListsStatistics())
+             STATISTICS.getChildren().clear();
+            for(TodoStatstics graph:statistics.setListsStatistics( CurrentUser.getCurrentUser().getTodoList()))
             { 
-              sTATISTICS.getChildren().add(graph);
+              STATISTICS.getChildren().add(graph);
             
             }
             TODOPANE.setVisible(false);
@@ -344,14 +349,42 @@ public class FXMLController implements Initializable {
         }
     }
    /*omnia*/
+    public void manageUI(boolean disable){
+        
+        SHOWNOTIFICATIONS.setMouseTransparent(disable);
+        lOGOUT.setMouseTransparent(disable);
+        
+        REQUESTS.setMouseTransparent(disable);
+        TODAY.setMouseTransparent(disable);
+        STATUS.setMouseTransparent(disable);
+        
+        LISTS.setMouseTransparent(disable);
+        FRIENDS.setMouseTransparent(disable);
+        
+        LIST.setMouseTransparent(disable);
+        
+        ADDTASK.setMouseTransparent(disable);
+        
+        // ALL ABOVE CAN BE PROFILEPANE.setNouseTransparent(disable);
+        
+        TODOPANE.setMouseTransparent(disable);
+        TODAYPANE.setMouseTransparent(disable);
+        STATUSPANE.setMouseTransparent(disable);
+        REQUESTPANE.setMouseTransparent(disable);
+        NOTIFIPANE.setMouseTransparent(disable);
+        
+    }
+    
     @FXML
     public void nav1(MouseEvent event) {
 
         if (event.getSource() == nEWLIST) {
-
+            //REQUESTS.setMouseTransparent(true);
+            manageUI(true);
             ADDLISTPANE.setVisible(true);
           }
         else if(event.getSource() == eDITLIST){
+            manageUI(true);
             NEWTODOTITLE1.setText(currentlyViewedTodoList.getTodo().getTitle());
                         
             STARTDATE.setValue(LocalDateTime.ofInstant(Instant.ofEpochMilli(currentlyViewedTodoList.getTodo().getAssignDate().getTime()), ZoneId.systemDefault()).toLocalDate());
@@ -407,6 +440,7 @@ public class FXMLController implements Initializable {
              NEWTODOTITLE.setText("");
              ADDLISTPANE.setVisible(false);
              eDITLISTAP.setVisible(false);
+             manageUI(false);
          } else if(event.getSource() == ADDDATE || event.getSource() == ADDDATE1){
              
              DATEPANE.setVisible(true);
@@ -513,6 +547,36 @@ public class FXMLController implements Initializable {
         TODAYPANE.setVisible(false);
     }
 
+     public void updatePieChart(int finishedp,int pendingp)
+     {   int percentp=0,percentf=0;
+         Itemstatuspane.setVisible(true); 
+         piechart.setStartAngle(180);  
+         if(finishedp>0)
+         {percentf=((finishedp / (finishedp + pendingp) )* 100);}
+          if(pendingp>0)
+         {percentp=((pendingp / (finishedp + pendingp) )* 100);}
+        
+         
+          ObservableList<PieChart.Data> pieChartData =
+           FXCollections.observableArrayList(
+                         new PieChart.Data("Done ",finishedp),
+                         new PieChart.Data("Pending", pendingp));
+
+          piechart.setData(pieChartData);
+       
+          finished.setText(new Integer(finishedp).toString());
+          pending.setText(new Integer(pendingp).toString());
+     }  
+     
+     
+      public void clearVbox(Object o){
+      lISTSTATUS.getChildren().clear();
+    } 
+    public void update(MItemState state){
+        
+        lISTSTATUS.getChildren().add(state);
+    }
+    
 //      
 //      public static boolean inHierarchy(Node node, Node potentialHierarchyElement) {
 //    if (potentialHierarchyElement == null) {
@@ -525,7 +589,6 @@ public class FXMLController implements Initializable {
 //        node = node.getParent();
 //    }
 //    return false;
-//}
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         /*eman*/
@@ -533,10 +596,18 @@ public class FXMLController implements Initializable {
         CollaboratorRequestHandler.setCollaborationRequestGUIGenerator(this::createCollaboratorRequestResponse);
         /*eman*/
         /*REHAM*/
+        TodoStatstics.setItemstateGUIClear(this::clearVbox);
+        TodoStatstics.setItemstateGUIGenerator(this::update);
+        MItemState.setpiechartGUIGenerator(this::updatePieChart);
         ToDoCreationHandler.setTodoGUIGenerator(this::createTodoListResponse);
         ToDoUpdateHandler.setTodoGUIModifier(this::updateTodoListResponse);
         ToDoDeleteHandler.setTodoGUIModifier(this::deleteTodoListResponse);
         FriendStatusHandler.setFriendStatusGUIModifier(this::updateFriendStatus);
+         TaskCreationHandler.setTodoGUIGenerator(this::createTaskResponse);
+        ItemCreationHandler.setTodoGUIGenerator(this:: createItemResponse);
+        CommentCreationHandler.setCommentGUIGenerator(this::commentCreationResponse);
+
+       
 //        sSTATISTICS.getChildren().add(bar1);
   //      sSTATISTICS.getChildren().add(bar2);
     //    sSTATISTICS.getChildren().add(bar3);
@@ -826,7 +897,7 @@ public class FXMLController implements Initializable {
             circle = new Circle();
             dropShadow = new DropShadow();
             imageView = new ImageView();
-            circle0 = new Circle();
+            //circle0 = new Circle();
             collaboratorName = new Label();
 
             setId("AnchorPane");
@@ -855,12 +926,12 @@ public class FXMLController implements Initializable {
             imageView.setPreserveRatio(true);
             imageView.setImage(new Image(getClass().getResource("icons8_user_40px.png").toExternalForm()));
 
-            circle0.setFill(javafx.scene.paint.Color.valueOf("#7cebbd"));
+            /*circle0.setFill(javafx.scene.paint.Color.valueOf("#7cebbd"));
             circle0.setLayoutX(27.0);
             circle0.setLayoutY(30.0);
             circle0.setRadius(5.0);
             circle0.setStroke(javafx.scene.paint.Color.valueOf("#0000007c"));
-            circle0.setStrokeType(javafx.scene.shape.StrokeType.INSIDE);
+            circle0.setStrokeType(javafx.scene.shape.StrokeType.INSIDE);*/
 
             collaboratorName.setLayoutX(46.0);
             collaboratorName.setLayoutY(11.0);
@@ -872,7 +943,7 @@ public class FXMLController implements Initializable {
 
             getChildren().add(circle);
             getChildren().add(imageView);
-            getChildren().add(circle0);
+            //getChildren().add(circle0);
             getChildren().add(collaboratorName);
 
         }
@@ -1079,7 +1150,7 @@ public class FXMLController implements Initializable {
         }
         viewTodo();
         label.setOnMousePressed(new EventHandler<MouseEvent>() {
-
+            
             @Override
             public void handle(MouseEvent event) {
              actions();
@@ -1099,9 +1170,23 @@ public class FXMLController implements Initializable {
         return todo;
     }
     public void viewTodo(){
-            
+        
+        iTEMCOMMENTs1.setVisible(false);
+        tASKINFO.setVisible(false);
+        iTEMNAME.setVisible(false);
+        aSSIGNEDTOTASK.setVisible(false); 
         /*Reham*/
         TITLE.setText(todo.getTitle());
+                if(COLLABORATORS == null)
+                    System.err.println("first null");
+                if(TODOCOLLABORATORS == null)
+                    System.err.println("second null");
+        if(todo.getColor() != null)
+            TITLE.setTextFill(Color.web(todo.getColor()));
+        
+        sTARTDATE.setText(todo.getAssignDate().getDate() + "/" + todo.getAssignDate().getMonth()+1 + "/" + (todo.getAssignDate().getYear()+1900));
+        eNDDATE.setText(todo.getDeadLineDate().getDate() + "/" + todo.getDeadLineDate().getMonth()+1 + "/" + (todo.getDeadLineDate().getYear()+1900));
+        
         COLLABORATORS.getChildren().setAll(TODOCOLLABORATORS);
         aDDRIENDCOLABLIST.getChildren().setAll(FRIENDSTOADDASCOLLABORATORS);
 
@@ -1117,7 +1202,7 @@ public class FXMLController implements Initializable {
         /*Abd El Malek*/
         currentToDo = todo;
         TASKLISTS.getPanes().clear();
-        
+        System.out.println("to do sisze is "+todo.getItemsList().size());
         if(todo.getItemsList()!=null){
                 for(ItemEntity itemEntity : todo.getItemsList()){
                         Item item = new Item(itemEntity);
@@ -1131,6 +1216,10 @@ public class FXMLController implements Initializable {
     public void updateFriendsToAddAsCollaborators(Friendtoadd friend){
         FRIENDSTOADDASCOLLABORATORS.getChildren().remove(friend);
     }
+
+        public void addItem(ItemEntity itemEntity) {
+            todo.getItemsList().add(itemEntity);
+        }
     }
 
 
@@ -1203,7 +1292,10 @@ public class FXMLController implements Initializable {
         line.setLayoutY(12.0);
         line.setStartX(-121.0);
         line.setStartY(-22.0);
-        line.setStroke(javafx.scene.paint.Color.valueOf("#cd0f97"));
+        if(currentlyViewedTodoList.getTodo().getColor() != null)
+            line.setStroke(javafx.scene.paint.Color.valueOf(currentlyViewedTodoList.getTodo().getColor()));
+        else
+            line.setStroke(javafx.scene.paint.Color.valueOf("#cd0f97"));
         line.setStrokeWidth(3.0);
 
         line0.setEndX(291.0);
@@ -1268,6 +1360,15 @@ public class FXMLController implements Initializable {
             
             }
         });
+        label.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                iTEMCOMMENTs1.setVisible(false);
+                tASKINFO.setVisible(false);
+                iTEMNAME.setVisible(false);
+                aSSIGNEDTOTASK.setVisible(false);
+                        }
+        });
         
        
         
@@ -1282,13 +1383,10 @@ public class FXMLController implements Initializable {
         });
         */
         
-        TaskCreationHandler.setTodoGUIGenerator(this::createTaskResponse);
-        ItemCreationHandler.setTodoGUIGenerator(this:: createItemResponse);
         ItemUpdateHandler.setTodoGUIGenerator(this::updateItemResponse);
         ItemDeletionHandler.setTodoGUIGenerator(this::deleteItemResponse);
         TaskUpdateStatusHandler.setTodoGUIGenerator(this::updateTaskResponse);
         TaskDeleteHandler.setTodoGUIGenerator(this::deleteTaskResponse);
-        CommentCreationHandler.setCommentGUIGenerator(this::commentCreationResponse);
     }
          public void updateTaskResponse(TaskEntity task){
             Platform.runLater(() ->  {
@@ -1298,21 +1396,7 @@ public class FXMLController implements Initializable {
             //  currentTask.setStatus(task.getStatus());
             });
     }
-    public void commentCreationResponse(CommentEntity commentEntity ){
-        
-        Platform.runLater(() ->  {
-                addComment(commentEntity);
-               List<TaskEntity> taskEntitys = currentToDo.getItemsList().get(currentToDo.getItemsList().indexOf(currentItem)).getTasksList();
-                taskEntitys.get(taskEntitys.indexOf(currentTask)).getCommentsList().add(commentEntity);
-               System.out.println("comment response invoked");
-               
-            });
-    }
     
-    public void addComment(CommentEntity commentEntity){
-        Comment comment = new Comment(commentEntity);
-        cOMMENTS.getChildren().add(comment);
-    }
          
     public void updateTAsk(TaskEntity taskEntity){
          for(int i=0; i< TASKLISTS.getPanes().size();i++){
@@ -1365,41 +1449,7 @@ public class FXMLController implements Initializable {
           }
        }         
     }
- public void createTaskResponse(TaskEntity task){
-            Platform.runLater(() ->  {
-                addTask(task);
-                currentToDo.getItemsList().get(currentToDo.getItemsList().indexOf(currentItem)).getTasksList().add(task);
-                
-               // currentItem.getTasksList().add(task);
-               
-            });
-    }
-
-public void createItemResponse(ItemEntity item){
-            Platform.runLater(() ->  {
-                addItem(item);
-                currentToDo.getItemsList().add(item);
-            });
-    }
-
-public  void addTask(TaskEntity taskEntity){
-    Task task = new Task(taskEntity);   
-
-    for(int i=0; i< TASKLISTS.getPanes().size();i++){
-          Item i1 = (Item) TASKLISTS.getPanes().get(i);
-          if(taskEntity.getItemId() == i1.itemId){
-              i1.vBox.getChildren().add(task);
-              break;
-          }
-       }
-     
-    }
-   public  void addItem(ItemEntity itemEntity){
-       Item item = new Item(itemEntity);
-       TASKLISTS.getPanes().add(item);
-       
-       
-   }
+ 
    private void deleteItem(ItemEntity itemEntity) {
             TASKLISTS.getPanes().remove(this);
         }
@@ -1439,13 +1489,32 @@ public  void addTask(TaskEntity taskEntity){
         public int taskId;
         protected final ContextMenu menu = new ContextMenu();
         protected MenuItem delete = new MenuItem("Delete");
+        protected MenuItem withdraw = new MenuItem("Withdraw");
+        TaskEntity taskEntity;
+        
         
         public Task(TaskEntity taskjEntity) {
             delete.setOnAction((event) -> {
                 taskController.deleteTask(taskjEntity);
             });
+            taskEntity = taskjEntity;
             taskId = taskjEntity.getId();
-            menu.getItems().addAll(delete);
+            menu.getItems().add(delete);
+            withdraw.setOnAction((event) -> {
+                taskController.withdrawFromTask(taskjEntity, CurrentUser.getCurrentUser().getId(), currentToDo.getId());
+            });
+            boolean isAssignedToCurrentUser = false;
+            
+            for(UserEntity user : taskjEntity.getAssignedUsersList()){
+                System.out.println("************"+user.getId());
+                if(user.getId() == CurrentUser.getCurrentUser().getId())
+                    isAssignedToCurrentUser = true;
+            }
+            
+            //withdraw.setDisable(!isAssignedToCurrentUser);
+            System.out.println(isAssignedToCurrentUser);
+            if(isAssignedToCurrentUser)
+                menu.getItems().add(withdraw);
 
             jFXCheckBox = new JFXCheckBox();
             line = new Line();
@@ -1466,7 +1535,10 @@ public  void addTask(TaskEntity taskEntity){
             line.setLayoutY(255.0);
             line.setStartX(-62.121307373046875);
             line.setStartY(-257.0);
-            line.setStroke(javafx.scene.paint.Color.valueOf("#c654ad"));
+            if(currentlyViewedTodoList.getTodo().getColor() != null)
+                line.setStroke(javafx.scene.paint.Color.valueOf(currentlyViewedTodoList.getTodo().getColor()));
+            else
+                line.setStroke(javafx.scene.paint.Color.valueOf("#c654ad"));
             line.setStrokeWidth(3.0);
 
             label.setLayoutX(64.0);
@@ -1497,6 +1569,7 @@ public  void addTask(TaskEntity taskEntity){
              iTEMCOMMENTs1.setVisible(true);
              tASKINFO.setVisible(true);
              iTEMNAME.setVisible(true);
+             aSSIGNEDTOTASK.setVisible(true);
              iTEMNAME.setText(taskjEntity.getDecription());
                 System.out.println("pressed");
                 currentTask = taskjEntity;
@@ -1508,6 +1581,12 @@ public  void addTask(TaskEntity taskEntity){
                     for(CommentEntity commentEntity : commentLis){
                         Comment comment = new Comment(commentEntity);
                         cOMMENTS.getChildren().add(comment);
+                    }
+                }
+                if(currentTask.getAssignedUsersList() != null){
+                    for(UserEntity user : currentTask.getAssignedUsersList()){
+                        Collaborator assignedToTaskCollab = new Collaborator(user);
+                        aSSIGNEDTOTASK.getChildren().add(assignedToTaskCollab);
                     }
                 }
                 
@@ -1696,8 +1775,9 @@ public  void addTask(TaskEntity taskEntity){
             label.setLayoutX(54.0);
             label.setLayoutY(17.0);
             label.setText(collaborationRequest.getMessage());
-            label.setPrefWidth(152);
+            label.setPrefWidth(100);
             label.prefHeight(21);
+            label.setFont(new Font(12.0));
 
             getChildren().add(imageView);
             getChildren().add(jFXButton);
@@ -1763,9 +1843,10 @@ public  void addTask(TaskEntity taskEntity){
 
             label.setLayoutX(54.0);
             label.setLayoutY(17.0);
-            label.setText("My Task");
-            label.setPrefWidth(152);
+            label.setText("My Task tttttttttttttt");
+            label.setPrefWidth(100);
             label.prefHeight(21);
+            label.setFont(new Font(12.0));
 
             getChildren().add(imageView);
             getChildren().add(jFXButton);
@@ -1841,6 +1922,69 @@ public  void addTask(TaskEntity taskEntity){
             LIST.getChildren().add(Litem);
         });
     }
+    
+    
+    public void createTaskResponse(TaskEntity task){
+            Platform.runLater(() ->  {
+                addTask(task);
+               // currentToDo.getItemsList().get(currentToDo.getItemsList().indexOf(currentItem)).getTasksList().add(task);
+               
+               currentItem.getTasksList().add(task);
+               
+            });
+    }
+
+public void createItemResponse(ItemEntity item){
+            Platform.runLater(() ->  {
+                addItem(item);
+               // currentToDo.getItemsList().add(item);
+            });
+    }
+
+public  void addTask(TaskEntity taskEntity){
+    Task task = new Task(taskEntity);   
+
+    for(int i=0; i< TASKLISTS.getPanes().size();i++){
+          Item i1 = (Item) TASKLISTS.getPanes().get(i);
+          if(taskEntity.getItemId() == i1.itemId){
+              i1.vBox.getChildren().add(task);
+              break;
+          }
+       }
+     
+    }
+   public  void addItem(ItemEntity itemEntity){
+       for (int i = 0; i < LIST.getChildren().size(); i++) {
+            System.out.println(((Listicon) LIST.getChildren().get(i)).getTodo().getId());
+            if (((Listicon) LIST.getChildren().get(i)).getTodo().getId() == itemEntity.getTodoId()) {
+                System.out.println("I found the todo");
+                ((Listicon) LIST.getChildren().get(i)).todo.getItemsList().add(itemEntity);
+               
+                break;
+            }
+        }
+       
+       Item item = new Item(itemEntity);
+       TASKLISTS.getPanes().add(item);
+       
+       
+   }
+   
+   public void commentCreationResponse(CommentEntity commentEntity ){
+        
+        Platform.runLater(() ->  {
+                addComment(commentEntity);
+               List<TaskEntity> taskEntitys = currentToDo.getItemsList().get(currentToDo.getItemsList().indexOf(currentItem)).getTasksList();
+                taskEntitys.get(taskEntitys.indexOf(currentTask)).getCommentsList().add(commentEntity);
+               System.out.println("comment response invoked");
+               
+            });
+    }
+    
+    public void addComment(CommentEntity commentEntity){
+        Comment comment = new Comment(commentEntity);
+        cOMMENTS.getChildren().add(comment);
+    }
 
     public void setTodoColor(MouseEvent event) {
         if (TODOCOLOR != null) {
@@ -1898,7 +2042,7 @@ public  void addTask(TaskEntity taskEntity){
         
         if(TODOCOLOR != null)
             newTodo.setColor(TODOCOLOR.getFill().toString());
-        
+              
         t.updateToDoList(newTodo);
         updateTodoListResponse(newTodo);
         
@@ -1910,7 +2054,7 @@ public  void addTask(TaskEntity taskEntity){
     }
 
     public void createTodoListRequest(MouseEvent event) {
-
+        manageUI(false);
         String todoTitle = NEWTODOTITLE.getText();
         System.out.println(todoTitle);
 
@@ -1935,6 +2079,7 @@ public  void addTask(TaskEntity taskEntity){
             ENDDATE.setValue(null);
             TODOCOLOR = null;
             ADDLISTPANE.setVisible(false);
+            manageUI(false);
         }
     }
     
@@ -1944,6 +2089,10 @@ public  void addTask(TaskEntity taskEntity){
             i++;
         ((Friendicon)FRIENDSLIST.getChildren().get(i)).getFriend().setUserStatus(friend.getUserStatus());
         ((Friendicon)FRIENDSLIST.getChildren().get(i)).updateFriendStatus(friend.getUserStatus());    
+    }
+    
+    public void withdrawFromTaskResponse(UserEntity user){
+        aSSIGNEDTOTASK.getChildren().remove(new Collaborator(user));   
     }
     /*REHAM*/
 

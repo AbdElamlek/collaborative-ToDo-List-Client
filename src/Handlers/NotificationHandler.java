@@ -34,7 +34,7 @@ public class NotificationHandler implements ActionHandler {
             JSONObject jsonObject = new JSONObject(responseJsonObject);
             String notificationJsonObject = jsonObject.getJSONObject("entity").toString();
             NotificationEntity ne = gson.fromJson(notificationJsonObject, NotificationEntity.class);
-            System.out.println("client// collaborator recieved notification " + notificationJsonObject);
+            System.out.println("client//  recieved notification " + notificationJsonObject);
             if (ne != null) {
                 //add notification to UI
                 CurrentUser.getCurrentUser().getNotificationList().add(ne);
